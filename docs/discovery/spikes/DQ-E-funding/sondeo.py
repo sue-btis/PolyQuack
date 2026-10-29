@@ -1,11 +1,11 @@
-"""Sondeo E1: ¿la tasa de funding de Polymarket Perps se separa de la de Hyperliquid lo
-suficiente para cobrar la diferencia con una posición neutral? (desechable)
+"""Probe E1: does the Polymarket Perps funding rate diverge from Hyperliquid's enough
+to collect the difference with a neutral position? (disposable)
 
-Ambas plataformas cobran funding cada hora. Estrategia simulada, walk-forward por día:
-si la diferencia promedio de las 24 h previas supera un umbral, se mantiene por las 24 h
-siguientes la posición que cobra (corto donde la tasa es mayor, largo donde es menor).
-Comisión de taker al abrir y al cerrar en las dos patas. No modela el riesgo de base
-(que los dos precios se separen) ni liquidaciones.
+Both platforms charge funding every hour. Simulated strategy, walk-forward by day:
+if the average spread of the previous 24 h exceeds a threshold, the position that collects
+is held for the next 24 h (short where the rate is higher, long where it is lower).
+Taker fee on open and on close on both legs. It does not model basis risk
+(the two prices drifting apart) or liquidations.
 """
 
 import json
@@ -16,156 +16,154 @@ import urllib.request
 from datetime import UTC, datetime
 from pathlib import Path
 
-AQUI = Path(__file__).parent
-CACHE = AQUI / "cache"
+HERE = Path(__file__).parent
+CACHE = HERE / "cache"
 CACHE.mkdir(exist_ok=True)
 UA = {"User-Agent": "polyquack-sondeo/0.1"}
-INICIO_MS = int(datetime(2026, 9, 3, tzinfo=UTC).timestamp() * 1000)
-FIN_MS = int(datetime(2026, 10, 26, tzinfo=UTC).timestamp() * 1000)
-# Nivel base de cada plataforma (cuenta nueva), leído de su documentación el 26 oct 2026.
-COMISION_PM = 0.0004
-COMISION_HL = 0.00045
-# Umbrales por hora: 0.00001 por hora son 8.8 % al año.
-UMBRALES = (0.0, 0.000005, 0.00001, 0.00002)
+START_MS = int(datetime(2026, 9, 3, tzinfo=UTC).timestamp() * 1000)
+END_MS = int(datetime(2026, 10, 26, tzinfo=UTC).timestamp() * 1000)
+# Base tier of each platform (new account), read from its documentation on Oct 26, 2026.
+PM_FEE = 0.0004
+HL_FEE = 0.00045
+# Hourly thresholds: 0.00001 per hour is 8.8% per year.
+THRESHOLDS = (0.0, 0.000005, 0.00001, 0.00002)
 
 
-def http(url, cuerpo=None):
-    datos = json.dumps(cuerpo).encode() if cuerpo is not None else None
-    cabeceras = dict(UA, **({"Content-Type": "application/json"} if cuerpo is not None else {}))
-    req = urllib.request.Request(url, data=datos, headers=cabeceras)
-    for espera in (2, 5, 15, 30):
+def http(url, body=None):
+    data = json.dumps(body).encode() if body is not None else None
+    headers = dict(UA, **({"Content-Type": "application/json"} if body is not None else {}))
+    req = urllib.request.Request(url, data=data, headers=headers)
+    for wait in (2, 5, 15, 30):
         try:
             with urllib.request.urlopen(req, timeout=60) as r:
                 return json.load(r)
         except urllib.error.HTTPError as e:
             if e.code != 429:
                 raise
-            time.sleep(espera)
-    raise RuntimeError(f"429 persistente en {url}")
+            time.sleep(wait)
+    raise RuntimeError(f"persistent 429 on {url}")
 
 
-def cacheado(nombre, funcion):
-    archivo = CACHE / nombre
-    if archivo.exists():
-        return json.loads(archivo.read_text())
-    datos = funcion()
-    archivo.write_text(json.dumps(datos))
-    return datos
+def cached(name, fn):
+    file = CACHE / name
+    if file.exists():
+        return json.loads(file.read_text())
+    data = fn()
+    file.write_text(json.dumps(data))
+    return data
 
 
-def funding_pm(instrument_id):
-    # La API devuelve de lo más nuevo a lo más viejo, 100 por página: se pagina hacia atrás.
-    filas, hasta = [], FIN_MS
+def pm_funding(instrument_id):
+    # The API returns newest to oldest, 100 per page: paginate backwards.
+    rows, until = [], END_MS
     while True:
         r = http(
             f"https://api.perpetuals.polymarket.com/v1/info/funding?instrument_id={instrument_id}"
-            f"&start_timestamp={INICIO_MS}&end_timestamp={hasta}"
+            f"&start_timestamp={START_MS}&end_timestamp={until}"
         )
-        filas += r["data"]
+        rows += r["data"]
         if not r.get("more") or not r["data"]:
-            return filas
-        hasta = min(f["timestamp"] for f in r["data"]) - 1
+            return rows
+        until = min(f["timestamp"] for f in r["data"]) - 1
         time.sleep(0.8)
 
 
-def funding_hl(moneda):
-    filas, desde = [], INICIO_MS
-    while desde < FIN_MS:
+def hl_funding(coin):
+    rows, since = [], START_MS
+    while since < END_MS:
         r = http(
             "https://api.hyperliquid.xyz/info",
-            {"type": "fundingHistory", "coin": moneda, "startTime": desde, "endTime": FIN_MS},
+            {"type": "fundingHistory", "coin": coin, "startTime": since, "endTime": END_MS},
         )
         if not r:
             break
-        filas += r
-        desde = max(f["time"] for f in r) + 1
+        rows += r
+        since = max(f["time"] for f in r) + 1
         time.sleep(0.8)
-    return filas
+    return rows
 
 
-def por_hora(filas, campo_t, campo_r):
-    return {int(f[campo_t]) // 3_600_000: float(f[campo_r]) for f in filas}
+def by_hour(rows, time_field, rate_field):
+    return {int(f[time_field]) // 3_600_000: float(f[rate_field]) for f in rows}
 
 
-def simular(horas, dif, umbral):
-    """dif[h] = tasa PM − tasa HL. Lado +1: corto PM / largo HL cobra dif; lado −1 cobra −dif."""
-    cobrado = comisiones = 0.0
-    lado = 0
-    horas_en_posicion = 0
-    for i in range(24, len(horas), 24):
-        previo = statistics.mean(dif[h] for h in horas[i - 24 : i])
-        nuevo = 0 if abs(previo) <= umbral else (1 if previo > 0 else -1)
-        if nuevo != lado:
-            # Cerrar y abrir: cada cambio cuesta las dos patas una vez por operación.
-            operaciones = (1 if lado else 0) + (1 if nuevo else 0)
-            comisiones += operaciones * (COMISION_PM + COMISION_HL)
-            lado = nuevo
-        for h in horas[i : i + 24]:
-            if lado:
-                cobrado += lado * dif[h]
-                horas_en_posicion += 1
-    if lado:
-        comisiones += COMISION_PM + COMISION_HL
-    return cobrado, comisiones, horas_en_posicion
+def simulate(hours, spread, threshold):
+    """spread[h] = PM rate − HL rate. Side +1: short PM / long HL collects spread; side −1 collects −spread."""
+    collected = fees = 0.0
+    side = 0
+    hours_in_position = 0
+    for i in range(24, len(hours), 24):
+        previous = statistics.mean(spread[h] for h in hours[i - 24 : i])
+        new = 0 if abs(previous) <= threshold else (1 if previous > 0 else -1)
+        if new != side:
+            # Close and open: each change costs both legs once per trade.
+            trades = (1 if side else 0) + (1 if new else 0)
+            fees += trades * (PM_FEE + HL_FEE)
+            side = new
+        for h in hours[i : i + 24]:
+            if side:
+                collected += side * spread[h]
+                hours_in_position += 1
+    if side:
+        fees += PM_FEE + HL_FEE
+    return collected, fees, hours_in_position
 
 
 def main():
-    instrumentos = cacheado(
+    instruments = cached(
         "instrumentos.json",
         lambda: http("https://api.perpetuals.polymarket.com/v1/info/instruments"),
     )
-    meta_hl = cacheado(
+    hl_meta = cached(
         "meta_hl.json", lambda: http("https://api.hyperliquid.xyz/info", {"type": "meta"})
     )
-    monedas_hl = {a["name"] for a in meta_hl["universe"]}
-    cripto = [
-        i for i in instrumentos if i.get("category") == "crypto" and i["base_asset"] in monedas_hl
+    hl_coins = {a["name"] for a in hl_meta["universe"]}
+    crypto = [
+        i for i in instruments if i.get("category") == "crypto" and i["base_asset"] in hl_coins
     ]
-    resultados = []
-    for inst in cripto:
-        moneda = inst["base_asset"]
-        pm = por_hora(
-            cacheado(f"pm_{moneda}.json", lambda: funding_pm(inst["instrument_id"])),
+    results = []
+    for inst in crypto:
+        coin = inst["base_asset"]
+        pm = by_hour(
+            cached(f"pm_{coin}.json", lambda: pm_funding(inst["instrument_id"])),
             "timestamp",
             "funding_rate",
         )
-        hl = por_hora(
-            cacheado(f"hl_{moneda}.json", lambda: funding_hl(moneda)), "time", "fundingRate"
-        )
-        horas = sorted(set(pm) & set(hl))
-        if len(horas) < 24 * 7:
+        hl = by_hour(cached(f"hl_{coin}.json", lambda: hl_funding(coin)), "time", "fundingRate")
+        hours = sorted(set(pm) & set(hl))
+        if len(hours) < 24 * 7:
             continue
-        dif = {h: pm[h] - hl[h] for h in horas}
-        valores = list(dif.values())
-        fila = {
-            "moneda": moneda,
-            "horas": len(horas),
-            "pm_media_anual": statistics.mean(pm[h] for h in horas) * 24 * 365,
-            "hl_media_anual": statistics.mean(hl[h] for h in horas) * 24 * 365,
-            "dif_media_anual": statistics.mean(valores) * 24 * 365,
-            "dif_abs_media_anual": statistics.mean(abs(v) for v in valores) * 24 * 365,
-            "horas_pm_mayor": sum(v > 0 for v in valores) / len(valores),
+        spread = {h: pm[h] - hl[h] for h in hours}
+        values = list(spread.values())
+        row = {
+            "moneda": coin,
+            "horas": len(hours),
+            "pm_media_anual": statistics.mean(pm[h] for h in hours) * 24 * 365,
+            "hl_media_anual": statistics.mean(hl[h] for h in hours) * 24 * 365,
+            "dif_media_anual": statistics.mean(values) * 24 * 365,
+            "dif_abs_media_anual": statistics.mean(abs(v) for v in values) * 24 * 365,
+            "horas_pm_mayor": sum(v > 0 for v in values) / len(values),
         }
-        dias = len(horas) / 24
-        for u in UMBRALES:
-            cobrado, comisiones, en_pos = simular(horas, dif, u)
-            neto = cobrado - comisiones
-            fila[f"neto_anual_u{u}"] = neto * 365 / dias
-            fila[f"en_posicion_u{u}"] = en_pos / len(horas)
-        resultados.append(fila)
+        days = len(hours) / 24
+        for u in THRESHOLDS:
+            collected, fees, in_pos = simulate(hours, spread, u)
+            net = collected - fees
+            row[f"neto_anual_u{u}"] = net * 365 / days
+            row[f"en_posicion_u{u}"] = in_pos / len(hours)
+        results.append(row)
         print(
-            moneda,
-            len(horas),
+            coin,
+            len(hours),
             "h",
-            "dif media anual",
-            f"{fila['dif_media_anual']:+.1%}",
-            "neto (u=0.00001)",
-            f"{fila['neto_anual_u1e-05']:+.1%}",
+            "avg annual spread",
+            f"{row['dif_media_anual']:+.1%}",
+            "net (u=0.00001)",
+            f"{row['neto_anual_u1e-05']:+.1%}",
             flush=True,
         )
 
-    resultados.sort(key=lambda f: -f["neto_anual_u1e-05"])
-    (AQUI / "resultado.json").write_text(json.dumps(resultados, indent=1), encoding="utf-8")
+    results.sort(key=lambda f: -f["neto_anual_u1e-05"])
+    (HERE / "resultado.json").write_text(json.dumps(results, indent=1), encoding="utf-8")
 
 
 if __name__ == "__main__":

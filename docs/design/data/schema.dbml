@@ -1,0 +1,249 @@
+// Polyquack — persistent schema (SQLite in WAL mode, ADR-002).
+// Reading tables only receive INSERT: never UPDATE or DELETE (BR-001, NFR-007).
+
+Project polyquack {
+  database_type: 'SQLite'
+}
+
+// ---------- Ingestion ----------
+
+Table platform {
+  id integer [pk]
+  name text [not null, unique, note: 'polymarket_perps | hyperliquid']
+}
+
+Table asset {
+  id integer [pk]
+  symbol text [not null, unique, note: 'BTC, ETH, ETHFI...']
+}
+
+Table instrument {
+  id integer [pk]
+  platform_id integer [not null, ref: > platform.id]
+  asset_id integer [not null, ref: > asset.id]
+  source_id text [not null, note: 'instrument_id on Polymarket or coin on Hyperliquid']
+  source_symbol text [not null]
+  discovered_at datetime [not null]
+  indexes {
+    (platform_id, source_id) [unique]
+    (platform_id, asset_id) [unique]
+  }
+}
+
+Table instrument_status {
+  instrument_id integer [not null, ref: > instrument.id]
+  since datetime [not null]
+  status text [not null, note: 'active | close_only | delisted (FR-003)']
+  indexes {
+    (instrument_id, since) [pk]
+  }
+}
+
+Table instrument_parameters {
+  instrument_id integer [not null, ref: > instrument.id]
+  effective_from datetime [not null]
+  max_leverage real [not null]
+  maintenance_margin real [not null, note: 'fraction of the notional']
+  min_notional real [not null]
+  liquidation_fee real [note: 'fraction of the notional, if the platform publishes it']
+  indexes {
+    (instrument_id, effective_from) [pk]
+  }
+}
+
+Table pair {
+  id integer [pk]
+  asset_id integer [not null, unique, ref: > asset.id]
+  polymarket_instrument_id integer [not null, unique, ref: > instrument.id]
+  hyperliquid_instrument_id integer [not null, unique, ref: > instrument.id]
+  paired_at datetime [not null]
+}
+
+Table fee_schedule {
+  platform_id integer [not null, ref: > platform.id]
+  effective_from datetime [not null]
+  tier text [not null, note: 'account volume tier; in the MVP, the initial tier']
+  taker real [not null, note: 'fraction of the notional']
+  maker real [not null]
+  indexes {
+    (platform_id, effective_from, tier) [pk]
+  }
+}
+
+Table funding_reading {
+  instrument_id integer [not null, ref: > instrument.id]
+  source_time datetime [not null, note: 'payment time reported by the platform']
+  rate real [not null, note: 'per hour; positive = longs pay (BR-007)']
+  received_at datetime [not null]
+  origin text [not null, note: 'live | history (FR-005, FR-011)']
+  indexes {
+    (instrument_id, source_time) [pk]
+  }
+}
+
+Table book_snapshot {
+  instrument_id integer [not null, ref: > instrument.id]
+  minute datetime [not null, note: 'UTC minute the snapshot belongs to (PD-012)']
+  source_time datetime [not null, note: 'time of the last channel message included']
+  best_bid real [not null]
+  best_ask real [not null]
+  bid_notional_05 real [not null, note: 'cumulative notional up to 0.5% below the mid']
+  ask_notional_05 real [not null]
+  bid_levels text [not null, note: 'JSON [[price, quantity], ...] up to 0.5%; for walking the book (FR-021)']
+  ask_levels text [not null]
+  indexes {
+    (instrument_id, minute) [pk]
+  }
+}
+
+Table price_reading {
+  instrument_id integer [not null, ref: > instrument.id]
+  minute datetime [not null]
+  mark_price real [not null]
+  index_price real [not null]
+  source_time datetime [note: 'source timestamp; null if the source does not provide it (Hyperliquid, ADR-006)']
+  received_at datetime [not null, note: 'reception time; it is the reading time when source_time is null']
+  indexes {
+    (instrument_id, minute) [pk]
+  }
+}
+
+Table gap {
+  id integer [pk]
+  platform_id integer [not null, ref: > platform.id]
+  instrument_id integer [ref: > instrument.id, note: 'null if the whole platform fails']
+  kind text [not null, note: 'funding | book_snapshot | price | instruments']
+  starts_at datetime [not null]
+  ends_at datetime [not null]
+  cause text [note: 'disconnection, 429, HTTP error, no data at the source...']
+  status text [not null, note: 'open | closed_with_data | final']
+  closed_at datetime
+  indexes {
+    (instrument_id, kind, starts_at)
+  }
+}
+
+// ---------- Evaluation ----------
+
+Table method {
+  id integer [pk]
+  name text [not null, unique, note: 'E1, ...']
+  visibility text [not null, default: 'private', note: 'public | private (FR-031)']
+}
+
+Table variant {
+  id integer [pk]
+  method_id integer [not null, ref: > method.id]
+  number integer [not null]
+  preregistration text [not null, note: 'JSON: rules, parameters, metric, horizon, criterion, reference size and leverage (FR-012)']
+  registered_at datetime [not null]
+  first_run_at datetime [note: 'from here the preregistration does not change (FR-013); a trigger enforces it. No visibility of its own: takes that of its method (FR-033)']
+  indexes {
+    (method_id, number) [unique]
+  }
+}
+
+Table run {
+  id integer [pk]
+  variant_id integer [not null, ref: > variant.id]
+  mode text [not null, note: 'live | reevaluation']
+  starts_at datetime [not null]
+  ends_at datetime
+  status text [not null, note: 'in_progress | complete | not_qualifiable (FR-018): not_qualifiable only if all pairs were excluded (PD-021)']
+  reason text [note: 'why it is not qualifiable']
+}
+
+Table excluded_pair {
+  run_id integer [not null, ref: > run.id]
+  pair_id integer [not null, ref: > pair.id]
+  expected_hours integer [not null, note: 'between the pair is paired and delisted, within the period']
+  hours_without_funding integer [not null]
+  expected_minutes integer [not null]
+  minutes_without_snapshot integer [not null]
+  reason text [not null, note: 'which PD-013 limit it exceeded (PD-021)']
+  indexes {
+    (run_id, pair_id) [pk]
+  }
+}
+
+Table decision {
+  run_id integer [not null, ref: > run.id]
+  pair_id integer [not null, ref: > pair.id]
+  hour datetime [not null]
+  action text [not null, note: 'open | hold | reverse | close | no_action']
+  data_until datetime [not null, note: 'time of the most recent reading used; must be <= hour (BR-004)']
+  funding_spread real [note: 'null if any rate is missing (FR-019, BR-001)']
+  indexes {
+    (run_id, pair_id, hour) [pk]
+  }
+}
+
+Table paper_position {
+  id integer [pk]
+  run_id integer [not null, ref: > run.id]
+  pair_id integer [not null, ref: > pair.id]
+  polymarket_side text [not null, note: 'long | short; Hyperliquid takes the opposite (BR-006)']
+  notional_per_leg real [not null]
+  leverage real [not null]
+  opened_at datetime [not null]
+  closed_at datetime
+  status text [not null, note: 'open | leg_liquidated | closed']
+}
+
+Table paper_trade {
+  id integer [pk]
+  position_id integer [not null, ref: > paper_position.id]
+  platform_id integer [not null, ref: > platform.id]
+  kind text [not null, note: 'open | close | liquidation']
+  hour datetime [not null]
+  side text [not null]
+  avg_price real [not null, note: 'walking the book snapshot prior to the decision (FR-021)']
+  best_price real [not null]
+  quantity real [not null]
+  fee real [not null]
+  slippage real [not null]
+  snapshot_minute datetime [not null, note: 'book snapshot used']
+}
+
+Table paper_funding_payment {
+  position_id integer [not null, ref: > paper_position.id]
+  platform_id integer [not null, ref: > platform.id]
+  source_time datetime [not null]
+  rate real [not null]
+  amount real [not null, note: 'positive = collected (FR-022). Only payments with source_time > the position opened_at and <= its close or liquidation (accrual, domain.md)']
+  indexes {
+    (position_id, platform_id, source_time) [pk]
+  }
+}
+
+Table position_measurement {
+  position_id integer [not null, ref: > paper_position.id]
+  minute datetime [not null]
+  basis real [note: 'Polymarket price − Hyperliquid price; null if either is missing (FR-023)']
+  basis_change real
+  polymarket_liquidation_distance real [note: 'price fraction until liquidation (FR-024)']
+  hyperliquid_liquidation_distance real
+  indexes {
+    (position_id, minute) [pk]
+  }
+}
+
+Table verdict {
+  run_id integer [pk, ref: - run.id]
+  issued_at datetime [not null]
+  outcome text [not null, note: 'continue | discard | investigate_further (FR-017)']
+  max_collateral real [not null, note: 'maximum committed at once by positions of non-excluded pairs (PD-020)']
+  annual_return_on_collateral real [not null, note: 'BR-003']
+  breakdown text [not null, note: 'JSON: funding, fees, slippage, basis, liquidations']
+  variants_tested integer [not null]
+}
+
+// ---------- Publishing ----------
+
+Table study {
+  id integer [pk]
+  title text [not null]
+  content text [not null, note: 'path or body of the study']
+  visibility text [not null, default: 'private']
+  updated_at datetime [not null]
+}

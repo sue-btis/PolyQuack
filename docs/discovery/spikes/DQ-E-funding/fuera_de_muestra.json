@@ -1,0 +1,33 @@
+{
+ "monedas": 38,
+ "corte_utc_hora": 497412,
+ "comision_ida_vuelta_dos_patas": 0.0017000000000000001,
+ "elegidas_primera_mitad": [
+  "LIT",
+  "KAITO",
+  "VIRTUAL",
+  "VVV",
+  "ETHFI",
+  "USELESS",
+  "ARB",
+  "LDO",
+  "DOGE",
+  "ENA"
+ ],
+ "neto_anual_segunda_mitad_elegidas_promedio": 0.08712853528490563,
+ "neto_anual_segunda_mitad_todas_promedio": 0.04297997838629592,
+ "neto_anual_segunda_mitad_por_moneda": {
+  "LIT": -0.0314,
+  "KAITO": 0.3048,
+  "VIRTUAL": 0.001,
+  "VVV": -0.0987,
+  "ETHFI": 0.3426,
+  "USELESS": -0.0899,
+  "ARB": 0.317,
+  "LDO": 0.0,
+  "DOGE": 0.1193,
+  "ENA": 0.0066
+ },
+ "dif_media_anual_todas": -0.1250883146685946,
+ "monedas_con_dif_negativa": 36
+}

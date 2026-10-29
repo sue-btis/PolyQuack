@@ -1,0 +1,1009 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Polyquack: qué encontró el descubrimiento</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans:ital,wght@0,400;0,500;0,700;1,400&family=Google+Sans+Mono&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #FAFAFA; --surface: #FFFFFF; --ink: #1B1F24; --ink2: #555E6B; --rule: #DADFE6;
+    --accent: #0F6CBD; --accent-l: #E6F0FA; --teal: #0F7B6C; --amber: #B26A00; --amber-l: #FFF4E0;
+    --red: #B3261E; --side: 260px;
+    --font: "Google Sans", "Segoe UI", system-ui, sans-serif;
+    --mono: "Google Sans Mono", Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #121418; --surface: #1A1D22; --ink: #E8EAED; --ink2: #A3ACB9; --rule: #333A44;
+      --accent: #7CB4EE; --accent-l: #1C2B3B; --teal: #4CC2AE; --amber: #F2B04B; --amber-l: #2E2616; --red: #F28B82;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #121418; --surface: #1A1D22; --ink: #E8EAED; --ink2: #A3ACB9; --rule: #333A44;
+    --accent: #7CB4EE; --accent-l: #1C2B3B; --teal: #4CC2AE; --amber: #F2B04B; --amber-l: #2E2616; --red: #F28B82;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--font);
+         font-size: 17px; line-height: 1.62; -webkit-font-smoothing: antialiased; }
+  nav.toc { position: fixed; top: 0; left: 0; bottom: 0; width: var(--side); overflow-y: auto;
+            padding: 28px 20px; border-right: 1px solid var(--rule); background: var(--surface); font-size: 14px; }
+  nav.toc .brand { font-weight: 700; font-size: 16px; margin-bottom: 18px; }
+  nav.toc .part { margin: 18px 0 6px; font-size: 11.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--ink2); font-weight: 700; }
+  nav.toc a { display: block; color: var(--ink); text-decoration: none; padding: 4px 0; line-height: 1.35; }
+  nav.toc a:hover { color: var(--accent); }
+  nav.toc a .n { color: var(--ink2); display: inline-block; width: 1.6em; }
+  main { margin-left: var(--side); padding: 48px 32px 96px; }
+  .col { max-width: 65ch; }
+  .wide { max-width: 1000px; }
+  h1 { font-size: 34px; line-height: 1.2; margin: 0 0 12px; font-weight: 700; letter-spacing: -.01em; }
+  h2.part { font-size: 13px; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); margin: 80px 0 0; }
+  section.ch { padding-top: 40px; border-top: 1px solid var(--rule); margin-top: 56px; }
+  section.ch > h2 { font-size: 27px; line-height: 1.25; margin: 0 0 18px; font-weight: 700; }
+  section.ch > h2 .n { color: var(--ink2); font-weight: 500; margin-right: .3em; }
+  h3 { font-size: 15px; letter-spacing: .06em; text-transform: uppercase; color: var(--ink2); margin: 34px 0 8px; }
+  p { margin: 0 0 14px; }
+  .short { background: var(--accent-l); border-left: 4px solid var(--accent); padding: 14px 18px; border-radius: 6px; margin: 0 0 22px; }
+  .short b:first-child { display: block; font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); margin-bottom: 4px; }
+  .row { display: grid; grid-template-columns: minmax(0, 65ch) 240px; gap: 36px; align-items: start; }
+  aside.note { font-size: 14px; line-height: 1.5; color: var(--ink2); border-left: 2px solid var(--rule); padding-left: 12px; margin-top: 4px; }
+  aside.note b { color: var(--ink); }
+  .lab { font-size: 12px; font-weight: 700; padding: 1px 7px; border-radius: 10px; white-space: nowrap; }
+  .lab.c { background: #E3F2EC; color: #0B5D4F; } .lab.h { background: var(--amber-l); color: var(--amber); }
+  .lab.p { background: #FBE9E7; color: var(--red); } .lab.q { background: #EDE7F6; color: #5E35B1; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .lab.c { background: #12332D; color: #6FD3BE; } :root:not([data-theme="light"]) .lab.q { background: #2A2340; color: #B9A6EE; } :root:not([data-theme="light"]) .lab.p { background: #3A1E1C; } }
+  a.t { color: inherit; text-decoration: underline dotted var(--accent); text-underline-offset: 3px; }
+  table { border-collapse: collapse; width: 100%; font-size: 15px; margin: 8px 0 18px; }
+  th, td { text-align: left; padding: 7px 10px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+  th { font-size: 12.5px; letter-spacing: .04em; text-transform: uppercase; color: var(--ink2); font-weight: 700; }
+  td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+  figure { margin: 22px 0 26px; }
+  figure .board { background: var(--surface); border: 1px solid var(--rule); border-radius: 10px; padding: 10px; overflow-x: auto; }
+  figure svg { display: block; width: 100%; min-width: 640px; height: auto; }
+  figcaption { font-size: 14px; color: var(--ink2); margin-top: 8px; max-width: 80ch; }
+  figcaption b { color: var(--ink); }
+  .bridge { font-style: italic; color: var(--ink2); margin-top: 26px; }
+  .reco { border: 1px dashed var(--amber); background: var(--amber-l); border-radius: 8px; padding: 14px 18px; margin: 20px 0; }
+  .reco b:first-child { color: var(--amber); }
+  dl.gloss dt { font-weight: 700; margin-top: 14px; }
+  dl.gloss dd { margin: 2px 0 0 0; }
+  code, .mono { font-family: var(--mono); font-size: .92em; }
+  ul { padding-left: 1.3em; margin: 0 0 14px; } li { margin: 3px 0; }
+  .cover p.lead { font-size: 19px; color: var(--ink2); }
+
+  /* diagramas */
+  svg .bx  { fill: var(--surface); stroke: var(--rule); stroke-width: 1.3; }
+  svg .bxm { fill: var(--surface); stroke: var(--ink2); stroke-width: 1.3; }
+  svg .bxc { fill: var(--surface); stroke: var(--accent); stroke-width: 1.6; }
+  svg .bxa { fill: var(--amber-l); stroke: var(--amber); stroke-width: 1.4; stroke-dasharray: 6 4; }
+  svg .bxr { fill: var(--surface); stroke: var(--red); stroke-width: 1.4; }
+  svg .bxt { fill: var(--surface); stroke: var(--teal); stroke-width: 1.6; }
+  svg .op  { fill: var(--accent); }
+  svg .ln  { stroke: var(--ink2); stroke-width: 1.6; fill: none; }
+  svg .lnr { stroke: var(--red); stroke-width: 1.6; fill: none; stroke-dasharray: 6 4; }
+  svg .axis{ stroke: var(--ink2); stroke-width: 1.2; }
+  svg .grid{ stroke: var(--rule); stroke-width: 1; stroke-dasharray: 3 4; }
+  svg text { font-family: var(--font); fill: var(--ink); }
+  svg .t1 { font-size: 14px; font-weight: 700; }
+  svg .t2 { font-size: 13px; }
+  svg .t3 { font-size: 12px; fill: var(--ink2); }
+  svg .tn { font-size: 11.5px; font-style: italic; fill: var(--ink2); }
+  svg .tc { fill: var(--accent); } svg .ta { fill: var(--amber); } svg .tr { fill: var(--red); } svg .tt { fill: var(--teal); }
+  svg .opt { font-size: 15px; font-weight: 700; fill: #fff; }
+  svg .halo { paint-order: stroke; stroke: var(--surface); stroke-width: 4px; stroke-linejoin: round; }
+
+  @media (max-width: 1100px) { .row { grid-template-columns: 1fr; } aside.note { margin-top: -4px; margin-bottom: 14px; } }
+  @media (max-width: 860px) { nav.toc { position: static; width: auto; border-right: 0; border-bottom: 1px solid var(--rule); }
+                              main { margin-left: 0; padding: 28px 16px 64px; } }
+  @media print {
+    nav.toc { display: none; } main { margin-left: 0; padding: 0; } body { background: #fff; font-size: 11.5pt; }
+    section.ch { page-break-before: always; border-top: 0; } figure { page-break-inside: avoid; }
+    a.t { text-decoration: none; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="toc" aria-label="Índice">
+  <div class="brand">Polyquack · descubrimiento</div>
+  <a href="#portada">Portada y resumen</a>
+  <div class="part">I · El terreno</div>
+  <a href="#c1"><span class="n">1</span>¿Por qué a veces los precios no suman 1?</a>
+  <a href="#c2"><span class="n">2</span>¿Cuánto cuesta de verdad tomar una oportunidad?</a>
+  <a href="#c3"><span class="n">3</span>¿Qué ya midió alguien y qué queda libre?</a>
+  <div class="part">II · Los ángulos</div>
+  <a href="#c4"><span class="n">4</span>A · ¿Se puede ganar por velocidad desde casa?</a>
+  <a href="#c5"><span class="n">5</span>B · ¿Las escaleras dan dinero?</a>
+  <a href="#c6"><span class="n">6</span>C · ¿Un pronóstico le gana al mercado del clima?</a>
+  <a href="#c7"><span class="n">7</span>D y calibración · ¿Hay ventaja en otro mercado o en un sesgo?</a>
+  <a href="#cE"><span class="n">8</span>E · ¿Se cobra la diferencia de funding entre plataformas?</a>
+  <div class="part">III · Decidir</div>
+  <a href="#c8"><span class="n">9</span>¿Cómo quedan contra tus criterios?</a>
+  <a href="#c9"><span class="n">10</span>¿Qué falta saber y qué decides?</a>
+  <div class="part">Consulta</div>
+  <a href="#glosario">Glosario</a>
+  <a href="#apA">A · Datos del sondeo de escaleras</a>
+  <a href="#apB">B · Datos del sondeo de clima</a>
+  <a href="#apC">C · Fuentes principales</a>
+  <a href="#apD">D · Decisiones que te tocan</a>
+  <a href="#bitacora">Bitácora de cambios</a>
+</nav>
+
+<main>
+
+<!-- ===================================================== PORTADA -->
+<section id="portada" class="cover col">
+  <h1>Polyquack: qué encontró el descubrimiento</h1>
+  <p class="lead">Al terminar, Josue puede elegir con qué ángulo sigue Polyquack, decidir cada pregunta pendiente y defender por qué.</p>
+  <p>Escrito el 26 oct 2026 a partir de <span class="mono">docs/discovery/findings.md</span>, de los sondeos en <span class="mono">docs/discovery/spikes/</span> y de una revisión independiente que corrigió tres errores graves (ver la <a href="#bitacora">bitácora</a>).</p>
+
+  <h3>Cómo leer este libro</h3>
+  <p>Cada capítulo responde una pregunta. El recuadro azul del inicio es la respuesta corta: si solo lees esos recuadros, ya te llevas el libro. Cada afirmación lleva su nivel de evidencia:</p>
+  <ul>
+    <li><span class="lab c">Confirmado</span> lo dicen los datos o el texto de una fuente primaria.</li>
+    <li><span class="lab h">Hipótesis</span> deducido, falta confirmar.</li>
+    <li><span class="lab q">Preguntar</span> solo tú lo decides.</li>
+    <li><span class="lab p">Problema</span> dato roto, incompleto o en conflicto.</li>
+  </ul>
+
+  <h3>El libro en una página</h3>
+  <p>En un mercado de varias opciones, comprar todas debería costar 1 USD, porque al final una sola paga 1 USD. A veces la suma no da 1, pero lo que cuenta es el precio al que de verdad puedes comprar, no el que muestra la página. Tomar la diferencia cuesta: la comisión, el volumen disponible y el tiempo que el dinero queda atrapado.</p>
+  <p>Un paper de 2026 ya midió estas diferencias con precios reales. Las que se cierran duran segundos y no se alcanzan desde casa. Las que duran horas casi siempre se cobran esperando la liquidación. Las escaleras (mercados que solo cambian un umbral o una fecha) se detectan con una regla muy precisa, pero en una foto dieron unos 17 USD en total. El pronóstico público del clima ya está metido en el precio.</p>
+  <p>Los ángulos de los mercados de predicción no demostraron ganancia neta. El que más se acercó vino de otro producto de Polymarket, sus futuros perpetuos (Perps). Su tasa de financiamiento se separa de forma sistemática de la de otra plataforma, y una estrategia simple dejó ganancia fuera de muestra, aunque con solo dos meses de historia. El capítulo 9 compara los ángulos contra tus criterios y el 10 lista lo que te toca decidir.</p>
+
+  <h3>Los ángulos</h3>
+  <p>La parte II revisa seis formas de buscar ventaja. Las letras A a D vienen de la sesión de ideas, la E de tu pregunta después de leer la primera versión, y la calibración venía desde el brief.</p>
+  <ul>
+    <li><b>A · Velocidad:</b> tomar diferencias de precio antes que los demás.</li>
+    <li><b>B · Escaleras:</b> encontrar mercados cuyos precios rompen una regla lógica.</li>
+    <li><b>C · Clima:</b> pronosticar la temperatura mejor que el mercado.</li>
+    <li><b>D · Opciones de cripto:</b> sacar un precio justo de otro mercado más profesional.</li>
+    <li><b>Calibración:</b> aprovechar un error sistemático de quienes operan.</li>
+    <li><b>E · Perps:</b> cobrar la diferencia de la tasa de financiamiento entre Polymarket y otra plataforma.</li>
+  </ul>
+  <p>Las claves como CR-001 o DQ-004 son los nombres de tus criterios y preguntas en <span class="mono">findings.md</span>; el libro dice siempre qué significan.</p>
+</section>
+
+<!-- ===================================================== PARTE I -->
+<h2 class="part">Parte I · El terreno</h2>
+
+<!-- ============ CAP 1 -->
+<section id="c1" class="ch">
+  <h2><span class="n">1</span>¿Por qué a veces los precios no suman 1?</h2>
+  <div class="short"><b>Respuesta corta</b>
+    En un mercado de varias opciones, al final una sola paga 1 USD, así que comprarlas todas debería costar 1. Pero lo que ves en la página no es lo que pagas: cuenta el precio al que de verdad puedes comprar en el libro de órdenes. Que el precio mostrado sume más de 1 suele ser el margen normal, no una oportunidad.
+  </div>
+
+  <h3>Caso</h3>
+  <div class="row"><div>
+    <p>El 26 oct 2026, Polymarket tenía abierto el mercado "Tasa de desempleo de octubre en EE. UU.". Tenía 9 <a class="t" href="#g-opcion">opciones</a>: "3.8 % o menos", "3.9 %", "4.0 %" y así hasta "4.6 % o más". El 6 nov sale el dato oficial y <b>una sola</b> opción paga 1 USD por acción; las otras 8 pagan 0.</p>
+    <p>Si compras una acción de cada opción, sabes de antemano que vas a cobrar exactamente 1 USD, salga lo que salga. Por eso, si comprar las 9 costara menos de 1 USD, ganarías la diferencia sin importar el resultado.</p>
+    <p>¿Cuánto costaba? Polymarket no fija los precios: los ponen las personas. Cada una deja órdenes del tipo "vendo 50 acciones de '4.2 %' a 0.34" o "compro 30 a 0.32". La lista de esas órdenes que esperan es el <a class="t" href="#g-libro">libro de órdenes</a>. De ahí salen dos precios por opción:</p>
+    <ul>
+      <li>el <a class="t" href="#g-ejecutable">precio de venta</a>: el más barato al que alguien te vende ya. Para "4.2 %" era 0.34 USD;</li>
+      <li>el <a class="t" href="#g-ejecutable">precio de compra</a>: el más alto que alguien te paga ya. Para "4.2 %" era 0.32 USD.</li>
+    </ul>
+    <p>Los nombres van desde el punto de vista de quien dejó la orden: tú <i>compras</i> al precio de venta de otro.</p>
+    <p>Sumando los precios de venta de las 9 opciones: 0.29 + 0.34 + 0.28 de las tres principales, más 0.166 de las otras seis, da <b>1.076 USD</b>. Pagas 1.076 para cobrar 1.00: pierdes 7.6 centavos por juego.</p>
+    <p>También se puede ir al revés. Polymarket deja <i>crear</i> el juego completo: depositas 1 USD y te entrega una acción de cada opción. Si vendes las 9 a sus precios de compra, cobras 0.924: también pierdes 7.6 centavos. <span class="lab c">Confirmado</span></p>
+    <p>Si alguna de esas sumas hubiera quedado del lado bueno, habría ganancia sin importar el resultado. A eso se le llama <a class="t" href="#g-arbitraje">arbitraje</a>.</p>
+  </div>
+  <aside class="note"><b>De dónde salen los números.</b> Foto de todos los mercados activos, 26 oct 2026, 03:08 UTC. La tabla completa está en el <a href="#apA">apéndice A</a>. Este mercado no cobraba comisión (tasa 0).</aside>
+  </div>
+
+  <figure class="wide">
+    <div class="board">
+    <svg viewBox="0 0 900 330" role="img" aria-label="Comprar las 9 opciones del desempleo de octubre cuesta 1.076 USD y paga 1.00 USD; venderlas da 0.924 USD por un juego que costó 1.00 USD. En los dos sentidos se pierden 7.6 centavos.">
+      <defs><marker id="m1" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink2)"/></marker></defs>
+      <text class="t1" x="20" y="28">Comprar todas</text>
+      <rect class="bxm" x="20" y="44" width="150" height="56" rx="7"/><text class="t2" x="32" y="66">"4.1 %"</text><text class="t3" x="32" y="86">venta 0.29</text>
+      <rect class="bxm" x="20" y="108" width="150" height="56" rx="7"/><text class="t2" x="32" y="130">"4.2 %"</text><text class="t3" x="32" y="150">venta 0.34</text>
+      <rect class="bxm" x="20" y="172" width="150" height="56" rx="7"/><text class="t2" x="32" y="194">"4.3 %"</text><text class="t3" x="32" y="214">venta 0.28</text>
+      <rect class="bxm" x="20" y="236" width="150" height="56" rx="7"/><text class="t2" x="32" y="258">las otras 6</text><text class="t3" x="32" y="278">venta 0.166 en total</text>
+      <polyline class="ln" points="170,72 214,72 214,168 236,168" marker-end="url(#m1)"/>
+      <polyline class="ln" points="170,136 214,136"/>
+      <polyline class="ln" points="170,200 214,200"/>
+      <polyline class="ln" points="170,264 214,264 214,168"/>
+      <circle class="op" cx="252" cy="168" r="14"/><text class="opt" x="252" y="173" text-anchor="middle">+</text>
+      <line class="ln" x1="266" y1="168" x2="300" y2="168" marker-end="url(#m1)"/>
+      <rect class="bxc" x="306" y="132" width="170" height="72" rx="7"/><text class="t1" x="320" y="158">Costo del juego</text><text class="t2" x="320" y="182">1.076 USD</text>
+      <line class="ln" x1="476" y1="168" x2="520" y2="168" marker-end="url(#m1)"/>
+      <circle class="op" cx="538" cy="168" r="14"/><text class="opt" x="538" y="173" text-anchor="middle">−</text>
+      <rect class="bxm" x="490" y="40" width="200" height="60" rx="7"/><text class="t1" x="504" y="64">Pago seguro</text><text class="t3" x="504" y="84">una sola opción paga 1.00</text>
+      <polyline class="ln" points="590,100 590,130 538,130 538,148" marker-end="url(#m1)"/>
+      <line class="ln" x1="552" y1="168" x2="596" y2="168" marker-end="url(#m1)"/>
+      <rect class="bxr" x="602" y="128" width="270" height="80" rx="7"/><text class="t1 tr" x="616" y="156">Resultado: −0.076 por juego</text><text class="t3" x="616" y="178">1.00 − 1.076. Pierdes aunque</text><text class="t3" x="616" y="196">sepas que vas a cobrar 1.00</text>
+      <line x1="20" y1="306" x2="880" y2="306" stroke="var(--rule)"/>
+      <text class="tn" x="20" y="324">Al revés: crear el juego por 1.00 y vender las 9 a su precio de compra da 0.924. También −0.076. Los precios mostrados (intermedios) sumaban ≈ 1.00.</text>
+    </svg>
+    </div>
+    <figcaption><b>Mira la caja azul y la roja.</b> El juego completo garantiza 1 USD, pero comprarlo al precio real cuesta 1.076 USD. Que la suma no sea 1 no es, por sí solo, una oportunidad: hay que ver en qué sentido se desvía y con qué precios.</figcaption>
+  </figure>
+
+  <h3>Mecanismo</h3>
+  <div class="row"><div>
+    <p>Un mercado de varias opciones (Polymarket los llama <a class="t" href="#g-negrisk">negRisk</a>) promete que exactamente una opción gana. Con esa promesa se puede armar un <a class="t" href="#g-juego">juego completo</a>: una acción de cada opción. El juego siempre paga 1 USD. Por eso, en equilibrio, sus precios suman 1.</p>
+    <p>Hay dos formas de que la suma se desvíe a tu favor:</p>
+    <ul>
+      <li><b>Comprar todas por menos de 1:</b> la suma de los precios de venta da menos de 1.</li>
+      <li><b>Vender todas por más de 1:</b> creas el juego por 1 USD y la suma de los precios de compra da más de 1.</li>
+    </ul>
+    <p>Entre el precio de compra y el de venta siempre hay una distancia, el <a class="t" href="#g-spread">spread</a>. Por eso, en un mercado normal, comprar todo cuesta un poco más de 1 y vender todo da un poco menos. Ese margen es el pago a quien deja órdenes esperando. No es una oportunidad.</p>
+    <p>La página de Polymarket enseña un <a class="t" href="#g-mostrado">precio mostrado</a>, el intermedio o el del último trato. Sumar precios mostrados y encontrar 1.03 no dice nada: puede ser solo el spread.</p>
+  </div>
+  <aside class="note"><b>Otro ejemplo, del capítulo 6:</b> los mercados de temperatura de Nueva York tienen 11 rangos de grados. En 60 días, sus precios del historial sumaron 1.022 en promedio. Era margen, no oportunidad.</aside>
+  </div>
+
+  <h3>Por qué importa</h3>
+  <p>Es la diferencia entre Polyquack y casi todo lo que circula. Los artículos y varias herramientas suman precios mostrados y anuncian oportunidades que no se pueden tomar. Tu primer criterio obligatorio, "ventaja con precios reales", existe justo para no caer ahí.</p>
+
+  <h3>Lo que no sabemos</h3>
+  <ul>
+    <li>Con qué frecuencia la suma de precios de venta baja de 1, o la de precios de compra sube de 1, en los mercados de hoy. Una foto no lo dice. <span class="lab h">Hipótesis</span>: pasa poco y dura poco (capítulo 3).</li>
+  </ul>
+  <p class="bridge">Supongamos que sí aparece un juego que cuesta menos de 1. ¿Cuánto te queda en la mano? Eso es el capítulo 2.</p>
+</section>
+
+<!-- ============ CAP 2 -->
+<section id="c2" class="ch">
+  <h2><span class="n">2</span>¿Cuánto cuesta de verdad tomar una oportunidad?</h2>
+  <div class="short"><b>Respuesta corta</b>
+    Hay tres costos: la comisión de quien compra al precio del libro (pesa más cuando el precio está cerca de 0.50), el volumen que hay a ese precio y el tiempo que el dinero queda atrapado hasta la resolución. El par "desempleo ≥ 6 % / ≥ 7 %" deja 2.6 % y atrapa el dinero 3.2 meses: unos 10 % al año.
+  </div>
+
+  <h3>Caso</h3>
+  <div class="row"><div>
+    <p>Otro mercado del 26 oct: "¿Hasta dónde llega el desempleo de EE. UU. en 2026?". No es de varias opciones: son 5 preguntas de sí o no ("¿llega al menos a 5.0 %?", "¿a 5.5 %?", "¿a 6.0 %?", "¿a 7.0 %?", "¿a 10 %?"). Las preguntas guardan una regla de orden: si el desempleo llega a 7 %, también llegó a 6 %. A esto le llamamos <a class="t" href="#g-escalera">escalera</a>.</p>
+    <p>Los precios de ese momento contradecían la regla. "Llega a 6 %" se vendía a 0.002, y alguien pagaba 0.028 por "llega a 7 %". Es decir, el mercado decía que 7 % era más probable que 6 %, cosa imposible.</p>
+    <p>Para aprovecharlo, compras dos cosas:</p>
+    <ul>
+      <li><b>Sí a "llega a 6 %"</b>, a 0.002 USD: lo que el mercado vende barato;</li>
+      <li><b>No a "llega a 7 %"</b>, a 0.972 USD: es la otra cara de lo que el mercado paga caro.</li>
+    </ul>
+    <p>¿Por qué el No? Cada pregunta tiene acciones de Sí y de No, y un Sí más un No siempre valen 1 juntos. Si alguien paga 0.028 por un Sí de 7 %, comprar el No equivale a venderle ese Sí: te cuesta 1 − 0.028 = 0.972.</p>
+    <p>Pagas 0.974 USD. ¿Cuánto cobras? Hay tres escenarios:</p>
+    <table>
+      <tr><th>Si el desempleo…</th><th class="num">Sí 6 %</th><th class="num">No 7 %</th><th class="num">Cobras</th></tr>
+      <tr><td>no llega a 6 %</td><td class="num">0</td><td class="num">1</td><td class="num">1</td></tr>
+      <tr><td>llega a 6 % pero no a 7 %</td><td class="num">1</td><td class="num">1</td><td class="num">2</td></tr>
+      <tr><td>llega a 7 %</td><td class="num">1</td><td class="num">0</td><td class="num">1</td></tr>
+    </table>
+    <p>Pase lo que pase, cobras al menos 1 USD. Ganas como mínimo 1 − 0.974 = <b>0.026 USD por acción, 2.6 % del pago</b>. El escenario del medio paga 2 USD: es un premio extra si el desempleo queda entre 6 % y 7 %, pero la cuenta no cuenta con él. Este mercado no cobraba comisión. <span class="lab c">Confirmado</span></p>
+    <p>Ahora el volumen. A esos precios no había acciones infinitas. Recorriendo los dos libros nivel por nivel, cabían <b>433 acciones</b> con costo menor a 1, con una ganancia total de <b>4.54 USD</b>. Es menos que 433 × 0.026 porque los niveles siguientes del libro son más caros.</p>
+    <p>Y el tiempo. El mercado cierra el 1 feb 2027: el dinero queda atrapado unos 3.2 meses. 2.6 % en 3.2 meses equivale a unos <b>10 % al año</b> (2.6 × 12 / 3.2 = 9.75).</p>
+  </div>
+  <aside class="note"><b>Un caso pequeño a propósito.</b> Es la mejor oportunidad <i>con libro real</i> que encontró el sondeo. Las 6 que se veían mejores eran precios fantasma (capítulo 5).</aside>
+  </div>
+
+  <figure class="wide">
+    <div class="board">
+    <svg viewBox="0 0 900 300" role="img" aria-label="Sí a 6 % a 0.002 más No a 7 % a 0.972 más comisión 0 da costo 0.974. El pago mínimo es 1.00, la ganancia es 0.026 por acción. Dividida entre 3.2 meses y multiplicada por 12 da cerca de 9.75 % al año.">
+      <defs><marker id="m2" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink2)"/></marker></defs>
+      <rect class="bxm" x="20" y="24" width="190" height="58" rx="7"/><text class="t2" x="34" y="48">Sí a "llega a 6 %"</text><text class="t3" x="34" y="68">precio de venta 0.002</text>
+      <rect class="bxm" x="20" y="96" width="190" height="58" rx="7"/><text class="t2" x="34" y="120">No a "llega a 7 %"</text><text class="t3" x="34" y="140">1 − 0.028 = 0.972</text>
+      <rect class="bxm" x="20" y="168" width="190" height="58" rx="7"/><text class="t2" x="34" y="192">Comisión</text><text class="t3" x="34" y="212">tasa 0 en este mercado</text>
+      <polyline class="ln" points="210,53 246,53 246,125 262,125" marker-end="url(#m2)"/>
+      <polyline class="ln" points="210,125 246,125"/>
+      <polyline class="ln" points="210,197 246,197 246,125"/>
+      <circle class="op" cx="282" cy="125" r="14"/><text class="opt" x="282" y="130" text-anchor="middle">+</text>
+      <line class="ln" x1="296" y1="125" x2="324" y2="125" marker-end="url(#m2)"/>
+      <rect class="bxc" x="330" y="96" width="140" height="58" rx="7"/><text class="t1" x="344" y="120">Costo</text><text class="t2" x="344" y="140">0.974</text>
+      <rect class="bxm" x="330" y="10" width="140" height="58" rx="7"/><text class="t1" x="344" y="34">Pago mínimo</text><text class="t2" x="344" y="54">1.00</text>
+      <line class="ln" x1="470" y1="125" x2="498" y2="125" marker-end="url(#m2)"/>
+      <polyline class="ln" points="470,39 518,39 518,105" marker-end="url(#m2)"/>
+      <circle class="op" cx="518" cy="125" r="14"/><text class="opt" x="518" y="130" text-anchor="middle">−</text>
+      <line class="ln" x1="532" y1="125" x2="560" y2="125" marker-end="url(#m2)"/>
+      <rect class="bxc" x="566" y="96" width="140" height="58" rx="7"/><text class="t1" x="580" y="120">Ganancia</text><text class="t2" x="580" y="140">0.026 (2.6 %)</text>
+      <rect class="bxa" x="566" y="196" width="140" height="58" rx="7"/><text class="t1 ta" x="580" y="220">Capital atrapado</text><text class="t2" x="580" y="240">3.2 meses</text>
+      <line class="ln" x1="706" y1="125" x2="734" y2="125" marker-end="url(#m2)"/>
+      <polyline class="ln" points="706,225 754,225 754,145" marker-end="url(#m2)"/>
+      <circle class="op" cx="754" cy="125" r="14"/><text class="opt" x="754" y="130" text-anchor="middle">÷</text>
+      <line class="ln" x1="768" y1="125" x2="790" y2="125" marker-end="url(#m2)"/>
+      <rect class="bxc" x="796" y="88" width="94" height="74" rx="7"/><text class="t1" x="806" y="112">Al año</text><text class="t2" x="806" y="132">≈ 9.75 %</text><text class="t3" x="806" y="150">× 12</text>
+      <text class="tn" x="20" y="278">Gris: medido en el libro. Azul: calculado. Ámbar punteado: depende de la fecha de cierre (1 feb 2027) y puede cambiar si la resolución se retrasa.</text>
+      <text class="tn" x="20" y="295">Volumen a esos precios: 433 acciones, 4.54 USD de ganancia en total.</text>
+    </svg>
+    </div>
+    <figcaption><b>Sigue la cuenta de izquierda a derecha.</b> Una ganancia "segura" de 2.6 % deja de verse grande cuando la divides entre el tiempo que el dinero no puede usarse para otra cosa.</figcaption>
+  </figure>
+
+  <h3>Mecanismo</h3>
+  <div class="row"><div>
+    <p><b>La comisión.</b> En Polymarket solo paga quien compra al precio del libro, el <a class="t" href="#g-taker">taker</a>. Quien deja una orden esperando, el <a class="t" href="#g-taker">maker</a>, paga 0 y además recibe un reembolso. La fórmula oficial, en palabras: acciones × tasa × precio × (1 − precio). El producto precio × (1 − precio) es máximo en 0.50 y casi cero cerca de 0 o de 1. <span class="lab c">Confirmado</span></p>
+    <p>Un ejemplo de la documentación: 100 acciones a 0.50 en Política, con tasa 0.04, pagan 100 × 0.04 × 0.50 × 0.50 = 1.00 USD de comisión, el 2 % de lo invertido. Las tasas van de 0 (Geopolítica) a 0.07 (Cripto). Cambiaron seis veces entre enero y julio de 2026, y algunos mercados de clima recientes cobran 0. Por eso la comisión real se lee en cada mercado. <span class="lab c">Confirmado</span></p>
+    <p><b>El volumen.</b> Una oportunidad vale tanto como las acciones que hay a ese precio. Hay que recorrer el libro nivel por nivel hasta que el costo llegue a 1. Además, cada mercado tiene un tamaño mínimo de orden, normalmente 5 acciones.</p>
+    <p><b>El tiempo.</b> El dinero queda atrapado desde que compras hasta que el mercado se resuelve y pagan. Si nadie disputa la resolución, el pago llega unas 2 h después de que se propone el resultado; si hay disputa, de 4 a 6 días. La ganancia hay que compararla contra lo que ese dinero rendiría en otro lado durante el mismo tiempo.</p>
+  </div>
+  <aside class="note"><b>Riesgo de resolución.</b> "Seguro" supone que el mercado se resuelve como dicen sus reglas. Ha habido casos disputados, como uno de unos 7 M USD en mar 2025, y las cifras de frecuencia no son comparables entre sí <span class="lab p">Problema</span>. Restarle un costo de riesgo por categoría es una opción pendiente (DQ-007).</aside>
+  </div>
+
+  <h3>Por qué importa</h3>
+  <p>Estos tres costos son el criterio CR-001, "ventaja neta real". Una herramienta que ignora uno solo anuncia ganancias que no existen. El evaluador que pide el brief tiene que calcular los tres siempre.</p>
+
+  <h3>Lo que no sabemos</h3>
+  <ul>
+    <li>Si el convertidor de Polymarket (capítulo 3) cobra algo: la documentación no lo dice. <span class="lab p">Problema</span></li>
+    <li>Otros costos menores, como depósitos y retiros por intermediarios. Polymarket no los cobra, los intermediarios sí pueden.</li>
+    <li>Cuánto rinde tu dinero en la alternativa (la tasa contra la que comparas). <span class="lab q">Preguntar</span></li>
+  </ul>
+  <p class="bridge">Ya sabemos qué es una oportunidad y cuánto cuesta tomarla. ¿Alguien ya midió cuántas hay?</p>
+</section>
+
+<!-- ============ CAP 3 -->
+<section id="c3" class="ch">
+  <h2><span class="n">3</span>¿Qué ya midió alguien y qué queda libre?</h2>
+  <div class="short"><b>Respuesta corta</b>
+    IMDEA estimó unos 40 M USD extraídos en un año, sin comisiones ni libro de órdenes. Gebele midió con libros reales de 2026 y con comisiones: las diferencias que se cierran duran segundos (mediana 16 s), pero el 58.7 % dura más de 50 minutos. Queda libre lo posterior a mayo de 2026, las escaleras y si se puede operar desde casa.
+  </div>
+
+  <h3>Caso</h3>
+  <div class="row"><div>
+    <p><b>IMDEA</b> (Saguillo y otros, 2025) revisó los tratos de Polymarket entre abr 2024 y abr 2025 y estimó cuánto sacaron las cuentas que aprovecharon diferencias de precio. Suman 39.6 M USD, suponiendo 1 USD de ganancia por trato. Usaron el precio promedio de los tratos de cada bloque, no el libro de órdenes. No restaron comisiones porque entonces no se cobraban. <span class="lab c">Confirmado</span></p>
+    <p><b>Gebele, Mutzel y Matthes</b> (ago 2026) hicieron lo que IMDEA no pudo: reprodujeron libros de órdenes completos, actualización por actualización, en una muestra de horas del 14 abr al 19 may 2026. Midieron violaciones con profundidad y comisiones, solo en mercados de varias opciones. <span class="lab c">Confirmado</span></p>
+    <p>No grabaron todo el periodo: eligieron horas sueltas y, en cada una, reprodujeron el libro minuto a minuto. En esas horas observaron 624 <a class="t" href="#g-episodio">episodios</a>, es decir, tramos en que una diferencia estuvo abierta después de comisiones:</p>
+    <ul>
+      <li><b>366 (58.7 %) duraron más de 50 minutos.</b> Ocupaban toda la hora observada, así que no se sabe cuánto más duraron.</li>
+      <li>Los otros 258 se vieron abrir y cerrar. De esos, 253 eran del lado Sí, con mediana de <b>16.15 s</b>, y 5 del lado No, con mediana de <b>7.99 s</b>. Los dos lados se explican abajo.</li>
+    </ul>
+    <p>Y sobre el dinero: los participantes sacaron 1.118 M USD. Casi todo, 1.086 M, vino del convertidor, que se explica abajo. Solo 32 mil vinieron de comprar canastas (el juego completo del capítulo 1) y esperar a la liquidación. Son totales de los periodos que estudiaron, calculados a partir de los tratos de cada cuenta.</p>
+  </div>
+  <aside class="note"><b>No se pueden comparar los 40 M con el 1.1 M.</b> Miden periodos, mercados y métodos distintos. Una versión anterior de este análisis decía "con precios reales queda 35 veces menos": era un error y la revisión independiente lo marcó.</aside>
+  </div>
+
+  <h3>Mecanismo</h3>
+  <p>Un <a class="t" href="#g-episodio">episodio</a> empieza cuando la diferencia se vuelve positiva después de comisiones y termina en la primera actualización del libro en que deja de serlo. Que termine no prueba que alguien lo haya aprovechado: también puede cerrarse porque alguien movió una orden.</p>
+  <p>En un mercado de varias opciones, cada opción tiene acciones de Sí y de No. El <a class="t" href="#g-convertidor">convertidor</a> de Polymarket cambia, al instante, 1 No de una opción por 1 Sí de cada una de las demás. Tiene sentido: "no gana Fulano" es lo mismo que "gana alguno de los otros". Con eso, una diferencia puede ir en dos sentidos (simplificado):</p>
+  <ul>
+    <li><b>Lado No:</b> los No están baratos frente a los Sí. Compras los No, los conviertes en Sí y vendes esos Sí de inmediato. Hay pocos episodios y duran poco: alguien los toma rápido.</li>
+    <li><b>Lado Sí:</b> los Sí están baratos. No existe la conversión al revés, así que la única forma de cobrar es comprar todos los Sí (la canasta) y esperar a que el mercado se resuelva. Hay muchos episodios y algunos duran horas: tomarlos exige atrapar el dinero.</li>
+  </ul>
+
+  <h3>Por qué importa</h3>
+  <p>Cambia el aporte posible de Polyquack. Medir arbitraje en mercados de varias opciones con libros reales ya está hecho. Lo que no encontramos publicado:</p>
+  <ul>
+    <li>qué pasa después del 19 may 2026. Desde entonces, Polymarket subió la comisión de deportes en julio (de 0.03 a 0.05) y terminó de pasar a su versión 2, que cambió el dinero que se usa y el convertidor;</li>
+    <li>las <a class="t" href="#g-escalera">escaleras</a> del capítulo 2, que son preguntas sueltas de sí o no y no mercados de varias opciones, así que Gebele no las mide;</li>
+    <li>si alguien desde una conexión casera puede tomar algo.</li>
+  </ul>
+
+  <h3>Lo que no sabemos</h3>
+  <ul>
+    <li>De dónde sacó Gebele los libros de 2026; cita una fuente [11] que no revisamos. <span class="lab h">Hipótesis</span>: un vendedor de datos.</li>
+    <li>Si sus resultados siguen igual después de la migración de Polymarket a su versión 2 (28 abr 2026), que cae a mitad de su muestra.</li>
+  </ul>
+  <p class="bridge">Si la mitad de las oportunidades duran segundos, ¿tiene sentido competir por velocidad?</p>
+</section>
+
+<!-- ===================================================== PARTE II -->
+<h2 class="part">Parte II · Los ángulos</h2>
+
+<!-- ============ CAP 4 -->
+<section id="c4" class="ch">
+  <h2><span class="n">4</span>A · ¿Se puede ganar por velocidad desde casa?</h2>
+  <div class="short"><b>Respuesta corta</b>
+    Probablemente no, aunque tu tiempo de reacción no se ha medido. Las oportunidades que se cierran solas duran segundos y el motor de Polymarket está en Londres. Las que duran horas casi siempre se cobran esperando la liquidación, y entonces la velocidad ya no importa.
+  </div>
+
+  <h3>Caso</h3>
+  <div class="row"><div>
+    <p>Tomemos la mediana de Gebele: un episodio del lado Sí dura 16 s. Para tomarlo desde tu casa en México tienes que:</p>
+    <ol>
+      <li>recibir la actualización del libro;</li>
+      <li>detectar que la suma bajó de 1;</li>
+      <li>mandar una orden por cada opción del mercado (en el caso del capítulo 1 serían 9). A cada una de esas compras se le dice <a class="t" href="#g-pata">pata</a>;</li>
+      <li>que todas se llenen antes de que otro las tome.</li>
+    </ol>
+    <p>El motor de Polymarket está en AWS, en Londres <span class="lab h">Hipótesis fuerte</span>: lo dice su documentación en chino y no se vio en la versión en inglés. Polymarket ofrece poner servidores junto a él a quien verifica su identidad. Los bots que viven ahí reciben y mandan antes. <span class="lab h">Hipótesis</span>: no se midió cuánto antes.</p>
+    <p>Y si llenas 8 patas y la novena ya no está, el juego queda incompleto: ya no está garantizado que cobres 1 USD. Si gana justo la opción que te faltó, pierdes casi todo lo que pagaste.</p>
+  </div>
+  <aside class="note"><b>Tu criterio CR-002</b> dice "corre desde casa: no exige servidores junto al exchange". Por eso el servidor en Londres o Dublín (OP-020) se descartó: es la misma idea que la co-ubicación.</aside>
+  </div>
+
+  <h3>Mecanismo</h3>
+  <p>El diagrama pone en la misma línea de tiempo lo que dura una oportunidad y lo que tardarías en reaccionar. La escala crece de izquierda a derecha: cada marca vale mucho más que la anterior. Tiene cuatro filas:</p>
+  <ul>
+    <li><b>Diferencias que se cierran:</b> los 258 episodios del capítulo 3 que se vieron abrir y cerrar.</li>
+    <li><b>Diferencias largas:</b> los 366 que siguieron abiertos más de 50 minutos.</li>
+    <li><b>Tu reacción desde casa:</b> no se ha medido.</li>
+    <li><b>Esperar la liquidación:</b> el tiempo que pasa si cobras una diferencia larga del lado Sí comprando la canasta.</li>
+  </ul>
+
+  <figure class="wide">
+    <div class="board">
+    <svg viewBox="0 0 900 330" role="img" aria-label="Línea de tiempo de segundos a meses. Las violaciones que se cierran tienen mediana de 8 a 16 segundos. 58.7 por ciento duran más de 50 minutos. La reacción desde casa no está medida. Esperar la liquidación toma semanas o meses.">
+      <line class="axis" x1="150" y1="282" x2="880" y2="282"/>
+      <g class="t3">
+        <line class="grid" x1="200" y1="40" x2="200" y2="282"/><text class="t3" x="200" y="302" text-anchor="middle">1 s</text>
+        <line class="grid" x1="320" y1="40" x2="320" y2="282"/><text class="t3" x="320" y="302" text-anchor="middle">10 s</text>
+        <line class="grid" x1="440" y1="40" x2="440" y2="282"/><text class="t3" x="440" y="302" text-anchor="middle">1 min</text>
+        <line class="grid" x1="560" y1="40" x2="560" y2="282"/><text class="t3" x="560" y="302" text-anchor="middle">1 h</text>
+        <line class="grid" x1="680" y1="40" x2="680" y2="282"/><text class="t3" x="680" y="302" text-anchor="middle">1 día</text>
+        <line class="grid" x1="800" y1="40" x2="800" y2="282"/><text class="t3" x="800" y="302" text-anchor="middle">1 mes</text>
+      </g>
+      <text class="t2" x="16" y="72">Diferencias</text><text class="t2" x="16" y="90">que se cierran</text>
+      <rect x="250" y="62" width="140" height="22" rx="4" fill="var(--accent)" opacity=".85"/>
+      <circle cx="356" cy="73" r="5" fill="var(--surface)" stroke="var(--accent)" stroke-width="2"/>
+      <text class="t3 halo" x="250" y="56">mediana 8 s (No) y 16 s (Sí)</text>
+      <text class="t2" x="16" y="134">Diferencias</text><text class="t2" x="16" y="152">largas</text>
+      <rect x="532" y="124" width="250" height="22" rx="4" fill="var(--teal)" opacity=".85"/>
+      <text class="t3 halo" x="532" y="118">58.7 % duran más de 50 min (no se sabe cuánto)</text>
+      <text class="t2" x="16" y="196">Tu reacción</text><text class="t2" x="16" y="214">desde casa</text>
+      <rect class="bxa" x="230" y="186" width="230" height="22" rx="4"/>
+      <text class="t3 ta halo" x="236" y="180">por confirmar: nadie lo ha medido</text>
+      <text class="t2" x="16" y="256">Esperar</text><text class="t2" x="16" y="272">la liquidación</text>
+      <rect x="690" y="244" width="170" height="22" rx="4" fill="var(--ink2)" opacity=".55"/>
+      <text class="t3 halo" x="690" y="238">semanas o meses (cap. 2: 3.2 meses)</text>
+      <text class="tn" x="16" y="324">Barras azul y verde: Gebele et al., libros de abr–may 2026, mercados de varias opciones. Ámbar punteado: sin medir. La posición de cada barra es aproximada.</text>
+    </svg>
+    </div>
+    <figcaption><b>Compara la barra azul con la ámbar.</b> Las diferencias cortas viven en la misma zona de tiempo que tu reacción, donde compites con bots en Londres. Las largas (verde) te dan tiempo, pero del lado Sí terminan en la barra gris: esperar meses.</figcaption>
+  </figure>
+
+  <h3>Por qué importa</h3>
+  <p>Si A fuera un ángulo para ganar dinero, fallaría tu criterio obligatorio "corre desde casa" en las diferencias cortas, y el de "ventaja neta real" en las largas (capital atrapado). Como <b>medición</b> sí tiene valor: grabar libros cuesta 0 USD y nadie ha publicado lo posterior a mayo de 2026 ni las escaleras.</p>
+
+  <h3>Lo que no sabemos</h3>
+  <ul>
+    <li>Cuánto tarda de verdad una orden desde tu conexión. No se midió. <span class="lab h">Hipótesis</span>: cientos de milisegundos, sin contar el tiempo de decidir.</li>
+    <li>Cuántas de las diferencias largas son del lado No, que se cobra sin esperar. En la muestra de Gebele, casi todas eran del lado Sí.</li>
+  </ul>
+  <p class="bridge">Si la velocidad no es la ventaja, ¿lo es el entendimiento? Las escaleras se corrigen razonando, no corriendo.</p>
+</section>
+
+<!-- ============ CAP 5 -->
+<section id="c5" class="ch">
+  <h2><span class="n">5</span>B · ¿Las escaleras dan dinero?</h2>
+  <div class="short"><b>Respuesta corta</b>
+    La regla es precisa: los 60 pares de la muestra eran válidos. Pero en la foto del 26 oct, después de quitar los precios fantasma, la ganancia total aprovechable fue de unos 17 USD, como techo. Una sola foto no dice con qué frecuencia aparecen ni cuánto duran.
+  </div>
+
+  <h3>Caso</h3>
+  <div class="row"><div>
+    <p>El par del capítulo 2, "desempleo ≥ 6 % / ≥ 7 %", salió de este sondeo. El sondeo descargó los 21,823 eventos activos de Polymarket en una foto (26 oct 2026, 03:08 UTC). Luego buscó escaleras: eventos cuyos mercados solo cambian un umbral ("arriba de X") o una fecha ("antes de X").</p>
+    <p>En una escalera, el Sí del mercado <i>difícil</i> implica el Sí del <i>fácil</i>. Llegar a 7 % implica haber llegado a 6 %. "Pasa antes de junio" implica "pasa antes de diciembre". Si comprar Sí al fácil y No al difícil cuesta menos de 1, es una oportunidad, por la misma tabla de tres escenarios del capítulo 2.</p>
+    <p>La regla necesitó cuatro versiones. Cada error enseñó algo que una IA también tendría que resolver:</p>
+    <ul>
+      <li><b>v1</b> trató "hit" como "subir". Los eventos de acciones mezclan "hit (LOW)" (caer a) con "hit (HIGH)" (subir a), y salieron decenas de oportunidades falsas.</li>
+      <li><b>v2</b> separó LOW y HIGH, pero "la aprobación de Trump llega a 20 %" significa <i>bajar</i>: depende del valor de hoy, que la regla no conoce.</li>
+      <li><b>v3</b> aceptó solo palabras explícitas ("or higher", "above") y descartó el "hit" a secas. Se equivocó de año: hay eventos que cierran antes que algunos de sus mercados.</li>
+      <li><b>v4</b> toma el año del cierre de cada mercado.</li>
+    </ul>
+  </div>
+  <aside class="note"><b>Precisión.</b> Se sacaron 60 pares al azar de los 13,776 y los 60 eran implicaciones válidas. Con 0 errores en 60, la precisión real es de al menos 95 % con 95 % de confianza (regla de tres: 3 / 60 = 5 % de error como máximo). Los revisé yo leyendo las preguntas, no tú, y no se leyeron las reglas completas de cada mercado <span class="lab h">Hipótesis</span>. No mide cuántas escaleras quedan fuera.</aside>
+  </div>
+
+  <h3>Mecanismo</h3>
+  <p>El diagrama sigue a los eventos por cada filtro, desde la foto completa hasta el dinero que se podía tomar.</p>
+
+  <figure class="wide">
+    <div class="board">
+    <svg viewBox="0 0 900 300" role="img" aria-label="De 21,823 eventos activos salen 1,003 escaleras y 13,776 pares. 54 pares costaban menos de 1, 40 después de comisión. De esos, 6 eran precios fantasma sin libro. 34 tenían libro real, 33 con volumen, y la ganancia total aprovechable fue 17.61 USD como techo.">
+      <defs><marker id="m4" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink2)"/></marker></defs>
+      <rect class="bxm" x="16" y="30" width="190" height="66" rx="7"/><text class="t1" x="30" y="56">21,823 eventos</text><text class="t3" x="30" y="76">activos, una foto</text>
+      <line class="ln" x1="206" y1="63" x2="232" y2="63" marker-end="url(#m4)"/>
+      <rect class="bxm" x="238" y="30" width="190" height="66" rx="7"/><text class="t1" x="252" y="56">1,003 escaleras</text><text class="t3" x="252" y="76">423 fecha · 580 umbral</text>
+      <line class="ln" x1="428" y1="63" x2="454" y2="63" marker-end="url(#m4)"/>
+      <rect class="bxm" x="460" y="30" width="190" height="66" rx="7"/><text class="t1" x="474" y="56">13,776 pares</text><text class="t3" x="474" y="76">fácil / difícil</text>
+      <line class="ln" x1="650" y1="63" x2="676" y2="63" marker-end="url(#m4)"/>
+      <rect class="bxm" x="682" y="30" width="200" height="66" rx="7"/><text class="t1" x="696" y="56">54 cuestan &lt; 1</text><text class="t3" x="696" y="76">con el mejor precio</text>
+      <polyline class="ln" points="782,96 782,126 112,126 112,148" marker-end="url(#m4)"/>
+      <rect class="bxm" x="16" y="154" width="190" height="66" rx="7"/><text class="t1" x="30" y="180">40 con comisión</text><text class="t3" x="30" y="200">siguen costando &lt; 1</text>
+      <line class="ln" x1="206" y1="187" x2="232" y2="187" marker-end="url(#m4)"/>
+      <rect class="bxm" x="238" y="154" width="190" height="66" rx="7"/><text class="t1" x="252" y="180">34 con libro real</text><text class="t3" x="252" y="200">se pudo leer su libro</text>
+      <polyline class="lnr" points="333,220 333,250"/>
+      <rect class="bxr" x="238" y="252" width="190" height="40" rx="7"/><text class="t2 tr" x="252" y="277">6 precios fantasma</text>
+      <line class="ln" x1="428" y1="187" x2="454" y2="187" marker-end="url(#m4)"/>
+      <rect class="bxm" x="460" y="154" width="190" height="66" rx="7"/><text class="t1" x="474" y="180">33 con volumen</text><text class="t3" x="474" y="200">5,254 acciones</text>
+      <line class="ln" x1="650" y1="187" x2="676" y2="187" marker-end="url(#m4)"/>
+      <rect class="bxc" x="682" y="154" width="200" height="66" rx="7"/><text class="t1 tc" x="696" y="180">17.61 USD</text><text class="t3" x="696" y="200">techo: hay patas repetidas</text>
+    </svg>
+    </div>
+    <figcaption><b>Mira la caja roja y la azul final.</b> Las 6 diferencias más grandes eran mercados sin libro, con precios de relleno (por ejemplo, compra 0.09 y venta 0.94). Lo que sí se podía tomar suma 17.61 USD. Es un techo: varios pares comparten una misma pata, y la cuenta usó el volumen de esa pata en cada par, aunque en la práctica solo se puede usar una vez.</figcaption>
+  </figure>
+
+  <div class="row"><div>
+    <p>Los <a class="t" href="#g-fantasma">precios fantasma</a> merecen un comentario. Gamma, la API de mercados de Polymarket, reportaba un precio de compra y uno de venta para mercados cuyo libro no existía (respondía "404, no encontrado"). Un escáner que confía en esos precios anuncia oportunidades de 5 % que nadie puede tomar. La primera versión de este análisis cayó en eso y la revisión independiente lo marcó.</p>
+  </div>
+  <aside class="note"><b>De 34 a 33:</b> el par sobre la valuación de la empresa Glean tenía solo 0.36 acciones, por debajo del mínimo de 5 por orden. La comisión de cada par se leyó de su propio mercado; muchos cobraban 0.</aside>
+  </div>
+
+  <h3>Por qué importa</h3>
+  <p>B cumple dos criterios: corre desde casa y cuesta 0 USD. Para el tercero, ventaja neta, la evidencia de una foto es <b>chica</b>: decenas de dólares y meses de capital atrapado. Como pieza de portafolio sí aporta. La regla es precisa, casi nadie la ha publicado y muestra el principio de no confiar en un número sin revisar de dónde sale.</p>
+
+  <h3>Lo que no sabemos</h3>
+  <ul>
+    <li>Con qué frecuencia aparecen y cuánto duran: una foto no lo dice. Hace falta grabar los libros en el tiempo, lo mismo que haría el ángulo A como medición. <span class="lab p">Problema</span></li>
+    <li>Cuántas escaleras deja fuera la regla: no se midió la cobertura.</li>
+    <li>Escaleras entre eventos distintos del mismo activo (por ejemplo, "BTC arriba de X el día D" contra "BTC toca X en octubre"). Es una opción nueva (OP-046), no probada.</li>
+  </ul>
+  <p class="bridge">Tanto A como B buscan precios que se contradicen. ¿Y si la ventaja viniera de saber más que el mercado?</p>
+</section>
+
+<!-- ============ CAP 6 -->
+<section id="c6" class="ch">
+  <h2><span class="n">6</span>C · ¿Un pronóstico le gana al mercado del clima?</h2>
+  <div class="short"><b>Respuesta corta</b>
+    La versión simple no: en Nueva York y Londres, el mercado se equivocó menos que el pronóstico público de un día antes, y mezclarlos no mejoró al mercado. Queda abierta una versión con más información (varios modelos, datos del mismo día, ML con años de historia), pero tendría que saber algo que el mercado no sabe.
+  </div>
+
+  <h3>Caso</h3>
+  <div class="row"><div>
+    <p>Mercado: "¿Temperatura máxima en Nueva York el 22 oct 2026?". Tiene 11 rangos: "55 °F o menos", "56–57 °F", … , "74 °F o más". Se resuelve con la estación del aeropuerto LaGuardia.</p>
+    <p>El 21 oct a las 16:00 UTC (mediodía en Nueva York), un día antes:</p>
+    <ul>
+      <li>El pronóstico público del centro meteorológico europeo (ECMWF, gratuito vía Open-Meteo) daba una máxima de <b>63.2 °F</b>.</li>
+      <li>El modelo había aprendido de los días anteriores que ese pronóstico se quedaba corto <b>0.64 °F</b> en promedio. Su centro quedó en 63.8 °F.</li>
+      <li>El error típico del pronóstico en días anteriores era de <b>2.23 °F</b>. Con eso, el modelo repartió la probabilidad en forma de campana y le dio <b>17.8 %</b> al rango "66–67 °F".</li>
+      <li>El mercado le daba <b>56.7 %</b> a ese mismo rango.</li>
+    </ul>
+    <p>Ganó "66–67 °F". El modelo esperaba un día más frío del que hubo: su favorito era "64–65 °F". El mercado ya tenía como favorito el rango correcto, algo que el pronóstico de un día antes no decía.</p>
+    <table>
+      <tr><th>Rango</th><th class="num">Modelo</th><th class="num">Mercado</th><th>Pasó</th></tr>
+      <tr><td>60–61 °F</td><td class="num">12.1 %</td><td class="num">0.4 %</td><td>no</td></tr>
+      <tr><td>62–63 °F</td><td class="num">29.2 %</td><td class="num">0.9 %</td><td>no</td></tr>
+      <tr><td>64–65 °F</td><td class="num">33.2 %</td><td class="num">8.6 %</td><td>no</td></tr>
+      <tr><td>66–67 °F</td><td class="num">17.8 %</td><td class="num">56.7 %</td><td><b>sí</b></td></tr>
+      <tr><td>68–69 °F</td><td class="num">4.5 %</td><td class="num">31.3 %</td><td>no</td></tr>
+      <tr><td>otros 6 rangos</td><td class="num">3.2 %</td><td class="num">2.1 %</td><td>no</td></tr>
+    </table>
+  </div>
+  <aside class="note"><b>Cómo se calificó.</b> El <a class="t" href="#g-brier">Brier score</a> suma, por cada rango, el cuadrado de la diferencia entre la probabilidad dada y lo que pasó (1 si ganó, 0 si no). El mercado: (1 − 0.567)² + 0.313² + 0.086² + … ≈ 0.29. El modelo: (1 − 0.178)² + 0.332² + 0.292² + 0.121² + … ≈ 0.89. Más bajo es mejor.</aside>
+  </div>
+
+  <figure class="wide">
+    <div class="board">
+    <svg viewBox="0 0 900 250" role="img" aria-label="Pronóstico 63.2 grados más sesgo 0.64 da centro 63.8. Con dispersión 2.23 la campana da 17.8 por ciento al rango 66 a 67. El mercado daba 56.7 por ciento. Ganó 66 a 67.">
+      <defs><marker id="m5" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink2)"/></marker></defs>
+      <rect class="bxm" x="16" y="20" width="176" height="58" rx="7"/><text class="t2" x="30" y="44">Pronóstico ECMWF</text><text class="t3" x="30" y="64">63.2 °F, un día antes</text>
+      <rect class="bxa" x="16" y="96" width="176" height="58" rx="7"/><text class="t2" x="30" y="120">Sesgo aprendido</text><text class="t3" x="30" y="140">+0.64 °F (días previos)</text>
+      <polyline class="ln" points="192,49 222,49 222,87 236,87" marker-end="url(#m5)"/>
+      <polyline class="ln" points="192,125 222,125 222,87"/>
+      <circle class="op" cx="254" cy="87" r="14"/><text class="opt" x="254" y="92" text-anchor="middle">+</text>
+      <line class="ln" x1="268" y1="87" x2="294" y2="87" marker-end="url(#m5)"/>
+      <rect class="bxc" x="300" y="58" width="150" height="58" rx="7"/><text class="t2" x="314" y="82">Centro</text><text class="t3" x="314" y="102">63.8 °F</text>
+      <rect class="bxa" x="300" y="150" width="150" height="58" rx="7"/><text class="t2" x="314" y="174">Error típico</text><text class="t3" x="314" y="194">2.23 °F (días previos)</text>
+      <line class="ln" x1="450" y1="87" x2="486" y2="87" marker-end="url(#m5)"/>
+      <polyline class="ln" points="450,179 470,179 470,100 486,100" marker-end="url(#m5)"/>
+      <rect class="bxc" x="492" y="52" width="180" height="70" rx="7"/><text class="t2" x="506" y="76">Campana del modelo</text><text class="t1 tc" x="506" y="100">66–67 °F: 17.8 %</text>
+      <rect class="bxm" x="492" y="150" width="180" height="58" rx="7"/><text class="t2" x="506" y="174">Precio del mercado</text><text class="t1" x="506" y="196">66–67 °F: 56.7 %</text>
+      <line class="ln" x1="672" y1="87" x2="706" y2="87" marker-end="url(#m5)"/>
+      <polyline class="ln" points="672,179 690,179 690,100 706,100" marker-end="url(#m5)"/>
+      <rect class="bxt" x="712" y="52" width="172" height="70" rx="7"/><text class="t2" x="726" y="76">Resultado</text><text class="t1 tt" x="726" y="100">ganó 66–67 °F</text>
+      <text class="tn" x="16" y="238">Gris: dato medido. Azul: calculado. Ámbar punteado: aprendido solo con días anteriores (walk-forward); si el error del pronóstico cambia, lo aprendido ya no aplica.</text>
+    </svg>
+    </div>
+    <figcaption><b>Compara las dos cajas que llegan al resultado.</b> El modelo esperaba un día más frío del que hubo; el mercado ya tenía el rango correcto como favorito. En 44 de los 60 días, el mercado tuvo mejor Brier que el modelo.</figcaption>
+  </figure>
+
+  <h3>Mecanismo</h3>
+  <p>Del caso a los 60 días. El sondeo hizo lo mismo para cada día de ago a oct 2026: 74 días en Nueva York y 75 en Londres. Los primeros 14 solo sirvieron para que el modelo aprendiera, así que se calificaron 60 y 61. Cada día, el modelo aprendió el sesgo y el error típico <b>solo con los días anteriores</b>. A eso se le llama <a class="t" href="#g-walk">walk-forward</a>: así el modelo no puede hacer trampa viendo el futuro.</p>
+  <table>
+    <tr><th>Ciudad</th><th class="num">Brier modelo</th><th class="num">Brier mercado</th><th class="num">Mezcla 80/20</th><th class="num">Días que ganó el modelo</th></tr>
+    <tr><td>Nueva York</td><td class="num">0.755</td><td class="num">0.586</td><td class="num">0.601</td><td class="num">16 de 60</td></tr>
+    <tr><td>Londres</td><td class="num">0.754</td><td class="num">0.637</td><td class="num">0.645</td><td class="num">18 de 61</td></tr>
+  </table>
+  <p>Para darle escala al Brier: va de 0 (acertar con 100 %) a 2 (dar 100 % a un rango que no salió). Repartir parejo entre 11 rangos daría 0.91. El modelo (0.75) apenas mejora eso; el mercado (0.59) mejora bastante más.</p>
+  <p>La columna "mezcla" es la prueba clave. Si mezclar 80 % del precio con 20 % del modelo mejorara al precio solo, el pronóstico traería información que el mercado no tiene. Pasó lo contrario: la mezcla empeoró en las dos ciudades.</p>
+  <ul>
+    <li>Que el mercado le gana al modelo simple: <span class="lab c">Confirmado</span>.</li>
+    <li>Que el pronóstico no aporta nada: <span class="lab h">Hipótesis</span>. Con 60 días no se puede descartar un aporte chico. En Nueva York, la mezcla empeoró 0.015, unas 2.5 veces su error estándar (0.006), así que es poco probable que sea suerte. En Londres empeoró 0.009, solo 1.4 veces su error estándar: puede ser ruido.</li>
+  </ul>
+  <p>Este "más bajo es mejor" mide información, no dinero: el sondeo usó precios del historial, no precios ejecutables.</p>
+
+  <h3>Por qué importa</h3>
+  <div class="row"><div>
+    <p>C era el ángulo con más ML. El sondeo descarta la versión ingenua, no el ángulo entero. Para ganarle al mercado, un modelo tendría que usar algo que el mercado no usa:</p>
+    <ul>
+      <li>pronósticos por conjuntos: decenas de corridas del mismo modelo con pequeñas variaciones, que dicen qué tan segura es la predicción;</li>
+      <li>modelos de alta resolución, que miran una zona más chica con más detalle;</li>
+      <li>las observaciones de la estación durante el mismo día;</li>
+      <li>años de historia para entrenar.</li>
+    </ul>
+    <p>Cualquiera de esas versiones arranca con desventaja. En Nueva York, el centro de la apuesta del mercado se alejó en promedio 1.15 °F de la máxima real, y el pronóstico sin corregir, 1.90 °F (74 días). En Londres fue 0.66 °C contra 1.14 °C. El 2.23 °F del caso es otra cosa: la dispersión que el modelo usó para dibujar su campana ese día.</p>
+    <p>Además, C busca ventaja de información, no arbitraje. El brief aprobó arbitraje, contradicciones y calibración. Si C sigue, es una ampliación de alcance que tienes que aprobar. <span class="lab q">Preguntar</span></p>
+  </div>
+  <aside class="note"><b>Límites del sondeo.</b> Usó precios del historial cada 3 h, no precios ejecutables: mide información, no ventaja neta. A mitad del periodo cambió, en las dos ciudades, la fuente con que se resuelve: de Weather Underground a NOAA. El modelo aprendió su sesgo inicial con la fuente vieja; cuánto distorsiona eso no se midió. El pronóstico de "un día antes" salió, para las horas del pico, de corridas publicadas después de la foto del mercado. Eso favorece al modelo, y aun así perdió.</aside>
+  </div>
+
+  <h3>Lo que no sabemos</h3>
+  <ul>
+    <li>Si una versión con conjuntos, observaciones del día o ML le gana al mercado. No se probó.</li>
+    <li>Si la comisión 0 de los mercados de clima recientes, desde el 19 oct 2026, se mantiene. Solo se vio en mercados de clima. <span class="lab h">Hipótesis</span>: es un cambio nuevo.</li>
+  </ul>
+  <p class="bridge">Si el pronóstico público ya está en el precio, ¿hay otra fuente de información que el mercado de predicción no use bien?</p>
+</section>
+
+<!-- ============ CAP 7 -->
+<section id="c7" class="ch">
+  <h2><span class="n">7</span>D y calibración · ¿Hay ventaja en otro mercado o en un sesgo?</h2>
+  <div class="short"><b>Respuesta corta</b>
+    Las opciones de cripto dan un precio justo, y un paper ya encontró desviaciones en las apuestas de "tocar X". En calibración, un estudio ve favoritos subvalorados a plazos largos y otro no ve ventaja. Nadie ha medido la ganancia neta de ninguno, y ninguno se sondeó.
+  </div>
+
+  <h3>Caso: D, opciones de cripto</h3>
+  <div class="row"><div>
+    <p>Polymarket tiene mercados sobre el precio de BTC de dos tipos:</p>
+    <ul>
+      <li><b>"Arriba de X":</b> solo importa el precio en una fecha, por ejemplo "¿BTC arriba de 120 mil el 31 dic?".</li>
+      <li><b>"¿Toca X?":</b> basta con que el precio pase por X en algún momento del periodo, aunque luego se aleje.</li>
+    </ul>
+    <p>En Deribit, una bolsa de derivados de cripto mucho más grande y usada por profesionales <span class="lab h">Hipótesis</span>, se negocian <a class="t" href="#g-opfin">opciones financieras</a> sobre BTC. Con un modelo matemático estándar, de sus precios se puede despejar la probabilidad que ese mercado le asigna a cada caso. Si no coincide con la de Polymarket, una de las dos está mal.</p>
+    <p>Lo que ya se sabe <span class="lab c">Confirmado</span> en el resumen de un paper que compara los dos mercados:</p>
+    <ul>
+      <li>Las apuestas de "arriba de X" siguen bien a las opciones.</li>
+      <li>Las de "¿toca X?" o "¿cae a X?" se desvían. Más al abrir el mercado, cerca del vencimiento y en fines de semana.</li>
+    </ul>
+    <p>Que se desvíen no significa que se pueda ganar: falta restar comisión, spread y capital atrapado, y nadie lo ha hecho.</p>
+  </div>
+  <aside class="note"><b>Por qué no se sondeó.</b> Pasa tus criterios: datos gratis y corre desde casa. Se dejó fuera porque ya está estudiado, y la novedad no es uno de tus criterios. Sigue siendo una opción válida.</aside>
+  </div>
+
+  <h3>Caso: calibración</h3>
+  <div class="row"><div>
+    <p>Un mercado está <a class="t" href="#g-calibracion">calibrado</a> si de todos los contratos que cotizan a 70 centavos, se cumple más o menos el 70 %. Dos estudios no coinciden:</p>
+    <ul>
+      <li><b>Le (2026)</b>, con tratos hasta dic 2025: en política, los favoritos valen menos de lo que deberían, y más a plazos largos. Un contrato a 70 centavos a un mes equivale a unos 75 % reales. No resta comisiones. <span class="lab c">Confirmado</span></li>
+      <li><b>Song</b>, con 2,975 mercados: no encuentra ese sesgo, y corregirlo fuera de muestra no mejoró nada. Es un análisis publicado en GitHub, sin revisión de pares: los números son de su texto, pero el método no lo ha revisado nadie más.</li>
+    </ul>
+  </div>
+  <aside class="note"><b>El sesgo y el tiempo.</b> Que un contrato a 70 valga 75 da 5 centavos, pero a un mes o más. Es el mismo problema del capital atrapado del capítulo 2.</aside>
+  </div>
+
+  <h3>Mecanismo</h3>
+  <p>Los dos son ventaja de información:</p>
+  <ul>
+    <li><b>D</b> trae un precio justo de un mercado más profesional.</li>
+    <li><b>La calibración</b> aprovecha un error sistemático de la gente que opera en Polymarket.</li>
+  </ul>
+  <p>Ninguno necesita velocidad, así que los dos pasan "corre desde casa". Los dos dependen de lo mismo: que la diferencia sobreviva a la comisión, al spread y al tiempo de espera. Nadie lo ha mostrado.</p>
+
+  <h3>Por qué importa</h3>
+  <p>D es el ángulo más "quant" clásico y tiene base matemática sólida. Medir la ventaja neta de la calibración, después de comisión, spread y tiempo, es algo que ningún estudio hace. Además usaría los mismos datos que el resto de Polyquack. Ninguno de los dos se ha descartado con evidencia.</p>
+
+  <h3>Lo que no sabemos</h3>
+  <ul>
+    <li>Si se puede operar en Deribit desde México, en caso de querer cubrirse. No se revisó.</li>
+    <li>Si el sesgo de Le sigue en 2026 y si sobrevive a las comisiones.</li>
+    <li>D, como C, amplía el alcance del brief. <span class="lab q">Preguntar</span></li>
+  </ul>
+  <p class="bridge">D usa los precios de otro mercado para juzgar a Polymarket. ¿Y si el otro mercado estuviera dentro de Polymarket, y lo que se comparara no fuera el precio sino lo que se cobra por mantener una posición?</p>
+</section>
+
+<!-- ============ CAP E -->
+<section id="cE" class="ch">
+  <h2><span class="n">8</span>E · ¿Se cobra la diferencia de funding entre plataformas?</h2>
+  <div class="short"><b>Respuesta corta</b>
+    Polymarket tiene futuros perpetuos desde sep 2026, y su tasa de financiamiento fue menor que la de Hyperliquid en 36 de 38 criptos. Comprar en una y vender en la otra cobra esa diferencia sin apostar al precio. Fuera de muestra dejó +8.7 % al año en promedio, con mucha dispersión y riesgos sin medir.
+  </div>
+
+  <h3>Caso</h3>
+  <div class="row"><div>
+    <p>Desde el 3 sep 2026, Polymarket tiene <a class="t" href="#g-perp">futuros perpetuos</a> (Perps). Son contratos que siguen el precio de un activo, como ETHFI, una cripto mediana, y nunca vencen.</p>
+    <p>Para que el precio del contrato no se aleje del precio real, cada hora se cobra una <a class="t" href="#g-funding">tasa de financiamiento</a> (funding):</p>
+    <ul>
+      <li>si el contrato cotiza arriba del precio real, los que compraron (largos) les pagan a los que vendieron (cortos);</li>
+      <li>si cotiza abajo, pagan los cortos.</li>
+    </ul>
+    <p>Hyperliquid, otra plataforma de perpetuos, hace lo mismo.</p>
+    <p>Entre el 3 sep y el 26 oct 2026, con ETHFI:</p>
+    <ul>
+      <li>En Polymarket, la tasa promedio fue de <b>−24.1 % al año</b>: los cortos les pagaron a los largos.</li>
+      <li>En Hyperliquid fue de <b>+13.7 % al año</b>: los largos les pagaron a los cortos.</li>
+    </ul>
+    <p>Si compras ETHFI en Polymarket y vendes la misma cantidad en Hyperliquid, cobras en las dos plataformas. A esta variante le llamamos <b>E1</b>. Lo que ganes o pierdas por el precio de ETHFI se cancela, porque estás comprado en una y vendido en la otra. Lo que queda es la suma de las dos tasas: <b>24.1 + 13.7 = 37.8 % al año</b>, antes de comisiones.</p>
+  </div>
+  <aside class="note"><b>De dónde salen los números.</b> Historial público de funding, hora por hora, de las dos plataformas. Las 38 criptos que están en ambas. Scripts en <span class="mono">docs/discovery/spikes/DQ-E-funding/</span>.</aside>
+  </div>
+
+  <figure class="wide">
+    <div class="board">
+    <svg viewBox="0 0 900 290" role="img" aria-label="Largo en Polymarket cobra 24.1 por ciento al año, corto en Hyperliquid cobra 13.7 por ciento al año. El precio de ETHFI se cancela entre las dos patas. La suma bruta es 37.8 por ciento al año. Restando comisiones y midiendo solo la segunda mitad, la estrategia dejó 34.3 por ciento neto en ETHFI.">
+      <defs><marker id="m6" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink2)"/></marker></defs>
+      <rect class="bxm" x="16" y="24" width="230" height="70" rx="7"/><text class="t1" x="30" y="48">Largo en Polymarket</text><text class="t3" x="30" y="68">funding −24.1 % al año:</text><text class="t3" x="30" y="84">los cortos te pagan</text>
+      <rect class="bxm" x="16" y="160" width="230" height="70" rx="7"/><text class="t1" x="30" y="184">Corto en Hyperliquid</text><text class="t3" x="30" y="204">funding +13.7 % al año:</text><text class="t3" x="30" y="220">los largos te pagan</text>
+      <rect class="bxa" x="290" y="98" width="190" height="58" rx="7"/><text class="t2 ta" x="304" y="122">Precio de ETHFI</text><text class="t3" x="304" y="142">sube en una, baja en otra</text>
+      <polyline class="ln" points="246,59 270,59 270,110 284,110" marker-end="url(#m6)"/>
+      <polyline class="ln" points="246,195 270,195 270,144 284,144" marker-end="url(#m6)"/>
+      <text class="tn halo" x="385" y="88" text-anchor="middle">se cancela (si no se separan)</text>
+      <polyline class="ln" points="246,40 520,40 520,105" marker-end="url(#m6)"/>
+      <polyline class="ln" points="246,214 520,214 520,149" marker-end="url(#m6)"/>
+      <circle class="op" cx="520" cy="127" r="14"/><text class="opt" x="520" y="132" text-anchor="middle">+</text>
+      <line class="ln" x1="534" y1="127" x2="562" y2="127" marker-end="url(#m6)"/>
+      <rect class="bxc" x="568" y="92" width="140" height="70" rx="7"/><text class="t1" x="582" y="118">Bruto</text><text class="t2" x="582" y="140">37.8 % al año</text>
+      <line class="ln" x1="708" y1="127" x2="736" y2="127" marker-end="url(#m6)"/>
+      <rect class="bxt" x="742" y="80" width="146" height="94" rx="7"/><text class="t1 tt" x="756" y="104">ETHFI, neto</text><text class="t1 tt" x="756" y="122">fuera de muestra</text><text class="t2" x="756" y="144">+34.3 % al año</text><text class="t3" x="756" y="162">29 sep – 26 oct</text>
+      <text class="tn" x="16" y="262">Gris: medido. Azul: calculado. Verde: la estrategia con comisiones, medida en datos que no usó para elegir. Ámbar punteado: el riesgo de base, sin medir.</text>
+      <text class="tn" x="16" y="280">Los porcentajes son sobre el valor de cada pata (nocional), no sobre el dinero que pones de garantía.</text>
+    </svg>
+    </div>
+    <figcaption><b>Sigue las dos flechas hacia el "+".</b> Cobras en las dos patas a la vez, y el precio del activo queda en medio, cancelado. La caja ámbar es la trampa: si los dos precios se separan, la cancelación no es perfecta.</figcaption>
+  </figure>
+
+  <h3>Mecanismo</h3>
+  <div class="row"><div>
+    <p><b>Del caso al patrón.</b> ETHFI no es la excepción:</p>
+    <ul>
+      <li>En <b>36 de las 38</b> criptos que están en las dos plataformas, el funding de Polymarket fue menor que el de Hyperliquid. La diferencia media es de 12.5 % al año. <span class="lab c">Confirmado</span> para estos dos meses.</li>
+      <li>Por qué pasa no está claro. Lo que se ve: en Hyperliquid, la tasa casi siempre quedó en su nivel normal (unos 11 % al año) o arriba. En Polymarket, varias altcoins cotizaron por debajo del precio real, con más gente vendiendo que comprando, y eso volvió negativa su tasa. Puede ser algo propio de una plataforma nueva, con pocos participantes. <span class="lab h">Hipótesis</span></li>
+    </ul>
+    <p><b>Del patrón a la regla.</b> Se simuló una estrategia que no ve el futuro:</p>
+    <ul>
+      <li>cada día mira la diferencia de las 24 h anteriores;</li>
+      <li>si pasa de un umbral (8.8 % al año), mantiene 24 h la posición que cobra, sea cual sea: largo en Polymarket y corto en Hyperliquid, o al revés. El umbral evita abrir y cerrar por diferencias chicas que no pagan la comisión. Se eligió viendo los mismos datos, y eso es una debilidad;</li>
+      <li>paga comisión de taker en las dos patas al abrir y al cerrar: 0.17 % del valor de una pata por cada ida y vuelta completa, ya descontada del neto. El 37.8 % del caso es bruto, sin esa resta.</li>
+    </ul>
+    <p>Sobre las 38 monedas y los dos meses completos, dejó <b>+2.6 % al año</b> en promedio, positiva en 17.</p>
+    <p><b>La prueba que importa.</b> Para no quedarse solo con las monedas que salieron bien por suerte, se eligieron las 10 de mayor diferencia en la primera mitad (3 a 29 sep) y se midieron solo en la segunda (29 sep a 26 oct):</p>
+    <ul>
+      <li>promedio: <b>+8.7 % al año</b>, contra +4.3 % de todas las monedas en esa misma segunda mitad (es distinto del +2.6 % porque es otro periodo);</li>
+      <li>dispersión enorme, de −9.9 % a +34.3 %;</li>
+      <li>tres pasaron de +30 % (ETHFI, ARB, KAITO) y tres perdieron.</li>
+    </ul>
+  </div>
+  <aside class="note"><b>Rendimiento sobre tu dinero.</b> Los porcentajes son sobre el valor de cada pata. Cada pata necesita su garantía (margen): con apalancamiento 2x, una pata de 1,000 USD pide 500, y las dos juntas piden 1,000. Así, el rendimiento sobre tu dinero queda igual a estos porcentajes. Con 4x pides la mitad y el rendimiento se duplica. Pero si el precio se mueve un poco menos de 25 % en contra de una pata, la plataforma la cierra (liquida), y la otra queda sin cobertura.</aside>
+  </div>
+
+  <h3>Por qué importa</h3>
+  <div class="row"><div>
+    <p>Es el primer ángulo que dejó <b>ganancia neta positiva en datos que no usó para elegir</b>. Pasa tus dos criterios obligatorios:</p>
+    <ul>
+      <li>corre desde casa, porque se cobra por hora y no por segundo;</li>
+      <li>la ganancia se midió con las tasas reales cobradas y con comisión.</li>
+    </ul>
+    <p>Tampoco sufre el problema del capítulo 2: el funding se cobra cada hora, no al final, así que el dinero no queda atrapado esperando una resolución. Lo que sí queda inmovilizado es la garantía de las dos patas.</p>
+    <p>Los datos son gratis. Desde México se puede operar: no está en la lista de países bloqueados de Perps. <span class="lab c">Confirmado</span> para la plataforma; el marco legal mexicano no se revisó.</p>
+    <p>Hay una segunda variante, <b>E2</b>, sin sondear: comparar o cubrir los mercados de predicción de precio ("¿BTC arriba de X?") con el perp de BTC, dentro de la misma plataforma. Es como D, pero sin salir de Polymarket.</p>
+    <p>Igual que C y D, E ya no es un mercado de predicción. Si sigue, amplía el brief. <span class="lab q">Preguntar</span></p>
+  </div>
+  <aside class="note"><b>Profundidad en una foto del 26 oct.</b> A 0.2 % del precio había, por ejemplo, 125 mil USD de venta en Polymarket para ETHFI, pero solo 5 mil de compra en Hyperliquid. Para tamaños de miles de USD alcanza; el lado chico suele ser Hyperliquid.</aside>
+  </div>
+
+  <h3>Lo que no sabemos</h3>
+  <ul>
+    <li><b>Riesgo de base:</b> cuánto se separan los dos precios mientras la posición está abierta. En la foto del 26 oct, Polymarket cotizaba entre 0.03 % y 0.12 % debajo de Hyperliquid. No se midió en el tiempo. <span class="lab p">Problema</span></li>
+    <li><b>Si dura:</b> la plataforma tiene dos meses. Si llega más gente, la diferencia puede cerrarse, y las comisiones de la etapa beta pueden cambiar.</li>
+    <li><b>Deslizamiento y liquidaciones:</b> no se modelaron.</li>
+    <li><b>Legalidad en México</b> de derivados con apalancamiento: no se revisó.</li>
+  </ul>
+  <p class="bridge">Ya están los seis: A, B, C, D, calibración y E. ¿Cómo quedan contra lo que dijiste que importa?</p>
+</section>
+
+<!-- ===================================================== PARTE III -->
+<h2 class="part">Parte III · Decidir</h2>
+
+<!-- ============ CAP 8 -->
+<section id="c8" class="ch">
+  <h2><span class="n">9</span>¿Cómo quedan contra tus criterios?</h2>
+  <div class="short"><b>Respuesta corta</b>
+    Pasan "corre desde casa" y "costo bajo": B, C, D, calibración y E. A falla "ventaja con precios reales" en lo medido hasta hoy. Solo E dejó ganancia neta fuera de muestra, con poca historia. La recomendación va al final, separada de la comparación.
+  </div>
+
+  <h3>Caso: tus criterios</h3>
+  <p>El 25 oct fijaste tres criterios antes de ver las opciones:</p>
+  <ul>
+    <li><b>CR-001, ventaja con precios reales</b> (obligatorio): la ganancia se mide con precios ejecutables, después de comisión y de capital atrapado.</li>
+    <li><b>CR-002, corre desde casa</b> (obligatorio): sin servidores junto al exchange.</li>
+    <li><b>CR-003, costo bajo</b>: hasta 20 USD al mes.</li>
+  </ul>
+
+  <h3>Mecanismo: la comparación</h3>
+  <p>En la columna de CR-001, "sin demostrar" no es ni pasa ni falla: falta el dato. Las dos últimas columnas no son criterios tuyos; están como información y no deciden nada.</p>
+  <div class="wide">
+  <table>
+    <tr><th>Ángulo</th><th>CR-001 ventaja real</th><th>CR-002 desde casa</th><th>CR-003 costo</th><th>Qué aporta ML</th><th>Qué tan nuevo</th></tr>
+    <tr><td><b>A</b> velocidad</td><td>Falla como negocio: las cortas son de bots y las largas esperan meses</td><td>Falla para operar; sirve para medir</td><td>0 USD (grabar)</td><td>Poco</td><td>Gebele ya midió abr–may 2026</td></tr>
+    <tr><td><b>B</b> escaleras</td><td>Sin demostrar: 17.61 USD en una foto</td><td>Pasa</td><td>0 USD</td><td>Medio: la regla primero, IA para cubrir más</td><td>Alto: no encontrado publicado</td></tr>
+    <tr><td><b>C</b> clima</td><td>Sin demostrar: la versión simple pierde</td><td>Pasa</td><td>0 USD</td><td><b>Alto</b></td><td>Medio: hay bots, no estudios</td></tr>
+    <tr><td><b>D</b> opciones cripto</td><td>Sin demostrar: hay desvíos documentados, no neto</td><td>Pasa</td><td>0 USD</td><td>Medio (cuantitativo)</td><td>Bajo: ya hay paper</td></tr>
+    <tr><td><b>Calibración</b> neta</td><td>Sin demostrar: los estudios no coinciden</td><td>Pasa</td><td>0 USD</td><td>Medio</td><td>Alto en la versión neta</td></tr>
+    <tr><td><b>E1</b> funding entre plataformas</td><td>Positiva fuera de muestra: +8.7 % al año en promedio sobre el valor de cada pata, después de comisión y sin capital esperando una resolución. Solo 2 meses de datos y el riesgo de base sin medir</td><td>Pasa</td><td>0 USD</td><td>Medio: predecir qué diferencias persisten</td><td>Alto: la plataforma tiene 2 meses</td></tr>
+  </table>
+  </div>
+
+  <h3>Por qué importa</h3>
+  <p>A es el único que falla un criterio obligatorio como forma de ganar dinero. De los demás, solo E tiene una señal de ventaja neta, y es corta: dos meses, una sola plataforma de comparación y el riesgo de base sin medir. La decisión no es "cuál gana": es <b>cuál vale la pena seguir midiendo</b> y con qué expectativa.</p>
+
+  <div class="reco"><b>Recomendación (no es una decisión).</b>
+    <p style="margin-top:8px">Tomar como núcleo de Polyquack tres piezas, ninguna construida todavía:</p>
+    <ul>
+      <li>un <b>grabador de libros</b>: un programa que se suscribe al canal en vivo de Polymarket y guarda cada cambio de los libros de órdenes;</li>
+      <li>el <b>evaluador</b> que pide el brief: calcula siempre la comisión, el volumen y el capital atrapado del capítulo 2, y compara cada método contra un criterio fijado antes de probarlo;</li>
+      <li>las <b>escaleras medidas en el tiempo</b>.</li>
+    </ul>
+    <p>Juntas responden lo que la foto de B no pudo: cuántas veces aparecen, cuánto duran y cuánto queda neto. También extienden lo que midió Gebele después de mayo de 2026.</p>
+    <p>Los datos cuestan 0 USD. Grabar sin parar exige una computadora prendida o un servidor chico, dentro de tus 20 USD al mes. Y sirve aunque el resultado sea "no hay dinero": cumple lo que dijiste al empezar, "escalarlo hasta tal vez lograr conseguir dinero o descartar métodos".</p>
+    <p><b>Con E cambia la prioridad de la ampliación.</b> Si apruebas ampliar el brief, empezaría por <b>E1</b> antes que por C o D:</p>
+    <ul>
+      <li>es el único ángulo con ganancia neta fuera de muestra;</li>
+      <li>el mismo grabador y el mismo evaluador le sirven;</li>
+      <li>su riesgo principal, la base, se puede medir grabando unas semanas más, sin dinero.</li>
+    </ul>
+    <p>La parte de ML vendría después: predecir qué diferencias de funding van a persistir.</p>
+    <p>Entre C y D, elegiría D: tiene desvíos ya documentados en las apuestas de "tocar X", y C, en su versión simple, perdió con claridad.</p>
+    <p>Lo que no recomendaría: competir por velocidad (A como negocio), gastar en datos históricos antes de tener el grabador, ni poner dinero en E1 antes de medir la base y las liquidaciones.</p>
+  </div>
+
+  <h3>Lo que no sabemos</h3>
+  <ul>
+    <li>Ningún ángulo tiene todavía una medición de ventaja neta en el tiempo. Toda la tabla podría cambiar con un mes de datos grabados.</li>
+  </ul>
+  <p class="bridge">La recomendación es solo eso. ¿Qué te toca decidir a ti, pregunta por pregunta?</p>
+</section>
+
+<!-- ============ CAP 9 -->
+<section id="c9" class="ch">
+  <h2><span class="n">10</span>¿Qué falta saber y qué decides?</h2>
+  <div class="short"><b>Respuesta corta</b>
+    Hay tres decisiones grandes: qué ángulo es el núcleo, si C, D o E entran como ampliación del brief, y si sigues por investigación o por ganancia. De las 10 preguntas de evidencia, unas ya tienen respuesta y otras tienen opciones claras para que elijas.
+  </div>
+
+  <h3>Caso: las tres decisiones grandes</h3>
+  <ol>
+    <li><b>Núcleo.</b> ¿El grabador con escaleras medidas en el tiempo (recomendado), otra combinación o parar aquí? <span class="lab q">Preguntar</span></li>
+    <li><b>Ampliación.</b> ¿Entran C, D o E? C y D buscan ventaja de información; E es arbitraje, pero en futuros perpetuos y no en mercados de predicción. Si alguno entra, el brief cambia, y E además suma derivados con apalancamiento. <span class="lab q">Preguntar</span></li>
+    <li><b>Expectativa.</b> ¿Polyquack es primero investigación y portafolio (la ganancia es un posible resultado) o primero ganancia (si no aparece, se para)? Cambia cuánto tiempo le das antes de cortar y qué cuenta como "no hay dinero". Ese plazo y ese umbral los fijas tú; el libro no los propone. <span class="lab q">Preguntar</span></li>
+  </ol>
+
+  <h3>Mecanismo: las 10 preguntas</h3>
+  <p>Al empezar el descubrimiento se fijaron 10 preguntas que nadie sabía responder (DQ-001 a DQ-010). La tabla dice qué se sabe hoy y qué eliges en cada una. "Papel" significa operar solo en simulación, sin dinero.</p>
+  <div class="wide">
+  <table>
+    <tr><th>Pregunta</th><th>Qué se sabe</th><th>Qué decides</th></tr>
+    <tr><td>DQ-001 Acceso desde México</td><td>Leer funciona: tu conexión no está bloqueada <span class="lab c">Confirmado</span>. Operar: zona gris legal <span class="lab p">Problema</span></td><td>Opinión legal antes de dinero real, o papel para siempre</td></tr>
+    <tr><td>DQ-002 Datos</td><td>No hay historial de libros en Polymarket; vendedores desde jul 2025</td><td>Grabar desde ya (0 USD) y comprar días sueltos solo si hace falta</td></tr>
+    <tr><td>DQ-003 Qué ya se midió</td><td>Gebele midió con libros reales abr–may 2026</td><td>Reenfocar a lo posterior a mayo de 2026 y a las escaleras</td></tr>
+    <tr><td>DQ-004 Costos</td><td>Fórmula de comisión clara; tasa por mercado</td><td>Calcular como taker; probar después el lado de venta: crear juegos por 1 USD y venderlos cuando los precios de compra suman más de 1 (capítulo 1)</td></tr>
+    <tr><td>DQ-005 Duración y velocidad</td><td>Segundos y más de 50 min; servidor en Londres descartado</td><td>Apuntar a diferencias largas; no competir por velocidad</td></tr>
+    <tr><td>DQ-006 Encontrar mercados relacionados</td><td>Regla de escaleras: 60 de 60 válidos en la muestra</td><td>Regla primero; IA después, solo para cubrir más</td></tr>
+    <tr><td>DQ-007 Riesgo de resolución</td><td>Hay disputas; las cifras de frecuencia no se comparan</td><td>Excluir reglas subjetivas o restar un costo de riesgo</td></tr>
+    <tr><td>DQ-008 Calibración</td><td>Los estudios no coinciden; ninguno mide neto</td><td>Medir la calibración neta u omitirla</td></tr>
+    <tr><td>DQ-009 Herramientas existentes</td><td>Ninguna herramienta abierta mide la ganancia neta con duración</td><td>Construir la propia. Hay un bot abierto (Synpath, licencia MIT) que sirve como referencia de código</td></tr>
+    <tr><td>DQ-010 Evaluación</td><td>Arbitraje y pronóstico necesitan métricas distintas</td><td>Un evaluador por familia: rendimiento anual sobre capital atrapado para arbitraje y Brier contra el mercado para pronósticos. Antes de cada prueba, escribir el criterio de éxito ("preregistro") para no moverlo después de ver el resultado</td></tr>
+  </table>
+  </div>
+
+  <h3>Por qué importa</h3>
+  <p>Para que el brief quede <i>Listo para el PRD</i> (el documento de requisitos que sigue), hacen falta las tres decisiones grandes y una elección en cada fila de la tabla. Sin ellas, el brief se queda en descubrimiento. Las decisiones técnicas, como cómo grabar o dónde guardar, no se toman aquí: pasan al diseño del sistema. El <a href="#apD">apéndice D</a> junta todas las decisiones en una lista para marcar.</p>
+
+  <h3>Lo que no sabemos</h3>
+  <ul>
+    <li>Si es legal operar desde México. Solo importa antes de usar dinero real: así lo dice una regla del brief.</li>
+  </ul>
+  <p class="bridge">Fin del recorrido. Lo que sigue es tu decisión.</p>
+</section>
+
+<!-- ===================================================== CONSULTA -->
+<section id="glosario" class="ch col">
+  <h2>Glosario</h2>
+  <dl class="gloss">
+    <dt id="g-opcion">Opción (de un mercado)</dt><dd>Uno de los resultados posibles. Al resolverse, la ganadora paga 1 USD por acción y las demás 0.</dd>
+    <dt id="g-negrisk">Mercado de varias opciones (negRisk)</dt><dd>Mercado cuyas opciones se excluyen entre sí: exactamente una gana. Polymarket le dice negRisk.</dd>
+    <dt id="g-juego">Juego completo (canasta)</dt><dd>Una acción de cada opción de un mercado de varias opciones. Siempre paga 1 USD.</dd>
+    <dt id="g-libro">Libro de órdenes</dt><dd>La lista de órdenes de compra y de venta que esperan, con su precio y su cantidad.</dd>
+    <dt id="g-ejecutable">Precio ejecutable (precio de venta y de compra)</dt><dd>El mejor precio al que de verdad puedes comprar ya (precio de venta, <i>ask</i>) o vender ya (precio de compra, <i>bid</i>).</dd>
+    <dt id="g-mostrado">Precio mostrado</dt><dd>El que enseña la página: intermedio o del último trato. No sirve para decidir una operación.</dd>
+    <dt id="g-spread">Spread</dt><dd>La distancia entre el precio de venta y el de compra. Es el pago a quien deja órdenes esperando.</dd>
+    <dt id="g-taker">Taker y maker</dt><dd>Taker: quien compra o vende al precio del libro, de inmediato; paga comisión. Maker: quien deja una orden esperando; no paga y recibe reembolso.</dd>
+    <dt id="g-arbitraje">Arbitraje</dt><dd>Combinación de compras y ventas que deja ganancia pase lo que pase con el resultado.</dd>
+    <dt id="g-convertidor">Convertidor</dt><dd>Herramienta de Polymarket que cambia 1 No de una opción por 1 Sí de cada una de las demás, en mercados de varias opciones.</dd>
+    <dt id="g-pata">Pata</dt><dd>Cada compra o venta individual dentro de una operación que combina varias. Un juego de 9 opciones tiene 9 patas.</dd>
+    <dt id="g-perp">Futuro perpetuo (perp)</dt><dd>Contrato que sigue el precio de un activo y nunca vence. Se puede comprar (largo) o vender (corto) con apalancamiento.</dd>
+    <dt id="g-funding">Tasa de financiamiento (funding)</dt><dd>Pago que, cada hora, hace un lado del perpetuo al otro para mantener su precio pegado al precio real. Si el perp está caro, pagan los largos; si está barato, los cortos.</dd>
+    <dt id="g-escalera">Escalera</dt><dd>Grupo de mercados que solo cambian un umbral o una fecha. El Sí del difícil implica el Sí del fácil.</dd>
+    <dt id="g-fantasma">Precio fantasma</dt><dd>Un precio que reporta la API de mercados de un mercado sin libro real. No se puede ejecutar.</dd>
+    <dt id="g-episodio">Episodio</dt><dd>El tiempo que una diferencia de precio se mantiene positiva después de comisiones, de que abre a que cierra.</dd>
+    <dt id="g-brier">Brier score</dt><dd>Mide el error de una probabilidad: suma, por cada resultado posible, el cuadrado de la diferencia entre la probabilidad dada y lo que pasó. Más bajo es mejor.</dd>
+    <dt id="g-walk">Walk-forward</dt><dd>Evaluar un modelo dejando que aprenda solo con datos anteriores a cada día que predice, para que no vea el futuro.</dd>
+    <dt id="g-calibracion">Calibración</dt><dd>Qué tanto coinciden las probabilidades de los precios con la frecuencia real con que se cumplen.</dd>
+    <dt id="g-opfin">Opciones financieras</dt><dd>Contratos que dan derecho a comprar o vender un activo a un precio en una fecha. Sus precios implican probabilidades sobre dónde estará el activo.</dd>
+  </dl>
+</section>
+
+<section id="apA" class="ch">
+  <h2>Apéndice A · Datos del sondeo de escaleras</h2>
+  <div class="col">
+  <p>Foto: 26 oct 2026, 03:08 UTC. Scripts: <span class="mono">docs/discovery/spikes/DQ-006-escaleras/</span> (<span class="mono">descargar.py</span>, <span class="mono">escaleras.py</span>); resultado completo en <span class="mono">resultado.json</span>.</p>
+  <table>
+    <tr><th>Concepto</th><th class="num">Cantidad</th></tr>
+    <tr><td>Eventos activos</td><td class="num">21,823</td></tr>
+    <tr><td>Eventos de varias opciones (no entran)</td><td class="num">8,847</td></tr>
+    <tr><td>Escaleras de fecha / umbral arriba / umbral abajo</td><td class="num">423 / 454 / 126</td></tr>
+    <tr><td>Pares</td><td class="num">13,776</td></tr>
+    <tr><td>Pares con costo bruto &lt; 1</td><td class="num">54</td></tr>
+    <tr><td>Pares con costo neto &lt; 1</td><td class="num">40</td></tr>
+    <tr><td>De esos, sin libro (404)</td><td class="num">6</td></tr>
+    <tr><td>Con libro y volumen</td><td class="num">33</td></tr>
+    <tr><td>Ganancia total recorriendo libros (techo)</td><td class="num">17.61 USD</td></tr>
+    <tr><td>Acciones totales</td><td class="num">5,254</td></tr>
+  </table>
+  <p><b>Caso del capítulo 1, "Tasa de desempleo de octubre":</b> precios de venta 0.005, 0.004, 0.064, 0.29, 0.34, 0.28, 0.07, 0.005, 0.018 (suma 1.076); precios de compra 0.001, 0.001, 0.04, 0.27, 0.32, 0.26, 0.029, 0.001, 0.002 (suma 0.924). Comisión 0.</p>
+  <p><b>Caso del capítulo 2, "¿Hasta dónde llega el desempleo en 2026?":</b> "≥ 6.0 %" compra 0.001 / venta 0.002; "≥ 7.0 %" compra 0.028 / venta 0.074. Comisión 0, mínimo 5 acciones, cierre 1 feb 2027.</p>
+  </div>
+</section>
+
+<section id="apB" class="ch">
+  <h2>Apéndice B · Datos del sondeo de clima</h2>
+  <div class="col">
+  <p>Script: <span class="mono">docs/discovery/spikes/DQ-C-clima/sondeo.py</span>; resúmenes en <span class="mono">resumen_nyc.json</span> y <span class="mono">resumen_london.json</span>.</p>
+  <table>
+    <tr><th>Concepto</th><th class="num">Nueva York</th><th class="num">Londres</th></tr>
+    <tr><td>Días evaluados</td><td class="num">60</td><td class="num">61</td></tr>
+    <tr><td>Brier modelo</td><td class="num">0.755</td><td class="num">0.754</td></tr>
+    <tr><td>Brier mercado</td><td class="num">0.586</td><td class="num">0.637</td></tr>
+    <tr><td>Brier mezcla 80/20</td><td class="num">0.601</td><td class="num">0.645</td></tr>
+    <tr><td>Log score modelo / mercado</td><td class="num">1.52 / 1.12</td><td class="num">1.52 / 1.19</td></tr>
+    <tr><td>Suma promedio de precios de los rangos</td><td class="num">1.022</td><td class="num">1.027</td></tr>
+    <tr><td>Mezcla menos mercado (error estándar)</td><td class="num">+0.015 (0.006)</td><td class="num">+0.009 (0.006)</td></tr>
+  </table>
+  <p>Fuentes de resolución en el periodo (Nueva York): Weather Underground 13 eventos, serie de NOAA 61, METAR 1. Calentamiento del modelo: 14 días.</p>
+  </div>
+</section>
+
+<section id="apC" class="ch">
+  <h2>Apéndice C · Fuentes principales</h2>
+  <div class="col">
+  <ul>
+    <li>Saguillo y otros, <i>Unravelling the Probabilistic Forest</i>, arXiv 2508.03474 (IMDEA).</li>
+    <li>Gebele, Mutzel y Matthes, <i>Executable Arbitrage and Market Efficiency in Prediction Markets</i>, arXiv 2608.00666, texto completo.</li>
+    <li>Polymarket, documentación de comisiones, precios y libros, WebSocket, negRisk y resolución (docs.polymarket.com).</li>
+    <li>Le, arXiv 2602.19520 (calibración); Song, <i>polymarket-calibration</i> (GitHub).</li>
+    <li>Paper de Polymarket frente a opciones de Deribit (fc26.ifca.ai).</li>
+    <li>Lista completa, con etiquetas de tipo de fuente: <span class="mono">docs/discovery/findings.md</span>, sección Sources.</li>
+  </ul>
+  </div>
+</section>
+
+<section id="apD" class="ch">
+  <h2>Apéndice D · Decisiones que te tocan</h2>
+  <div class="col">
+  <ol>
+    <li>Núcleo de Polyquack: grabador y escaleras en el tiempo (recomendado), otra combinación o parar.</li>
+    <li>¿Entran C, D o E como ampliación del brief? ¿Cuál primero?</li>
+    <li>Si entra E: ¿una opinión legal sobre derivados con apalancamiento desde México antes de usar dinero?</li>
+    <li>Expectativa: investigación y portafolio primero, o ganancia primero, y cuánto tiempo antes de cortar.</li>
+    <li>DQ-001: opinión legal antes de dinero real o papel para siempre.</li>
+    <li>DQ-007: excluir reglas subjetivas o restar un costo de riesgo.</li>
+    <li>DQ-008: calibración neta u omitirla.</li>
+    <li>Tasa de comparación para el capital atrapado: cuánto rinde tu dinero en la alternativa.</li>
+  </ol>
+  </div>
+</section>
+
+<section id="bitacora" class="ch">
+  <h2>Bitácora de cambios</h2>
+  <div class="col">
+  <ul>
+    <li><b>25 oct 2026.</b> Investigación de fuentes, sondeos B y C.</li>
+    <li><b>25 oct 2026, revisión independiente</b> (veredicto: fallo, 3 errores graves). Correcciones:
+      <ul>
+        <li>Las 6 mejores violaciones de B eran precios fantasma; el máximo real es 2.6 %.</li>
+        <li>Se quitó la comparación "35 veces menos" entre IMDEA y Gebele.</li>
+        <li>"Nadie midió la duración" era falso: Gebele la mide.</li>
+        <li>El 3.5 % de IMDEA no es una precisión.</li>
+        <li>"El pronóstico no aporta" bajó a Hipótesis.</li>
+        <li>El servidor en Londres se descartó por CR-002.</li>
+        <li>Se agregaron 3 opciones: el lado de venta, la duración con libros ajenos y las escaleras entre eventos.</li>
+      </ul>
+    </li>
+    <li><b>26 oct 2026.</b> Primera versión de este libro.</li>
+    <li><b>26 oct 2026, lectores fríos</b> (un agente sin contexto por capítulo). Cambios:
+      <ul>
+        <li>Se definieron en el texto el libro de órdenes, el arbitraje, el convertidor, los lados Sí y No, la pata y la canasta.</li>
+        <li>Se suavizó "muy probablemente no" en el capítulo 4.</li>
+        <li>Se agregó la tabla del día de ejemplo y la escala del Brier en el capítulo 6.</li>
+        <li>Se quitaron claves internas como OP-0xx y CON-005.</li>
+        <li>Se verificó el error medio del clima: 1.15 °F el mercado contra 1.90 °F el pronóstico en Nueva York.</li>
+        <li>Los capítulos 3, 5 y 6 se volvieron a pasar y quedaron bien.</li>
+      </ul>
+    </li>
+    <li><b>26 oct 2026, ángulo E.</b> Josue preguntó por los Perps de Polymarket. Se agregó el capítulo 8, con un sondeo de funding entre Polymarket y Hyperliquid. La comparación y las decisiones pasaron a los capítulos 9 y 10.</li>
+  </ul>
+  </div>
+</section>
+
+</main>
+</body>
+</html>

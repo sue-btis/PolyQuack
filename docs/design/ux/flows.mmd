@@ -1,0 +1,54 @@
+flowchart TB
+  subgraph F001["F-001 Continuous ingestion (CAP-001; FR-001 to FR-011; ADR-004, ADR-006)"]
+    direction LR
+    A[Start or reconnection] --> B[Request instruments of both platforms over REST]
+    B --> C[Pair by asset; list unpaired]
+    C --> D[Recover funding history of each pair]
+    D --> E[Subscribe to the order book channels]
+    E --> F[Resync each order book over REST]
+    F --> G{Did a minute close?}
+    G -- yes, valid book --> H[Store book snapshot]
+    G -- yes, no valid book --> I[Record final gap for the minute]
+    H --> G
+    I --> G
+    G -- every minute --> P1[Request mark and index price of all instruments: one request per platform]
+    P1 -- arrived --> P2[Store price readings]
+    P1 -- did not arrive --> P3[Record price gap for the minute]
+    E -. disconnection .-> J[Open gap and reconnect]
+    J --> A
+    K[Every hour] --> L[Request funding paid over REST]
+    L -- arrived --> M[Store funding reading]
+    L -- did not arrive --> N[Open funding gap]
+    N -. on reconnect .-> D
+  end
+
+  subgraph F002["F-002 Hour t of E1 on paper (CAP-003; FR-019 to FR-026; BR-004)"]
+    direction LR
+    P[Hour t, after storing the funding of t] --> X[Accrual: credit or debit the funding of t only to legs opened before t]
+    X --> Q[For each non-excluded pair: rates of hour t]
+    Q -- one is missing --> R[Decision no_action; null spread]
+    Q -- both present --> S[Funding spread]
+    S --> T[Apply preregistration rules with data up to t]
+    T --> U{Action}
+    U -- open, close or reverse --> V[Walk the previous book snapshot for the reference size]
+    V --> W[Record trade with price, fee and slippage; a leg opened at t collects from t+1]
+    U -- hold --> Y[Every minute: basis and distance to liquidation]
+    W --> Y
+    Y -- crosses level --> Z[Leg liquidated; the other is left uncovered]
+  end
+
+  subgraph F003["F-003 Verdict (CAP-002; FR-015 to FR-018; BR-009; PD-020, PD-021)"]
+    direction LR
+    AA[Horizon is reached] --> AB[For each pair: gaps between its pairing and its delisting]
+    AB -- exceeds PD-013 --> AH[Exclude the pair and report its gaps]
+    AB -- does not exceed --> AI[The pair enters the verdict]
+    AH --> AJ{Any pairs left?}
+    AI --> AJ
+    AJ -- no --> AC[Run not_qualifiable with its reason]
+    AJ -- yes --> AD[Net profit with breakdown for the pairs that enter]
+    AD --> AE[Annual return on the maximum collateral used at once]
+    AE --> AF[Compare with the preregistered criterion]
+    AF --> AG[Verdict with breakdown, excluded pairs and variants tested]
+  end
+
+  M --> P

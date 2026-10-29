@@ -1,0 +1,52 @@
+schema_version: 3
+project: polyquack
+status: approved
+
+review:
+  baseline_id: RV-001
+  ledger: docs/design/review.md
+
+read_first:
+  - docs/product/prd.md
+  - docs/design/domain.md
+  - docs/design/architecture/architecture.dsl
+  - docs/design/architecture/adr/
+  - docs/design/data/schema.dbml
+
+authoritative_sources:
+  product:
+    path: docs/product/prd.md
+    owns: [purpose, users, scope, journeys, functional_requirements, non_functional_requirements, business_rules, product_constraints, product_decisions]
+  domain:
+    path: docs/design/domain.md
+    owns: [ubiquitous_language, domain_invariants, domain_boundaries]
+  architecture:
+    path: docs/design/architecture/architecture.dsl
+    owns: [system_structure, containers, components, dependencies, deployment_views]
+  architecture_decisions:
+    path: docs/design/architecture/adr/
+    owns: [technical_decision_rationale, tradeoffs]
+  quality_attributes:
+    path: docs/design/architecture/quality-attributes.md
+    owns: [nfr_design_response, nfr_verification_evidence]
+  data:
+    path: docs/design/data/schema.dbml
+    owns: [persistent_schema]
+  ux_flows:
+    path: docs/design/ux/flows.mmd
+    owns: [interaction_flow]
+
+not_applicable:
+  - http_api
+  - events
+  - ui_prototype
+
+change_folders: docs/changes/
+
+rules:
+  - A more specific canonical contract owns its detail; general prose must not redefine it.
+  - An ADR settles a decision only when its status is Accepted with an "Accepted by" line, or Superseded explicitly.
+  - Product behavior may not be changed by a technical artifact without a decided PRD §15 row.
+  - Stop implementation for semantic conflicts that require incompatible behavior or could cause materially different implementations; terminology, formatting, casing, and editorial differences alone are not blocking contradictions.
+  - No artifact cites the version of another artifact.
+  - After approval, authorities change only through change folders; a new review happens only when a new baseline opens, and it covers the impact of the material change plus global contradictions.

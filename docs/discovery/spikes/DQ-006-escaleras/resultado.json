@@ -1,0 +1,893 @@
+{
+ "resumen": {
+  "descargado": "2026-10-26T03:08:32Z",
+  "eventos_activos": 21823,
+  "eventos_negRisk": 8847,
+  "escaleras_por_tipo": {
+   "fecha": 423,
+   "umbral_arriba": 454,
+   "umbral_abajo": 126
+  },
+  "pares": 13776,
+  "pares_costo_bruto_menor_1": 54,
+  "pares_neto_menor_1": 40
+ },
+ "violaciones": [
+  {
+   "evento": "Will Cambria launch a token by ___?",
+   "tipo": "fecha",
+   "facil": "Will Cambria launch a token by September 30, 2027?",
+   "dificil": "Will Cambria launch a token by June 30, 2027?",
+   "costo": 0.947,
+   "neto": 0.9514,
+   "error_libro": "HTTP Error 404: Not Found"
+  },
+  {
+   "evento": "Will Cambria launch a token by ___?",
+   "tipo": "fecha",
+   "facil": "Will Cambria launch a token by September 30, 2027?",
+   "dificil": "Will Cambria launch a token by December 31, 2026?",
+   "costo": 0.949,
+   "neto": 0.9536,
+   "error_libro": "HTTP Error 404: Not Found"
+  },
+  {
+   "evento": "Will Cambria launch a token by ___?",
+   "tipo": "fecha",
+   "facil": "Will Cambria launch a token by March 31, 2027?",
+   "dificil": "Will Cambria launch a token by December 31, 2026?",
+   "costo": 0.949,
+   "neto": 0.9536,
+   "error_libro": "HTTP Error 404: Not Found"
+  },
+  {
+   "evento": "Will StandX launch a token by ___?",
+   "tipo": "fecha",
+   "facil": "Will StandX launch a token by June 30, 2027?",
+   "dificil": "Will StandX launch a token by March 31, 2027?",
+   "costo": 0.968,
+   "neto": 0.9739,
+   "error_libro": "HTTP Error 404: Not Found"
+  },
+  {
+   "evento": "How high will US unemployment go in 2026?",
+   "tipo": "umbral_arriba",
+   "facil": "Will US unemployment reach at least 6.0% in 2026?",
+   "dificil": "Will US unemployment reach at least 7.0% in 2026?",
+   "costo": 0.974,
+   "neto": 0.974,
+   "acciones": 432.54,
+   "ganancia_usd": 4.5371400000000035
+  },
+  {
+   "evento": "Will Ritual launch a token by ___?",
+   "tipo": "fecha",
+   "facil": "Will Ritual launch a token by September 30, 2027?",
+   "dificil": "Will Ritual launch a token by June 30, 2027?",
+   "costo": 0.97,
+   "neto": 0.976,
+   "error_libro": "HTTP Error 404: Not Found"
+  },
+  {
+   "evento": "How high will US unemployment go in 2026?",
+   "tipo": "umbral_arriba",
+   "facil": "Will US unemployment reach at least 6.0% in 2026?",
+   "dificil": "Will US unemployment reach at least 10.0% in 2026?",
+   "costo": 0.989,
+   "neto": 0.989,
+   "acciones": 292.54,
+   "ganancia_usd": 1.5696300000000014
+  },
+  {
+   "evento": "StandX FDV above ___ one day after launch?",
+   "tipo": "umbral_arriba",
+   "facil": "StandX FDV above $50M one day after launch?",
+   "dificil": "StandX FDV above $800M one day after launch?",
+   "costo": 0.989,
+   "neto": 0.991,
+   "acciones": 417.4,
+   "ganancia_usd": 2.155651857999991
+  },
+  {
+   "evento": "StandX FDV above ___ one day after launch?",
+   "tipo": "umbral_arriba",
+   "facil": "StandX FDV above $50M one day after launch?",
+   "dificil": "StandX FDV above $1B one day after launch?",
+   "costo": 0.989,
+   "neto": 0.991,
+   "acciones": 417.4,
+   "ganancia_usd": 1.6009056900000063
+  },
+  {
+   "evento": "What will Fed Rate hit before 2027?",
+   "tipo": "umbral_abajo",
+   "facil": "Will the Fed’s lower bound reach 1.75% or lower before 2027?",
+   "dificil": "Will the Fed’s lower bound reach 0.5% or lower before 2027?",
+   "costo": 0.991,
+   "neto": 0.991,
+   "acciones": 98.11,
+   "ganancia_usd": 0.3461100000000003
+  },
+  {
+   "evento": "Will Glean's valuation hit __ by October 31?",
+   "tipo": "umbral_arriba",
+   "facil": "Will Glean's valuation hit (HIGH) $7.5B by October 31?",
+   "dificil": "Will Glean's valuation hit (HIGH) $7.75B by October 31?",
+   "costo": 0.991,
+   "neto": 0.991,
+   "acciones": 0.36,
+   "ganancia_usd": 0.003240000000000003
+  },
+  {
+   "evento": "Hurupay FDV above ___ one day after launch?",
+   "tipo": "umbral_arriba",
+   "facil": "Hurupay FDV above $30M one day after launch?",
+   "dificil": "Hurupay FDV above $100M one day after launch?",
+   "costo": 0.988,
+   "neto": 0.9921,
+   "acciones": 56.85,
+   "ganancia_usd": 0.35276162400000277
+  },
+  {
+   "evento": "StandX FDV above ___ one day after launch?",
+   "tipo": "umbral_arriba",
+   "facil": "StandX FDV above $2B one day after launch?",
+   "dificil": "StandX FDV above $5B one day after launch?",
+   "costo": 0.991,
+   "neto": 0.9927,
+   "acciones": 585.6800000000001,
+   "ganancia_usd": 0.9544831863999568
+  },
+  {
+   "evento": "StandX FDV above ___ one day after launch?",
+   "tipo": "umbral_arriba",
+   "facil": "StandX FDV above $50M one day after launch?",
+   "dificil": "StandX FDV above $5B one day after launch?",
+   "costo": 0.992,
+   "neto": 0.9938,
+   "acciones": 98.0,
+   "ganancia_usd": 0.4832580400000057
+  },
+  {
+   "evento": "What will Fed Rate hit before 2027?",
+   "tipo": "umbral_abajo",
+   "facil": "Will the Fed’s lower bound reach 3.0% or lower before 2027?",
+   "dificil": "Will the Fed’s lower bound reach 0.5% or lower before 2027?",
+   "costo": 0.994,
+   "neto": 0.994,
+   "acciones": 35.0,
+   "ganancia_usd": 0.17800000000000016
+  },
+  {
+   "evento": "Abstract FDV above ___ one day after launch?",
+   "tipo": "umbral_arriba",
+   "facil": "Abstract FDV above $200M one day after launch?",
+   "dificil": "Abstract FDV above $600M one day after launch?",
+   "costo": 0.991,
+   "neto": 0.9945,
+   "acciones": 730.45,
+   "ganancia_usd": 1.9375118163999843
+  },
+  {
+   "evento": "Will Ritual launch a token by ___?",
+   "tipo": "fecha",
+   "facil": "Will Ritual launch a token by December 31, 2027?",
+   "dificil": "Will Ritual launch a token by June 30, 2027?",
+   "costo": 0.99,
+   "neto": 0.9947,
+   "error_libro": "HTTP Error 404: Not Found"
+  },
+  {
+   "evento": "What will Fed Rate hit before 2027?",
+   "tipo": "umbral_abajo",
+   "facil": "Will the Fed’s lower bound reach 2.25% or lower before 2027?",
+   "dificil": "Will the Fed’s lower bound reach 0.5% or lower before 2027?",
+   "costo": 0.995,
+   "neto": 0.995,
+   "acciones": 35.0,
+   "ganancia_usd": 0.14300000000000013
+  },
+  {
+   "evento": "Hyperbeat FDV above ___ one day after launch?",
+   "tipo": "umbral_arriba",
+   "facil": "Hyperbeat FDV above $200M one day after launch?",
+   "dificil": "Hyperbeat FDV above $400M one day after launch?",
+   "costo": 0.993,
+   "neto": 0.9953,
+   "acciones": 448.1,
+   "ganancia_usd": 1.105544820400005
+  },
+  {
+   "evento": "What will Fed Rate hit before 2027?",
+   "tipo": "umbral_abajo",
+   "facil": "Will the Fed’s lower bound reach 2.5% or lower before 2027?",
+   "dificil": "Will the Fed’s lower bound reach 0.5% or lower before 2027?",
+   "costo": 0.996,
+   "neto": 0.996,
+   "acciones": 35.0,
+   "ganancia_usd": 0.1080000000000001
+  },
+  {
+   "evento": "What will Fed Rate hit before 2027?",
+   "tipo": "umbral_abajo",
+   "facil": "Will the Fed’s lower bound reach 1.75% or lower before 2027?",
+   "dificil": "Will the Fed’s lower bound reach 0.75% or lower before 2027?",
+   "costo": 0.996,
+   "neto": 0.996,
+   "acciones": 5.05,
+   "ganancia_usd": 0.020200000000000017
+  },
+  {
+   "evento": "What will Fed Rate hit before 2027?",
+   "tipo": "umbral_abajo",
+   "facil": "Will the Fed’s lower bound reach 1.75% or lower before 2027?",
+   "dificil": "Will the Fed’s lower bound reach 0.25% or lower before 2027?",
+   "costo": 0.996,
+   "neto": 0.996,
+   "acciones": 156.0,
+   "ganancia_usd": 0.41411000000000037
+  },
+  {
+   "evento": "What will Fed Rate hit before 2027?",
+   "tipo": "umbral_abajo",
+   "facil": "Will the Fed’s lower bound reach 0.75% or lower before 2027?",
+   "dificil": "Will the Fed’s lower bound reach 0.5% or lower before 2027?",
+   "costo": 0.996,
+   "neto": 0.996,
+   "acciones": 35.0,
+   "ganancia_usd": 0.1080000000000001
+  },
+  {
+   "evento": "How high will US unemployment go in 2026?",
+   "tipo": "umbral_arriba",
+   "facil": "Will US unemployment reach at least 5.5% in 2026?",
+   "dificil": "Will US unemployment reach at least 7.0% in 2026?",
+   "costo": 0.996,
+   "neto": 0.996,
+   "acciones": 83.63,
+   "ganancia_usd": 0.28526000000000024
+  },
+  {
+   "evento": "Will the 30-year Mortgage Rate hit __ in 2026?",
+   "tipo": "umbral_abajo",
+   "facil": "Will the U.S. 30-year Fixed-Rate Mortgage hit 5.70% (LOW) by December 31, 2026?",
+   "dificil": "Will the U.S. 30-year Fixed-Rate Mortgage hit 5.50% (LOW) by December 31, 2026?",
+   "costo": 0.996,
+   "neto": 0.996,
+   "acciones": 20.0,
+   "ganancia_usd": 0.08000000000000007
+  },
+  {
+   "evento": "Ostium FDV above ___ one day after launch?",
+   "tipo": "umbral_arriba",
+   "facil": "Ostium FDV above $200M one day after launch?",
+   "dificil": "Ostium FDV above $700M one day after launch?",
+   "costo": 0.993,
+   "neto": 0.9962,
+   "acciones": 90.0,
+   "ganancia_usd": 0.1449545999999946
+  },
+  {
+   "evento": "StandX FDV above ___ one day after launch?",
+   "tipo": "umbral_arriba",
+   "facil": "StandX FDV above $2B one day after launch?",
+   "dificil": "StandX FDV above $3B one day after launch?",
+   "costo": 0.995,
+   "neto": 0.9965,
+   "acciones": 212.69,
+   "ganancia_usd": 0.35697186139998444
+  },
+  {
+   "evento": "Ostium FDV above ___ one day after launch?",
+   "tipo": "umbral_arriba",
+   "facil": "Ostium FDV above $300M one day after launch?",
+   "dificil": "Ostium FDV above $700M one day after launch?",
+   "costo": 0.994,
+   "neto": 0.9973,
+   "acciones": 55.0,
+   "ganancia_usd": 0.04700410000000155
+  },
+  {
+   "evento": "StandX FDV above ___ one day after launch?",
+   "tipo": "umbral_arriba",
+   "facil": "StandX FDV above $50M one day after launch?",
+   "dificil": "StandX FDV above $3B one day after launch?",
+   "costo": 0.996,
+   "neto": 0.9975,
+   "acciones": 94.34,
+   "ganancia_usd": 0.167202668000002
+  },
+  {
+   "evento": "Pacifica FDV above ___ one day after launch?",
+   "tipo": "umbral_arriba",
+   "facil": "Pacifica FDV above $1B one day after launch?",
+   "dificil": "Pacifica FDV above $2B one day after launch?",
+   "costo": 0.992,
+   "neto": 0.9975,
+   "acciones": 0.0,
+   "ganancia_usd": 0.0
+  },
+  {
+   "evento": "What will Rocket Lab USA, Inc. (RKLB) hit in October 2026?",
+   "tipo": "umbral_arriba",
+   "facil": "Will Rocket Lab USA, Inc. (RKLB) hit (HIGH) $92 in October?",
+   "dificil": "Will Rocket Lab USA, Inc. (RKLB) hit (HIGH) $96 in October?",
+   "costo": 0.998,
+   "neto": 0.998,
+   "acciones": 50.25,
+   "ganancia_usd": 0.08040000000000007
+  },
+  {
+   "evento": "Metamask FDV above ___ one day after launch?",
+   "tipo": "umbral_arriba",
+   "facil": "Metamask FDV above $500M one day after launch?",
+   "dificil": "Metamask FDV above $700M one day after launch?",
+   "costo": 0.992,
+   "neto": 0.9986,
+   "acciones": 109.37,
+   "ganancia_usd": 0.07348590750000167
+  },
+  {
+   "evento": "Hurupay FDV above ___ one day after launch?",
+   "tipo": "umbral_arriba",
+   "facil": "Hurupay FDV above $30M one day after launch?",
+   "dificil": "Hurupay FDV above $50M one day after launch?",
+   "costo": 0.995,
+   "neto": 0.9986,
+   "acciones": 10.85,
+   "ganancia_usd": 0.01507271149999923
+  },
+  {
+   "evento": "What will Fed Rate hit before 2027?",
+   "tipo": "umbral_abajo",
+   "facil": "Will the Fed’s lower bound reach 3.0% or lower before 2027?",
+   "dificil": "Will the Fed’s lower bound reach 0.75% or lower before 2027?",
+   "costo": 0.999,
+   "neto": 0.999,
+   "acciones": 5.05,
+   "ganancia_usd": 0.005050000000000004
+  },
+  {
+   "evento": "What will Fed Rate hit before 2027?",
+   "tipo": "umbral_abajo",
+   "facil": "Will the Fed’s lower bound reach 3.0% or lower before 2027?",
+   "dificil": "Will the Fed’s lower bound reach 0.25% or lower before 2027?",
+   "costo": 0.999,
+   "neto": 0.999,
+   "acciones": 60.0,
+   "ganancia_usd": 0.06000000000000005
+  },
+  {
+   "evento": "StandX FDV above ___ one day after launch?",
+   "tipo": "umbral_arriba",
+   "facil": "StandX FDV above $50M one day after launch?",
+   "dificil": "StandX FDV above $400M one day after launch?",
+   "costo": 0.998,
+   "neto": 0.9994,
+   "acciones": 91.0,
+   "ganancia_usd": 0.05588674000000371
+  },
+  {
+   "evento": "StandX FDV above ___ one day after launch?",
+   "tipo": "umbral_arriba",
+   "facil": "StandX FDV above $100M one day after launch?",
+   "dificil": "StandX FDV above $800M one day after launch?",
+   "costo": 0.997,
+   "neto": 0.9995,
+   "acciones": 23.73,
+   "ganancia_usd": 0.010873797900000093
+  },
+  {
+   "evento": "StandX FDV above ___ one day after launch?",
+   "tipo": "umbral_arriba",
+   "facil": "StandX FDV above $100M one day after launch?",
+   "dificil": "StandX FDV above $1B one day after launch?",
+   "costo": 0.997,
+   "neto": 0.9995,
+   "acciones": 23.73,
+   "ganancia_usd": 0.010873797900000093
+  },
+  {
+   "evento": "StandX FDV above ___ one day after launch?",
+   "tipo": "umbral_arriba",
+   "facil": "StandX FDV above $200M one day after launch?",
+   "dificil": "StandX FDV above $800M one day after launch?",
+   "costo": 0.997,
+   "neto": 0.9995,
+   "acciones": 326.01,
+   "ganancia_usd": 0.14938756230000128
+  },
+  {
+   "evento": "StandX FDV above ___ one day after launch?",
+   "tipo": "umbral_arriba",
+   "facil": "StandX FDV above $200M one day after launch?",
+   "dificil": "StandX FDV above $1B one day after launch?",
+   "costo": 0.997,
+   "neto": 0.9995,
+   "acciones": 120.0,
+   "ganancia_usd": 0.05498760000000047
+  }
+ ],
+ "muestra_para_etiquetar": [
+  {
+   "evento": "What will Alphabet Inc. (GOOGL) hit in October 2026?",
+   "tipo": "umbral_abajo",
+   "facil": "Will Alphabet Inc. (GOOGL) hit (LOW) $290 in October?",
+   "dificil": "Will Alphabet Inc. (GOOGL) hit (LOW) $270 in October?",
+   "costo": 1.219,
+   "neto": 1.219
+  },
+  {
+   "evento": "Arc FDV above ___ one day after launch?",
+   "tipo": "umbral_arriba",
+   "facil": "Arc FDV above $1B one day after launch?",
+   "dificil": "Arc FDV above $6B one day after launch?",
+   "costo": 1.59,
+   "neto": 1.609
+  },
+  {
+   "evento": "What will South Korea ETF (EWY) hit in October 2026?",
+   "tipo": "umbral_arriba",
+   "facil": "Will South Korea ETF (EWY) hit (HIGH) $162 in October?",
+   "dificil": "Will South Korea ETF (EWY) hit (HIGH) $176 in October?",
+   "costo": 1.29,
+   "neto": 1.29
+  },
+  {
+   "evento": "Will Amazon (AMZN) finish week of October 26 above___?",
+   "tipo": "umbral_arriba",
+   "facil": "Will Amazon (AMZN) finish week of October 26 above $250?",
+   "dificil": "Will Amazon (AMZN) finish week of October 26 above $260?",
+   "costo": 1.63,
+   "neto": 1.63
+  },
+  {
+   "evento": "Variational FDV above ___ one day after launch?",
+   "tipo": "umbral_arriba",
+   "facil": "Variational FDV above $800M one day after launch?",
+   "dificil": "Variational FDV above $3B one day after launch?",
+   "costo": 1.619,
+   "neto": 1.6395
+  },
+  {
+   "evento": "Will the 30-year Mortgage Rate hit __ in 2026?",
+   "tipo": "umbral_abajo",
+   "facil": "Will the U.S. 30-year Fixed-Rate Mortgage hit 6.50% (LOW) by December 31, 2026?",
+   "dificil": "Will the U.S. 30-year Fixed-Rate Mortgage hit 5.70% (LOW) by December 31, 2026?",
+   "costo": 1.233,
+   "neto": 1.233
+  },
+  {
+   "evento": "Ethereum above ___ on November 1?",
+   "tipo": "umbral_arriba",
+   "facil": "Will the price of Ethereum be above $2,200 on November 1?",
+   "dificil": "Will the price of Ethereum be above $2,400 on November 1?",
+   "costo": 1.52,
+   "neto": 1.5454
+  },
+  {
+   "evento": "Will Intel (INTC) Q3 Foundry revenue be above __?",
+   "tipo": "umbral_arriba",
+   "facil": "Will Intel (INTC) Q3 Foundry revenue be above $6B?",
+   "dificil": "Will Intel (INTC) Q3 Foundry revenue be above $7B?",
+   "costo": 1.63,
+   "neto": 1.63
+  },
+  {
+   "evento": "yo.xyz FDV above ___ one day after launch?",
+   "tipo": "umbral_arriba",
+   "facil": "Yo FDV above $30M one day after launch?",
+   "dificil": "Yo FDV above $500M one day after launch?",
+   "costo": 1.945,
+   "neto": 1.9487
+  },
+  {
+   "evento": "What will Micron Technology, Inc. (MU) hit in October 2026?",
+   "tipo": "umbral_arriba",
+   "facil": "Will Micron Technology, Inc. (MU) hit (HIGH) $960 in October?",
+   "dificil": "Will Micron Technology, Inc. (MU) hit (HIGH) $1,320 in October?",
+   "costo": 1.31,
+   "neto": 1.31
+  },
+  {
+   "evento": "Bitcoin above ___ on October 28?",
+   "tipo": "umbral_arriba",
+   "facil": "Will the price of Bitcoin be above $80,000 on October 28?",
+   "dificil": "Will the price of Bitcoin be above $94,000 on October 28?",
+   "costo": 1.452,
+   "neto": 1.4699
+  },
+  {
+   "evento": "What will S&P 500 (SPX) hit by end of December?",
+   "tipo": "umbral_arriba",
+   "facil": "Will S&P 500 (SPX) hit $8,000 (HIGH) in December?",
+   "dificil": "Will S&P 500 (SPX) hit $8,600 (HIGH) in December?",
+   "costo": 1.54,
+   "neto": 1.54
+  },
+  {
+   "evento": "Saudi troops enter Sanaa by...?",
+   "tipo": "fecha",
+   "facil": "Saudi troops enter Sanaa by December 31, 2026?",
+   "dificil": "Saudi troops enter Sanaa by October 31, 2026?",
+   "costo": 1.061,
+   "neto": 1.061
+  },
+  {
+   "evento": "TownSquare FDV above ___ one day after launch?",
+   "tipo": "umbral_arriba",
+   "facil": "TownSquare FDV above $200M one day after launch?",
+   "dificil": "TownSquare FDV above $225M one day after launch?",
+   "costo": 1.05,
+   "neto": 1.082
+  },
+  {
+   "evento": "Pacifica FDV above ___ one day after launch?",
+   "tipo": "umbral_arriba",
+   "facil": "Pacifica FDV above $100M one day after launch?",
+   "dificil": "Pacifica FDV above $1B one day after launch?",
+   "costo": 1.066,
+   "neto": 1.0725
+  },
+  {
+   "evento": "Predict.fun FDV above ___ one day after launch?",
+   "tipo": "umbral_arriba",
+   "facil": "Predict.fun FDV above $300M one day after launch?",
+   "dificil": "Predict.fun FDV above $1B one day after launch?",
+   "costo": 1.326,
+   "neto": 1.3465
+  },
+  {
+   "evento": "Will Amazon (AMZN) close above ___ end of October?",
+   "tipo": "umbral_arriba",
+   "facil": "Will Amazon (AMZN) close above $200 end of October?",
+   "dificil": "Will Amazon (AMZN) close above $300 end of October?",
+   "costo": 1.982,
+   "neto": 1.982
+  },
+  {
+   "evento": "What will Silver (XAGUSD) hit in October 2026?",
+   "tipo": "umbral_abajo",
+   "facil": "Will Silver (XAGUSD) hit (LOW) $52 in October?",
+   "dificil": "Will Silver (XAGUSD) hit (LOW) $44 in October?",
+   "costo": 1.428,
+   "neto": 1.428
+  },
+  {
+   "evento": "Hurupay FDV above ___ one day after launch?",
+   "tipo": "umbral_arriba",
+   "facil": "Hurupay FDV above $40M one day after launch?",
+   "dificil": "Hurupay FDV above $100M one day after launch?",
+   "costo": 1.038,
+   "neto": 1.0452
+  },
+  {
+   "evento": "NCAA Football: Kansas 2026 Win Total",
+   "tipo": "umbral_arriba",
+   "facil": "Will Kansas have more than 6.5 wins during the 2026 CFB season?",
+   "dificil": "Will Kansas have more than 7.5 wins during the 2026 CFB season?",
+   "costo": 1.065,
+   "neto": 1.0703
+  },
+  {
+   "evento": "Cambria FDV above ___ one day after launch?",
+   "tipo": "umbral_arriba",
+   "facil": "Cambria FDV above $100M one day after launch?",
+   "dificil": "Cambria FDV above $150M one day after launch?",
+   "costo": 1.077,
+   "neto": 1.0836
+  },
+  {
+   "evento": "Will N1 launch a token by ___?",
+   "tipo": "fecha",
+   "facil": "Will N1 launch a token by June 30, 2027?",
+   "dificil": "Will N1 launch a token by December 31, 2026?",
+   "costo": 1.28,
+   "neto": 1.2997
+  },
+  {
+   "evento": "Will Apple (AAPL) close above ___ end of October?",
+   "tipo": "umbral_arriba",
+   "facil": "Will Apple (AAPL) close above $300 end of October?",
+   "dificil": "Will Apple (AAPL) close above $360 end of October?",
+   "costo": 1.93,
+   "neto": 1.93
+  },
+  {
+   "evento": "What will S&P 500 (SPX) hit by end of December?",
+   "tipo": "umbral_abajo",
+   "facil": "Will S&P 500 (SPX) hit $7,400 (LOW) in December?",
+   "dificil": "Will S&P 500 (SPX) hit $5,800 (LOW) in December?",
+   "costo": 1.821,
+   "neto": 1.821
+  },
+  {
+   "evento": "Solana above ___ on November 1?",
+   "tipo": "umbral_arriba",
+   "facil": "Will the price of Solana be above $80 on November 1?",
+   "dificil": "Will the price of Solana be above $120 on November 1?",
+   "costo": 1.992,
+   "neto": 1.9926
+  },
+  {
+   "evento": "Ethereum above ___ on October 27?",
+   "tipo": "umbral_arriba",
+   "facil": "Will the price of Ethereum be above $2,600 on October 27?",
+   "dificil": "Will the price of Ethereum be above $2,800 on October 27?",
+   "costo": 1.01,
+   "neto": 1.0108
+  },
+  {
+   "evento": "Apyx FDV above ___ one day after launch?",
+   "tipo": "umbral_arriba",
+   "facil": "APYX FDV above $50M one day after launch?",
+   "dificil": "APYX FDV above $150M one day after launch?",
+   "costo": 1.29,
+   "neto": 1.321
+  },
+  {
+   "evento": "How many Senators will vote for the Clarity Act?",
+   "tipo": "umbral_arriba",
+   "facil": "Will over 58 Senators vote for the Clarity Act?",
+   "dificil": "Will over 62 Senators vote for the Clarity Act?",
+   "costo": 1.059,
+   "neto": 1.059
+  },
+  {
+   "evento": "XRP above ___ on October 30?",
+   "tipo": "umbral_arriba",
+   "facil": "Will the price of XRP be above $0.90 on October 30?",
+   "dificil": "Will the price of XRP be above $1.10 on October 30?",
+   "costo": 1.035,
+   "neto": 1.0374
+  },
+  {
+   "evento": "Solana above ___ on October 30?",
+   "tipo": "umbral_arriba",
+   "facil": "Will the price of Solana be above $85 on October 30?",
+   "dificil": "Will the price of Solana be above $105 on October 30?",
+   "costo": 1.756,
+   "neto": 1.769
+  },
+  {
+   "evento": "Bitcoin above ___ on October 28?",
+   "tipo": "umbral_arriba",
+   "facil": "Will the price of Bitcoin be above $82,000 on October 28?",
+   "dificil": "Will the price of Bitcoin be above $88,000 on October 28?",
+   "costo": 1.161,
+   "neto": 1.1715
+  },
+  {
+   "evento": "HUDL FDV above ___ one day after launch?",
+   "tipo": "umbral_arriba",
+   "facil": "Huddle FDV above $20M one day after launch?",
+   "dificil": "Huddle FDV above $400M one day after launch?",
+   "costo": 1.092,
+   "neto": 1.1001
+  },
+  {
+   "evento": "Will Airbnb (ABNB) Q3 gross booking value be above __?",
+   "tipo": "umbral_arriba",
+   "facil": "Will Airbnb (ABNB) Q3 gross booking value be above $26.2B?",
+   "dificil": "Will Airbnb (ABNB) Q3 gross booking value be above $27B?",
+   "costo": 1.66,
+   "neto": 1.6697
+  },
+  {
+   "evento": "Solana above ___ on October 28?",
+   "tipo": "umbral_arriba",
+   "facil": "Will the price of Solana be above $95 on October 28?",
+   "dificil": "Will the price of Solana be above $120 on October 28?",
+   "costo": 1.931,
+   "neto": 1.9355
+  },
+  {
+   "evento": "What will South Korea ETF (EWY) hit in October 2026?",
+   "tipo": "umbral_arriba",
+   "facil": "Will South Korea ETF (EWY) hit (HIGH) $164 in October?",
+   "dificil": "Will South Korea ETF (EWY) hit (HIGH) $200 in October?",
+   "costo": 1.248,
+   "neto": 1.248
+  },
+  {
+   "evento": "Fed rate cut by...?",
+   "tipo": "fecha",
+   "facil": "Fed rate cut by June 2027 meeting?",
+   "dificil": "Fed rate cut by April 2027 meeting?",
+   "costo": 1.28,
+   "neto": 1.28
+  },
+  {
+   "evento": "Kimi K4 released by…?",
+   "tipo": "fecha",
+   "facil": "Kimi K4 released by March 31, 2027?",
+   "dificil": "Kimi K4 released by October 31, 2026?",
+   "costo": 1.26,
+   "neto": 1.26
+  },
+  {
+   "evento": "Variational FDV above ___ one day after launch?",
+   "tipo": "umbral_arriba",
+   "facil": "Variational FDV above $100M one day after launch?",
+   "dificil": "Variational FDV above $1B one day after launch?",
+   "costo": 1.426,
+   "neto": 1.4442
+  },
+  {
+   "evento": "Solana above ___ on October 26?",
+   "tipo": "umbral_arriba",
+   "facil": "Will the price of Solana be above $90 on October 26?",
+   "dificil": "Will the price of Solana be above $110 on October 26?",
+   "costo": 1.995,
+   "neto": 1.9953
+  },
+  {
+   "evento": "Tuyo FDV above ___ one day after launch?",
+   "tipo": "umbral_arriba",
+   "facil": "Tuyo FDV above $600M one day after launch?",
+   "dificil": "Tuyo FDV above $800M one day after launch?",
+   "costo": 1.674,
+   "neto": 1.6931
+  },
+  {
+   "evento": "How low will 30-year Treasury yield get before 2027?",
+   "tipo": "umbral_abajo",
+   "facil": "Will the 30-year Treasury yield dip below 5.05% before 2027?",
+   "dificil": "Will the 30-year Treasury yield dip below 4.80% before 2027?",
+   "costo": 1.169,
+   "neto": 1.169
+  },
+  {
+   "evento": "What will WTI Crude Oil (WTI) hit in October 2026?",
+   "tipo": "umbral_arriba",
+   "facil": "Will WTI Crude Oil (WTI) hit (HIGH) $105 in October?",
+   "dificil": "Will WTI Crude Oil (WTI) hit (HIGH) $130 in October?",
+   "costo": 1.462,
+   "neto": 1.462
+  },
+  {
+   "evento": "3Jane FDV above ___ one day after launch?",
+   "tipo": "umbral_arriba",
+   "facil": "3Jane FDV above $40M one day after launch?",
+   "dificil": "3Jane FDV above $200M one day after launch?",
+   "costo": 1.874,
+   "neto": 1.8821
+  },
+  {
+   "evento": "Will Apple (AAPL) Q4 Services revenue be above __?",
+   "tipo": "umbral_arriba",
+   "facil": "Will Apple (AAPL) Q4 Services revenue be above $31.5B?",
+   "dificil": "Will Apple (AAPL) Q4 Services revenue be above $32B?",
+   "costo": 1.85,
+   "neto": 1.85
+  },
+  {
+   "evento": "Hotstuff FDV above ___ one day after launch?",
+   "tipo": "umbral_arriba",
+   "facil": "Hotstuff FDV above $50M one day after launch?",
+   "dificil": "Hotstuff FDV above $80M one day after launch?",
+   "costo": 1.09,
+   "neto": 1.1141
+  },
+  {
+   "evento": "Solana above ___ on October 27?",
+   "tipo": "umbral_arriba",
+   "facil": "Will the price of Solana be above $100 on October 27?",
+   "dificil": "Will the price of Solana be above $115 on October 27?",
+   "costo": 1.629,
+   "neto": 1.6454
+  },
+  {
+   "evento": "Total Unique Champions Played at Worlds 2026",
+   "tipo": "umbral_arriba",
+   "facil": "Will 95 or more unique champions be played at Worlds 2026?",
+   "dificil": "Will 100 or more unique champions be played at Worlds 2026?",
+   "costo": 1.303,
+   "neto": 1.316
+  },
+  {
+   "evento": "XRP above ___ on October 26?",
+   "tipo": "umbral_arriba",
+   "facil": "Will the price of XRP be above $1.30 on October 26?",
+   "dificil": "Will the price of XRP be above $1.50 on October 26?",
+   "costo": 1.319,
+   "neto": 1.3343
+  },
+  {
+   "evento": "What will WTI Crude Oil (WTI) hit in November 2026?",
+   "tipo": "umbral_abajo",
+   "facil": "Will WTI Crude Oil (WTI) hit (LOW) $85 in November?",
+   "dificil": "Will WTI Crude Oil (WTI) hit (LOW) $70 in November?",
+   "costo": 1.28,
+   "neto": 1.28
+  },
+  {
+   "evento": "What will Netflix, Inc. (NFLX) hit Week of October 26 2026?",
+   "tipo": "umbral_arriba",
+   "facil": "Will Netflix, Inc. (NFLX) hit (HIGH) $67.50 Week of October 26 2026?",
+   "dificil": "Will Netflix, Inc. (NFLX) hit (HIGH) $80 Week of October 26 2026?",
+   "costo": 1.559,
+   "neto": 1.559
+  },
+  {
+   "evento": "GMGN FDV above ___ one day after launch?",
+   "tipo": "umbral_arriba",
+   "facil": "GMGN FDV above $700M one day after launch",
+   "dificil": "GMGN FDV above $1B one day after launch",
+   "costo": 1.33,
+   "neto": 1.3541
+  },
+  {
+   "evento": "Multipli.fi FDV above ___ one day after launch?",
+   "tipo": "umbral_arriba",
+   "facil": "Multipli.fi FDV above $200M one day after launch?",
+   "dificil": "Multipli.fi FDV above $1B one day after launch?",
+   "costo": 1.445,
+   "neto": 1.4648
+  },
+  {
+   "evento": "Bitcoin above ___ on October 28?",
+   "tipo": "umbral_arriba",
+   "facil": "Will the price of Bitcoin be above $76,000 on October 28?",
+   "dificil": "Will the price of Bitcoin be above $84,000 on October 28?",
+   "costo": 1.891,
+   "neto": 1.8982
+  },
+  {
+   "evento": "Solana above ___ on October 27?",
+   "tipo": "umbral_arriba",
+   "facil": "Will the price of Solana be above $105 on October 27?",
+   "dificil": "Will the price of Solana be above $120 on October 27?",
+   "costo": 1.149,
+   "neto": 1.158
+  },
+  {
+   "evento": "What will Microsoft Corporation (MSFT) hit Week of October 26 2026?",
+   "tipo": "umbral_arriba",
+   "facil": "Will Microsoft Corporation (MSFT) hit (HIGH) $540 Week of October 26 2026?",
+   "dificil": "Will Microsoft Corporation (MSFT) hit (HIGH) $547.50 Week of October 26 2026?",
+   "costo": 1.21,
+   "neto": 1.21
+  },
+  {
+   "evento": "Trump meets with Putin by...?",
+   "tipo": "fecha",
+   "facil": "Trump meets with Putin by December 31?",
+   "dificil": "Trump meets with Putin by November 30?",
+   "costo": 1.05,
+   "neto": 1.05
+  },
+  {
+   "evento": "What will SK hynix (SKHY) hit in October 2026?",
+   "tipo": "umbral_arriba",
+   "facil": "Will SK hynix (SKHY) hit (HIGH) $138 in October?",
+   "dificil": "Will SK hynix (SKHY) hit (HIGH) $198 in October?",
+   "costo": 1.98,
+   "neto": 1.98
+  },
+  {
+   "evento": "Ethereal FDV above ___ one day after launch?",
+   "tipo": "umbral_arriba",
+   "facil": "Ethereal FDV above $200M one day after launch?",
+   "dificil": "Ethereal FDV above $300M one day after launch?",
+   "costo": 1.39,
+   "neto": 1.4163
+  },
+  {
+   "evento": "Will Palo Alto Networks Q1 Next-Generation Security ARR be above __?",
+   "tipo": "umbral_arriba",
+   "facil": "Will Palo Alto Networks Q1 Next-Generation Security ARR be above $9.75B?",
+   "dificil": "Will Palo Alto Networks Q1 Next-Generation Security ARR be above $10.25B?",
+   "costo": 1.53,
+   "neto": 1.53
+  },
+  {
+   "evento": "What will Micron Technology, Inc. (MU) hit Week of October 26 2026?",
+   "tipo": "umbral_arriba",
+   "facil": "Will Micron Technology, Inc. (MU) hit (HIGH) $900 Week of October 26 2026?",
+   "dificil": "Will Micron Technology, Inc. (MU) hit (HIGH) $1,080 Week of October 26 2026?",
+   "costo": 1.77,
+   "neto": 1.77
+  }
+ ]
+}

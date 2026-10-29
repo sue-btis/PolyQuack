@@ -1,0 +1,19 @@
+# Local data and configuration
+*.db
+*.db-wal
+*.db-shm
+*.sqlite
+.env
+config.local.*
+
+# Python
+__pycache__/
+.venv/
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+
+# Heavy discovery data
+docs/discovery/spikes/**/cache/
+docs/discovery/spikes/DQ-006-escaleras/eventos.json
+dbml-error.log

@@ -1,4 +1,4 @@
-"""Downloads the active Gamma events to eventos.json, keeping only the fields the probe needs (disposable)."""
+"""Downloads the active Gamma events to events.json, keeping only the fields the probe needs (disposable)."""
 
 import json
 import time
@@ -46,10 +46,10 @@ while True:
         break
     time.sleep(0.3)
 
-output = Path(__file__).with_name("eventos.json")
+output = Path(__file__).with_name("events.json")
 output.write_text(
     json.dumps(
-        {"descargado": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), "eventos": events}
+        {"downloaded": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), "events": events}
     )
 )
 print(len(events), "events,", sum(len(e["markets"]) for e in events), "markets")

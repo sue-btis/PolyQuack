@@ -3,7 +3,7 @@
 Status: Accepted
 Date: 2026-10-26
 Decision owners: the author
-Accepted by: the author, 2026-10-26, «Acepto ADR-006 (Recomendado)»
+Accepted by: the author, 2026-10-26, «I accept ADR-006 (Recommended)»
 Related: FR-007, FR-023, FR-024, NFR-005, NFR-010, ADR-004
 
 ## Context

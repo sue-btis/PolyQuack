@@ -3,7 +3,7 @@
 Status: Accepted
 Date: 2026-10-26
 Decision owners: the author
-Accepted by: the author, 2026-10-26, «Canal en vivo + REST (Recomendado)»
+Accepted by: the author, 2026-10-26, «Live channel + REST (Recommended)»
 Related: FR-006, FR-007, FR-010, NFR-003, NFR-005, NFR-010, PD-012
 
 ## Context

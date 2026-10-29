@@ -8,7 +8,7 @@ import json
 import statistics
 from pathlib import Path
 
-from sondeo import CACHE, HL_FEE, PM_FEE, by_hour, simulate
+from probe import CACHE, HL_FEE, PM_FEE, by_hour, simulate
 
 THRESHOLD = 0.00001
 result = {}
@@ -43,25 +43,25 @@ second_half = {m: annual_net([h for h in hs if h >= cutoff], d) for m, (hs, d) i
 second_half = {m: v for m, v in second_half.items() if v is not None}
 
 summary = {
-    "monedas": len(coins),
-    "corte_utc_hora": cutoff,
-    "comision_ida_vuelta_dos_patas": 2 * (PM_FEE + HL_FEE),
-    "elegidas_primera_mitad": chosen,
-    "neto_anual_segunda_mitad_elegidas_promedio": statistics.mean(
+    "coins": len(coins),
+    "cutoff_utc_hour": cutoff,
+    "round_trip_fee_two_legs": 2 * (PM_FEE + HL_FEE),
+    "chosen_first_half": chosen,
+    "annual_net_second_half_chosen_mean": statistics.mean(
         second_half[m] for m in chosen if m in second_half
     ),
-    "neto_anual_segunda_mitad_todas_promedio": statistics.mean(second_half.values()),
-    "neto_anual_segunda_mitad_por_moneda": {
+    "annual_net_second_half_all_mean": statistics.mean(second_half.values()),
+    "annual_net_second_half_by_coin": {
         m: round(second_half[m], 4) for m in chosen if m in second_half
     },
-    "dif_media_anual_todas": statistics.mean(
+    "mean_annual_diff_all": statistics.mean(
         statistics.mean(d.values()) for _, d in coins.values()
     )
     * 24
     * 365,
-    "monedas_con_dif_negativa": sum(statistics.mean(d.values()) < 0 for _, d in coins.values()),
+    "coins_with_negative_diff": sum(statistics.mean(d.values()) < 0 for _, d in coins.values()),
 }
-(Path(__file__).parent / "fuera_de_muestra.json").write_text(
+(Path(__file__).parent / "out_of_sample.json").write_text(
     json.dumps(summary, indent=1), encoding="utf-8"
 )
 print(json.dumps(summary, indent=1))

@@ -19,7 +19,7 @@ from pathlib import Path
 HERE = Path(__file__).parent
 CACHE = HERE / "cache"
 CACHE.mkdir(exist_ok=True)
-UA = {"User-Agent": "polyquack-sondeo/0.1"}
+UA = {"User-Agent": "polyquack-probe/0.1"}
 START_MS = int(datetime(2026, 9, 3, tzinfo=UTC).timestamp() * 1000)
 END_MS = int(datetime(2026, 10, 26, tzinfo=UTC).timestamp() * 1000)
 # Base tier of each platform (new account), read from its documentation on Oct 26, 2026.
@@ -111,7 +111,7 @@ def simulate(hours, spread, threshold):
 
 def main():
     instruments = cached(
-        "instrumentos.json",
+        "instruments.json",
         lambda: http("https://api.perpetuals.polymarket.com/v1/info/instruments"),
     )
     hl_meta = cached(
@@ -136,34 +136,34 @@ def main():
         spread = {h: pm[h] - hl[h] for h in hours}
         values = list(spread.values())
         row = {
-            "moneda": coin,
-            "horas": len(hours),
-            "pm_media_anual": statistics.mean(pm[h] for h in hours) * 24 * 365,
-            "hl_media_anual": statistics.mean(hl[h] for h in hours) * 24 * 365,
-            "dif_media_anual": statistics.mean(values) * 24 * 365,
-            "dif_abs_media_anual": statistics.mean(abs(v) for v in values) * 24 * 365,
-            "horas_pm_mayor": sum(v > 0 for v in values) / len(values),
+            "coin": coin,
+            "hours": len(hours),
+            "pm_mean_annual": statistics.mean(pm[h] for h in hours) * 24 * 365,
+            "hl_mean_annual": statistics.mean(hl[h] for h in hours) * 24 * 365,
+            "mean_annual_diff": statistics.mean(values) * 24 * 365,
+            "mean_annual_abs_diff": statistics.mean(abs(v) for v in values) * 24 * 365,
+            "pm_higher_share": sum(v > 0 for v in values) / len(values),
         }
         days = len(hours) / 24
         for u in THRESHOLDS:
             collected, fees, in_pos = simulate(hours, spread, u)
             net = collected - fees
-            row[f"neto_anual_u{u}"] = net * 365 / days
-            row[f"en_posicion_u{u}"] = in_pos / len(hours)
+            row[f"annual_net_u{u}"] = net * 365 / days
+            row[f"in_position_u{u}"] = in_pos / len(hours)
         results.append(row)
         print(
             coin,
             len(hours),
             "h",
             "avg annual spread",
-            f"{row['dif_media_anual']:+.1%}",
+            f"{row['mean_annual_diff']:+.1%}",
             "net (u=0.00001)",
-            f"{row['neto_anual_u1e-05']:+.1%}",
+            f"{row['annual_net_u1e-05']:+.1%}",
             flush=True,
         )
 
-    results.sort(key=lambda f: -f["neto_anual_u1e-05"])
-    (HERE / "resultado.json").write_text(json.dumps(results, indent=1), encoding="utf-8")
+    results.sort(key=lambda f: -f["annual_net_u1e-05"])
+    (HERE / "result.json").write_text(json.dumps(results, indent=1), encoding="utf-8")
 
 
 if __name__ == "__main__":

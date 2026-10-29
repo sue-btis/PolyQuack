@@ -41,8 +41,8 @@ Enumeration values are left in English.
 | `npx --yes -p @mermaid-js/mermaid-cli mmdc -i docs/design/domain.md -o <scratchpad>/fv1-domain.md` | **Pass** (exit 0). The 2 diagrams were generated. |
 
 Decision status at follow-up:
-- PD-020 (`prd.md:366`) and PD-021 (`prd.md:367`) are `Decided`, with author, date 2026-10-26, and verbatim quote: «Máximo usado a la vez (Recomendado)» and «Por par, excluyendo el par (Recomendado)».
-- ADR-006 is `Accepted`, with "Accepted by: the author, 2026-10-26, «Acepto ADR-006 (Recomendado)»" (`ADR-006-price-capture.md:3-6`).
+- PD-020 (`prd.md:366`) and PD-021 (`prd.md:367`) are `Decided`, with author, date 2026-10-26, and verbatim quote: «Maximum used at the same time (Recommended)» and «Per pair, excluding the pair (Recommended)».
+- ADR-006 is `Accepted`, with "Accepted by: the author, 2026-10-26, «I accept ADR-006 (Recommended)»" (`ADR-006-price-capture.md:3-6`).
 - No authority depends on an ADR in `Proposed`.
 
 ## Current Blocking Summary
@@ -98,7 +98,7 @@ Decision status at follow-up:
 - Required resolution: the author decides in PRD §15 (a new PD with a verbatim quote) how the collateral of a run with simultaneous or changing positions is calculated. Then BR-003 and the domain definition are updated citing that PD. This cannot be inferred: it is a product rule.
 - Changed paths (cycle 1): `docs/product/prd.md` (new PD-020, decided by the author with a quote; BR-003 cites PD-020); `docs/design/domain.md` (term Collateral; Run invariant); `docs/design/data/schema.dbml` (`verdict.max_collateral`); `docs/design/ux/flows.mmd` (F-003, return step).
 - Verification evidence (follow-up, 2026-10-26):
-  - PD-020 is at `prd.md:366`: `Decided`, author, 2026-10-26, «Máximo usado a la vez (Recomendado)». The decision is "the maximum collateral committed at the same time during the run".
+  - PD-020 is at `prd.md:366`: `Decided`, author, 2026-10-26, «Maximum used at the same time (Recommended)». The decision is "the maximum collateral committed at the same time during the run".
   - BR-003 (`prd.md:278`) defines the collateral of a position and of a run, and cites PD-020. FR-016 (`prd.md:180`) refers to BR-003.
   - The domain is aligned. `domain.md:26` defines the term. `domain.md:76` is the Run invariant and limits the maximum to non-excluded positions, which matches PD-021.
   - The DBML has `verdict.max_collateral` at `schema.dbml:235`, with a PD-020 note.
@@ -123,7 +123,7 @@ Decision status at follow-up:
 - Required resolution: the author decides in §15 the counting level (per pair, summed, or excluding the pair instead of the whole run) and how expected hours or minutes are counted for pairs that enter or leave. FR-018 and PD-013 are left with that precision.
 - Changed paths (cycle 1): `docs/product/prd.md` (new PD-021, decided by the author with a quote; FR-018 rewritten citing PD-021); `docs/design/domain.md` (term Excluded pair; Run lifecycle and invariants); `docs/design/data/schema.dbml` (table `excluded_pair`; note on `run.status`); `docs/design/ux/flows.mmd` (F-003 per pair).
 - Verification evidence (follow-up, 2026-10-26):
-  - PD-021 is at `prd.md:367`: `Decided`, author, 2026-10-26, «Por par, excluyendo el par (Recomendado)». What it says: counting is per pair; the pair that passes the limit is left out and reported; each pair counts only between its pairing and its delisting. Affects lists PD-013, so it refines PD-013 without contradicting it.
+  - PD-021 is at `prd.md:367`: `Decided`, author, 2026-10-26, «Per pair, excluding the pair (Recommended)». What it says: counting is per pair; the pair that passes the limit is left out and reported; each pair counts only between its pairing and its delisting. Affects lists PD-013, so it refines PD-013 without contradicting it.
   - FR-018 (`prd.md:186`) applies the limit per pair, measures only between pairing and delisting, qualifies with the remaining pairs, and leaves the run unqualified only if none remains.
   - The domain is aligned:
     - `domain.md:28` defines «Excluded pair».
@@ -177,9 +177,9 @@ Decision status at follow-up:
   - It was not verified whether a batch endpoint exists (for example "tickers", `findings.md:497`) or a live mark price channel.
 - Why it matters: if implemented as written at `architecture.dsl:14`, with one REST request per instrument every minute, it repeats the option that ADR-004 rejected and puts NFR-005 (zero bans) at risk. The per-minute prices feed the basis and the liquidation distance (FR-023, FR-024).
 - Required resolution: ADR-004 (or a new ADR) decides the source and frequency of the mark price and index price: live channel, batch endpoint, or REST per instrument, with its rate calculation against NFR-005 and NFR-010. `architecture.dsl` and `flows.mmd` are aligned with that decision.
-- Changed paths (cycle 1): `docs/design/architecture/adr/ADR-006-price-capture.md` (new, Accepted by the author with the quote «Acepto ADR-006 (Recomendado)»); `docs/design/architecture/architecture.dsl` (Ingestion description); `docs/design/ux/flows.mmd` (F-001, batch prices every minute); `docs/design/data/schema.dbml` (`price_reading.source_time` null if the source does not provide it, `received_at`); `docs/design/architecture/quality-attributes.md` (NFR-005, NFR-010).
+- Changed paths (cycle 1): `docs/design/architecture/adr/ADR-006-price-capture.md` (new, Accepted by the author with the quote «I accept ADR-006 (Recommended)»); `docs/design/architecture/architecture.dsl` (Ingestion description); `docs/design/ux/flows.mmd` (F-001, batch prices every minute); `docs/design/data/schema.dbml` (`price_reading.source_time` null if the source does not provide it, `received_at`); `docs/design/architecture/quality-attributes.md` (NFR-005, NFR-010).
 - Verification evidence (follow-up, 2026-10-26):
-  - ADR-006 is `Accepted`, with «Accepted by: the author, 2026-10-26, «Acepto ADR-006 (Recomendado)»» (`ADR-006:3-6`).
+  - ADR-006 is `Accepted`, with «Accepted by: the author, 2026-10-26, «I accept ADR-006 (Recommended)»» (`ADR-006:3-6`).
   - It weighed three options (`ADR-006:25-35`) and chose B: one batch request per platform every minute (`ADR-006:37-42`).
   - The rate calculation is at `ADR-006:12,30`: 2 requests per minute in total regardless of how many pairs there are, versus about 200 for the per-instrument option. That answers NFR-005 and NFR-010.
   - The endpoints appear as verified on Oct 26, 2026 at `ADR-006:14-17`: Polymarket Perps `GET /v1/info/tickers` and Hyperliquid `POST /info {"type":"metaAndAssetCtxs"}`. They were not queried again in this follow-up.
@@ -377,7 +377,7 @@ Decision status at follow-up:
 ### Reconciliation — cycle 1
 
 - Date: 2026-10-26. Scope: only the 5 open MAJOR findings (F-001 to F-005). The 10 MINOR findings (F-006 to F-015) remain `OPEN` as non-blocking debt.
-- Author decisions used: PD-020 («Máximo usado a la vez (Recomendado)») and PD-021 («Por par, excluyendo el par (Recomendado)»), both of 2026-10-26 and recorded in PRD §15. ADR-006 accepted by the author on 2026-10-26 («Acepto ADR-006 (Recomendado)»).
+- Author decisions used: PD-020 («Maximum used at the same time (Recommended)») and PD-021 («Per pair, excluding the pair (Recommended)»), both of 2026-10-26 and recorded in PRD §15. ADR-006 accepted by the author on 2026-10-26 («I accept ADR-006 (Recommended)»).
 - Files changed: `docs/product/prd.md`, `docs/design/domain.md`, `docs/design/ux/flows.mmd`, `docs/design/data/schema.dbml`, `docs/design/architecture/architecture.dsl`, `docs/design/architecture/quality-attributes.md`, `docs/design/architecture/adr/ADR-006-price-capture.md` (new).
 - Commands run after the changes: `npx -p @dbml/cli dbml2sql schema.dbml` → exit 0, 22 tables; `check-package.mjs` → exit 1 only because of F-006 (MINOR, outside the scope of this cycle). Structurizr and Mermaid were not run again in this cycle.
 - Findings moved to `READY_FOR_VERIFICATION`: F-001, F-002, F-003, F-004, F-005. None was marked `RESOLVED`: that is up to the independent verification.

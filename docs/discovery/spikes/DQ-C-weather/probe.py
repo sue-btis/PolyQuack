@@ -46,7 +46,7 @@ def get_json(url, name):
     if file.exists():
         return json.loads(file.read_text())
     # The Data API answers 403 to clients without a User-Agent.
-    request = urllib.request.Request(url, headers={"User-Agent": "polyquack-sondeo/0.1"})
+    request = urllib.request.Request(url, headers={"User-Agent": "polyquack-probe/0.1"})
     for _ in range(3):
         try:
             with urllib.request.urlopen(request, timeout=60) as r:
@@ -134,19 +134,19 @@ def main():
             token = json.loads(m["clobTokenIds"])[0]
             options.append(
                 {
-                    "rango": bucket_range(m["groupItemTitle"]),
-                    "gano": won,
-                    "precio": price_at(token, instant),
-                    "tasa": (m.get("feeSchedule") or {}).get("rate"),
+                    "range": bucket_range(m["groupItemTitle"]),
+                    "won": won,
+                    "price": price_at(token, instant),
+                    "rate": (m.get("feeSchedule") or {}).get("rate"),
                 }
             )
-        if sum(o["gano"] for o in options) != 1 or any(o["precio"] is None for o in options):
+        if sum(o["won"] for o in options) != 1 or any(o["price"] is None for o in options):
             continue
-        winner = next(o for o in options if o["gano"])
-        rows.append({"dia": str(day), "fc": fc, "opciones": options, "ganador": winner["rango"]})
-        print(day, "forecast", round(fc, 1), "won", winner["rango"], flush=True)
+        winner = next(o for o in options if o["won"])
+        rows.append({"day": str(day), "fc": fc, "options": options, "winner": winner["range"]})
+        print(day, "forecast", round(fc, 1), "won", winner["range"], flush=True)
 
-    (HERE / f"filas_{city}.json").write_text(json.dumps(rows, default=str))
+    (HERE / f"rows_{city}.json").write_text(json.dumps(rows, default=str))
     evaluate(city, rows)
 
 
@@ -156,36 +156,36 @@ def evaluate(city, rows):
     res = []
     warmup = 14
     for f in rows:
-        lo, hi = f["ganador"]
+        lo, hi = f["winner"]
         center = hi if lo == -math.inf else lo if hi == math.inf else (lo + hi) / 2
         if len(errors) >= warmup:
             bias = statistics.mean(errors)
             sigma = max(statistics.stdev(errors), 0.8)
             mu = f["fc"] + bias
-            market_sum = sum(o["precio"] for o in f["opciones"])
+            market_sum = sum(o["price"] for o in f["options"])
             b_mod = b_mkt = b_mix = 0.0
             ll_mod = ll_mkt = 0.0
-            for o in f["opciones"]:
-                p_mod = range_prob(*o["rango"], mu, sigma)
-                p_mkt = o["precio"] / market_sum
+            for o in f["options"]:
+                p_mod = range_prob(*o["range"], mu, sigma)
+                p_mkt = o["price"] / market_sum
                 # If the blend beats the market alone, the forecast carries information the price lacks.
                 p_mix = 0.8 * p_mkt + 0.2 * p_mod
-                y = 1.0 if o["gano"] else 0.0
+                y = 1.0 if o["won"] else 0.0
                 b_mod += (p_mod - y) ** 2
                 b_mkt += (p_mkt - y) ** 2
                 b_mix += (p_mix - y) ** 2
-                if o["gano"]:
+                if o["won"]:
                     ll_mod = -math.log(max(p_mod, 1e-6))
                     ll_mkt = -math.log(max(p_mkt, 1e-6))
             res.append(
                 {
-                    "dia": f["dia"],
-                    "brier_modelo": b_mod,
-                    "brier_mercado": b_mkt,
-                    "brier_mezcla": b_mix,
-                    "log_modelo": ll_mod,
-                    "log_mercado": ll_mkt,
-                    "suma_mercado": market_sum,
+                    "day": f["day"],
+                    "brier_model": b_mod,
+                    "brier_market": b_mkt,
+                    "brier_blend": b_mix,
+                    "log_model": ll_mod,
+                    "log_market": ll_mkt,
+                    "market_sum": market_sum,
                 }
             )
         # The center of the winning range approximates the true max (the station gives whole degrees).
@@ -196,18 +196,18 @@ def evaluate(city, rows):
         return
     n = len(res)
     summary = {
-        "ciudad": city,
-        "dias_evaluados": n,
-        "brier_modelo": statistics.mean(r["brier_modelo"] for r in res),
-        "brier_mercado": statistics.mean(r["brier_mercado"] for r in res),
-        "brier_mezcla_80_20": statistics.mean(r["brier_mezcla"] for r in res),
-        "log_modelo": statistics.mean(r["log_modelo"] for r in res),
-        "log_mercado": statistics.mean(r["log_mercado"] for r in res),
-        "dias_modelo_mejor_brier": sum(r["brier_modelo"] < r["brier_mercado"] for r in res),
-        "suma_mercado_media": statistics.mean(r["suma_mercado"] for r in res),
+        "city": city,
+        "days_evaluated": n,
+        "brier_model": statistics.mean(r["brier_model"] for r in res),
+        "brier_market": statistics.mean(r["brier_market"] for r in res),
+        "brier_blend_80_20": statistics.mean(r["brier_blend"] for r in res),
+        "log_model": statistics.mean(r["log_model"] for r in res),
+        "log_market": statistics.mean(r["log_market"] for r in res),
+        "days_model_better_brier": sum(r["brier_model"] < r["brier_market"] for r in res),
+        "market_sum_mean": statistics.mean(r["market_sum"] for r in res),
     }
-    (HERE / f"resumen_{city}.json").write_text(
-        json.dumps({"resumen": summary, "dias": res}, indent=1)
+    (HERE / f"summary_{city}.json").write_text(
+        json.dumps({"summary": summary, "days": res}, indent=1)
     )
     print(json.dumps(summary, indent=1))
 

@@ -101,7 +101,7 @@ def ladders_of(event):
     if c:
         return [c]
     result = []
-    for side, kind, sign in (("up", "umbral_arriba", 1), ("down", "umbral_abajo", -1)):
+    for side, kind, sign in (("up", "threshold_up", 1), ("down", "threshold_down", -1)):
         group = [m for m in markets if direction(m["question"]) == side]
         nums = [number(m["groupItemTitle"]) for m in group]
         if len(group) >= 2 and None not in nums and len(set(nums)) == len(nums):
@@ -122,7 +122,7 @@ def classify_date(event, open_markets):
         return None
     questions = " ".join(m["question"] for m in open_markets)
     if DEADLINE.search(questions) and not EXACT.search(event["title"]):
-        return "fecha", [(-f.toordinal(), m) for f, m in zip(dates, open_markets)]
+        return "date", [(-f.toordinal(), m) for f, m in zip(dates, open_markets)]
     return None
 
 
@@ -137,16 +137,16 @@ def classify(event, open_markets):
     if all(dates) and len(set(dates)) == len(dates):
         if DEADLINE.search(questions) and not EXACT.search(event["title"]):
             # "Before a later date" is easier: the negative key puts it first.
-            return "fecha", [(-f.toordinal(), m) for f, m in zip(dates, open_markets)]
+            return "date", [(-f.toordinal(), m) for f, m in zip(dates, open_markets)]
         return None
 
     nums = [number(m["groupItemTitle"]) for m in open_markets]
     if all(n is not None for n in nums) and len(set(nums)) == len(nums):
         up, down = bool(UP.search(questions)), bool(DOWN.search(questions))
         if up and not down:
-            return "umbral_arriba", [(n, m) for n, m in zip(nums, open_markets)]
+            return "threshold_up", [(n, m) for n, m in zip(nums, open_markets)]
         if down and not up:
-            return "umbral_abajo", [(-n, m) for n, m in zip(nums, open_markets)]
+            return "threshold_down", [(-n, m) for n, m in zip(nums, open_markets)]
     return None
 
 
@@ -169,7 +169,7 @@ def pairs(kind, markets):
 def book(token):
     req = urllib.request.Request(
         f"https://clob.polymarket.com/book?token_id={token}",
-        headers={"User-Agent": "polyquack-sondeo/0.1"},
+        headers={"User-Agent": "polyquack-probe/0.1"},
     )
     with urllib.request.urlopen(req, timeout=30) as r:
         return json.load(r)
@@ -203,8 +203,8 @@ def depth(easy, hard):
 
 
 def main():
-    data = json.loads((HERE / "eventos.json").read_text())
-    events = data["eventos"]
+    data = json.loads((HERE / "events.json").read_text())
+    events = data["events"]
     ladders = [(e, *c) for e in events for c in ladders_of(e)]
     by_kind = {}
     everything = []
@@ -213,42 +213,42 @@ def main():
         for easy, hard, cost, net in pairs(kind, markets):
             everything.append(
                 {
-                    "evento": e["title"],
-                    "tipo": kind,
-                    "facil": easy["question"],
-                    "dificil": hard["question"],
-                    "costo": round(cost, 4),
-                    "neto": round(net, 4),
+                    "event": e["title"],
+                    "kind": kind,
+                    "easy": easy["question"],
+                    "hard": hard["question"],
+                    "cost": round(cost, 4),
+                    "net": round(net, 4),
                     "_f": easy,
                     "_d": hard,
                 }
             )
 
-    violations = sorted((p for p in everything if p["neto"] < 1), key=lambda p: p["neto"])
+    violations = sorted((p for p in everything if p["net"] < 1), key=lambda p: p["net"])
     for p in violations[:40]:
         try:
-            p["acciones"], p["ganancia_usd"] = depth(p["_f"], p["_d"])
+            p["shares"], p["profit_usd"] = depth(p["_f"], p["_d"])
         except Exception as ex:  # noqa: BLE001 - probe
-            p["error_libro"] = str(ex)
+            p["book_error"] = str(ex)
 
     random.seed(7)
     sample = random.sample(everything, min(60, len(everything)))
     clean = lambda p: {k: v for k, v in p.items() if not k.startswith("_")}  # noqa: E731
     summary = {
-        "descargado": data["descargado"],
-        "eventos_activos": len(events),
-        "eventos_negRisk": sum(bool(e.get("negRisk")) for e in events),
-        "escaleras_por_tipo": by_kind,
-        "pares": len(everything),
-        "pares_costo_bruto_menor_1": sum(p["costo"] < 1 for p in everything),
-        "pares_neto_menor_1": len(violations),
+        "downloaded": data["downloaded"],
+        "active_events": len(events),
+        "negRisk_events": sum(bool(e.get("negRisk")) for e in events),
+        "ladders_by_kind": by_kind,
+        "pairs": len(everything),
+        "pairs_gross_cost_below_1": sum(p["cost"] < 1 for p in everything),
+        "pairs_net_below_1": len(violations),
     }
-    (HERE / "resultado.json").write_text(
+    (HERE / "result.json").write_text(
         json.dumps(
             {
-                "resumen": summary,
-                "violaciones": [clean(p) for p in violations[:40]],
-                "muestra_para_etiquetar": [clean(p) for p in sample],
+                "summary": summary,
+                "violations": [clean(p) for p in violations[:40]],
+                "sample_to_label": [clean(p) for p in sample],
             },
             indent=1,
             ensure_ascii=False,
@@ -258,13 +258,13 @@ def main():
     print(json.dumps(summary, indent=1))
     for p in violations[:15]:
         print(
-            round(p["neto"], 3),
-            p.get("acciones"),
-            p.get("ganancia_usd"),
+            round(p["net"], 3),
+            p.get("shares"),
+            p.get("profit_usd"),
             "|",
-            p["facil"],
+            p["easy"],
             "=>",
-            p["dificil"],
+            p["hard"],
         )
 
 

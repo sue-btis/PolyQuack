@@ -1,0 +1,893 @@
+{
+ "summary": {
+  "downloaded": "2026-10-26T03:08:32Z",
+  "active_events": 21823,
+  "negRisk_events": 8847,
+  "ladders_by_kind": {
+   "date": 423,
+   "threshold_up": 454,
+   "threshold_down": 126
+  },
+  "pairs": 13776,
+  "pairs_gross_cost_below_1": 54,
+  "pairs_net_below_1": 40
+ },
+ "violations": [
+  {
+   "event": "Will Cambria launch a token by ___?",
+   "kind": "date",
+   "easy": "Will Cambria launch a token by September 30, 2027?",
+   "hard": "Will Cambria launch a token by June 30, 2027?",
+   "cost": 0.947,
+   "net": 0.9514,
+   "book_error": "HTTP Error 404: Not Found"
+  },
+  {
+   "event": "Will Cambria launch a token by ___?",
+   "kind": "date",
+   "easy": "Will Cambria launch a token by September 30, 2027?",
+   "hard": "Will Cambria launch a token by December 31, 2026?",
+   "cost": 0.949,
+   "net": 0.9536,
+   "book_error": "HTTP Error 404: Not Found"
+  },
+  {
+   "event": "Will Cambria launch a token by ___?",
+   "kind": "date",
+   "easy": "Will Cambria launch a token by March 31, 2027?",
+   "hard": "Will Cambria launch a token by December 31, 2026?",
+   "cost": 0.949,
+   "net": 0.9536,
+   "book_error": "HTTP Error 404: Not Found"
+  },
+  {
+   "event": "Will StandX launch a token by ___?",
+   "kind": "date",
+   "easy": "Will StandX launch a token by June 30, 2027?",
+   "hard": "Will StandX launch a token by March 31, 2027?",
+   "cost": 0.968,
+   "net": 0.9739,
+   "book_error": "HTTP Error 404: Not Found"
+  },
+  {
+   "event": "How high will US unemployment go in 2026?",
+   "kind": "threshold_up",
+   "easy": "Will US unemployment reach at least 6.0% in 2026?",
+   "hard": "Will US unemployment reach at least 7.0% in 2026?",
+   "cost": 0.974,
+   "net": 0.974,
+   "shares": 432.54,
+   "profit_usd": 4.5371400000000035
+  },
+  {
+   "event": "Will Ritual launch a token by ___?",
+   "kind": "date",
+   "easy": "Will Ritual launch a token by September 30, 2027?",
+   "hard": "Will Ritual launch a token by June 30, 2027?",
+   "cost": 0.97,
+   "net": 0.976,
+   "book_error": "HTTP Error 404: Not Found"
+  },
+  {
+   "event": "How high will US unemployment go in 2026?",
+   "kind": "threshold_up",
+   "easy": "Will US unemployment reach at least 6.0% in 2026?",
+   "hard": "Will US unemployment reach at least 10.0% in 2026?",
+   "cost": 0.989,
+   "net": 0.989,
+   "shares": 292.54,
+   "profit_usd": 1.5696300000000014
+  },
+  {
+   "event": "StandX FDV above ___ one day after launch?",
+   "kind": "threshold_up",
+   "easy": "StandX FDV above $50M one day after launch?",
+   "hard": "StandX FDV above $800M one day after launch?",
+   "cost": 0.989,
+   "net": 0.991,
+   "shares": 417.4,
+   "profit_usd": 2.155651857999991
+  },
+  {
+   "event": "StandX FDV above ___ one day after launch?",
+   "kind": "threshold_up",
+   "easy": "StandX FDV above $50M one day after launch?",
+   "hard": "StandX FDV above $1B one day after launch?",
+   "cost": 0.989,
+   "net": 0.991,
+   "shares": 417.4,
+   "profit_usd": 1.6009056900000063
+  },
+  {
+   "event": "What will Fed Rate hit before 2027?",
+   "kind": "threshold_down",
+   "easy": "Will the Fed’s lower bound reach 1.75% or lower before 2027?",
+   "hard": "Will the Fed’s lower bound reach 0.5% or lower before 2027?",
+   "cost": 0.991,
+   "net": 0.991,
+   "shares": 98.11,
+   "profit_usd": 0.3461100000000003
+  },
+  {
+   "event": "Will Glean's valuation hit __ by October 31?",
+   "kind": "threshold_up",
+   "easy": "Will Glean's valuation hit (HIGH) $7.5B by October 31?",
+   "hard": "Will Glean's valuation hit (HIGH) $7.75B by October 31?",
+   "cost": 0.991,
+   "net": 0.991,
+   "shares": 0.36,
+   "profit_usd": 0.003240000000000003
+  },
+  {
+   "event": "Hurupay FDV above ___ one day after launch?",
+   "kind": "threshold_up",
+   "easy": "Hurupay FDV above $30M one day after launch?",
+   "hard": "Hurupay FDV above $100M one day after launch?",
+   "cost": 0.988,
+   "net": 0.9921,
+   "shares": 56.85,
+   "profit_usd": 0.35276162400000277
+  },
+  {
+   "event": "StandX FDV above ___ one day after launch?",
+   "kind": "threshold_up",
+   "easy": "StandX FDV above $2B one day after launch?",
+   "hard": "StandX FDV above $5B one day after launch?",
+   "cost": 0.991,
+   "net": 0.9927,
+   "shares": 585.6800000000001,
+   "profit_usd": 0.9544831863999568
+  },
+  {
+   "event": "StandX FDV above ___ one day after launch?",
+   "kind": "threshold_up",
+   "easy": "StandX FDV above $50M one day after launch?",
+   "hard": "StandX FDV above $5B one day after launch?",
+   "cost": 0.992,
+   "net": 0.9938,
+   "shares": 98.0,
+   "profit_usd": 0.4832580400000057
+  },
+  {
+   "event": "What will Fed Rate hit before 2027?",
+   "kind": "threshold_down",
+   "easy": "Will the Fed’s lower bound reach 3.0% or lower before 2027?",
+   "hard": "Will the Fed’s lower bound reach 0.5% or lower before 2027?",
+   "cost": 0.994,
+   "net": 0.994,
+   "shares": 35.0,
+   "profit_usd": 0.17800000000000016
+  },
+  {
+   "event": "Abstract FDV above ___ one day after launch?",
+   "kind": "threshold_up",
+   "easy": "Abstract FDV above $200M one day after launch?",
+   "hard": "Abstract FDV above $600M one day after launch?",
+   "cost": 0.991,
+   "net": 0.9945,
+   "shares": 730.45,
+   "profit_usd": 1.9375118163999843
+  },
+  {
+   "event": "Will Ritual launch a token by ___?",
+   "kind": "date",
+   "easy": "Will Ritual launch a token by December 31, 2027?",
+   "hard": "Will Ritual launch a token by June 30, 2027?",
+   "cost": 0.99,
+   "net": 0.9947,
+   "book_error": "HTTP Error 404: Not Found"
+  },
+  {
+   "event": "What will Fed Rate hit before 2027?",
+   "kind": "threshold_down",
+   "easy": "Will the Fed’s lower bound reach 2.25% or lower before 2027?",
+   "hard": "Will the Fed’s lower bound reach 0.5% or lower before 2027?",
+   "cost": 0.995,
+   "net": 0.995,
+   "shares": 35.0,
+   "profit_usd": 0.14300000000000013
+  },
+  {
+   "event": "Hyperbeat FDV above ___ one day after launch?",
+   "kind": "threshold_up",
+   "easy": "Hyperbeat FDV above $200M one day after launch?",
+   "hard": "Hyperbeat FDV above $400M one day after launch?",
+   "cost": 0.993,
+   "net": 0.9953,
+   "shares": 448.1,
+   "profit_usd": 1.105544820400005
+  },
+  {
+   "event": "What will Fed Rate hit before 2027?",
+   "kind": "threshold_down",
+   "easy": "Will the Fed’s lower bound reach 2.5% or lower before 2027?",
+   "hard": "Will the Fed’s lower bound reach 0.5% or lower before 2027?",
+   "cost": 0.996,
+   "net": 0.996,
+   "shares": 35.0,
+   "profit_usd": 0.1080000000000001
+  },
+  {
+   "event": "What will Fed Rate hit before 2027?",
+   "kind": "threshold_down",
+   "easy": "Will the Fed’s lower bound reach 1.75% or lower before 2027?",
+   "hard": "Will the Fed’s lower bound reach 0.75% or lower before 2027?",
+   "cost": 0.996,
+   "net": 0.996,
+   "shares": 5.05,
+   "profit_usd": 0.020200000000000017
+  },
+  {
+   "event": "What will Fed Rate hit before 2027?",
+   "kind": "threshold_down",
+   "easy": "Will the Fed’s lower bound reach 1.75% or lower before 2027?",
+   "hard": "Will the Fed’s lower bound reach 0.25% or lower before 2027?",
+   "cost": 0.996,
+   "net": 0.996,
+   "shares": 156.0,
+   "profit_usd": 0.41411000000000037
+  },
+  {
+   "event": "What will Fed Rate hit before 2027?",
+   "kind": "threshold_down",
+   "easy": "Will the Fed’s lower bound reach 0.75% or lower before 2027?",
+   "hard": "Will the Fed’s lower bound reach 0.5% or lower before 2027?",
+   "cost": 0.996,
+   "net": 0.996,
+   "shares": 35.0,
+   "profit_usd": 0.1080000000000001
+  },
+  {
+   "event": "How high will US unemployment go in 2026?",
+   "kind": "threshold_up",
+   "easy": "Will US unemployment reach at least 5.5% in 2026?",
+   "hard": "Will US unemployment reach at least 7.0% in 2026?",
+   "cost": 0.996,
+   "net": 0.996,
+   "shares": 83.63,
+   "profit_usd": 0.28526000000000024
+  },
+  {
+   "event": "Will the 30-year Mortgage Rate hit __ in 2026?",
+   "kind": "threshold_down",
+   "easy": "Will the U.S. 30-year Fixed-Rate Mortgage hit 5.70% (LOW) by December 31, 2026?",
+   "hard": "Will the U.S. 30-year Fixed-Rate Mortgage hit 5.50% (LOW) by December 31, 2026?",
+   "cost": 0.996,
+   "net": 0.996,
+   "shares": 20.0,
+   "profit_usd": 0.08000000000000007
+  },
+  {
+   "event": "Ostium FDV above ___ one day after launch?",
+   "kind": "threshold_up",
+   "easy": "Ostium FDV above $200M one day after launch?",
+   "hard": "Ostium FDV above $700M one day after launch?",
+   "cost": 0.993,
+   "net": 0.9962,
+   "shares": 90.0,
+   "profit_usd": 0.1449545999999946
+  },
+  {
+   "event": "StandX FDV above ___ one day after launch?",
+   "kind": "threshold_up",
+   "easy": "StandX FDV above $2B one day after launch?",
+   "hard": "StandX FDV above $3B one day after launch?",
+   "cost": 0.995,
+   "net": 0.9965,
+   "shares": 212.69,
+   "profit_usd": 0.35697186139998444
+  },
+  {
+   "event": "Ostium FDV above ___ one day after launch?",
+   "kind": "threshold_up",
+   "easy": "Ostium FDV above $300M one day after launch?",
+   "hard": "Ostium FDV above $700M one day after launch?",
+   "cost": 0.994,
+   "net": 0.9973,
+   "shares": 55.0,
+   "profit_usd": 0.04700410000000155
+  },
+  {
+   "event": "StandX FDV above ___ one day after launch?",
+   "kind": "threshold_up",
+   "easy": "StandX FDV above $50M one day after launch?",
+   "hard": "StandX FDV above $3B one day after launch?",
+   "cost": 0.996,
+   "net": 0.9975,
+   "shares": 94.34,
+   "profit_usd": 0.167202668000002
+  },
+  {
+   "event": "Pacifica FDV above ___ one day after launch?",
+   "kind": "threshold_up",
+   "easy": "Pacifica FDV above $1B one day after launch?",
+   "hard": "Pacifica FDV above $2B one day after launch?",
+   "cost": 0.992,
+   "net": 0.9975,
+   "shares": 0.0,
+   "profit_usd": 0.0
+  },
+  {
+   "event": "What will Rocket Lab USA, Inc. (RKLB) hit in October 2026?",
+   "kind": "threshold_up",
+   "easy": "Will Rocket Lab USA, Inc. (RKLB) hit (HIGH) $92 in October?",
+   "hard": "Will Rocket Lab USA, Inc. (RKLB) hit (HIGH) $96 in October?",
+   "cost": 0.998,
+   "net": 0.998,
+   "shares": 50.25,
+   "profit_usd": 0.08040000000000007
+  },
+  {
+   "event": "Metamask FDV above ___ one day after launch?",
+   "kind": "threshold_up",
+   "easy": "Metamask FDV above $500M one day after launch?",
+   "hard": "Metamask FDV above $700M one day after launch?",
+   "cost": 0.992,
+   "net": 0.9986,
+   "shares": 109.37,
+   "profit_usd": 0.07348590750000167
+  },
+  {
+   "event": "Hurupay FDV above ___ one day after launch?",
+   "kind": "threshold_up",
+   "easy": "Hurupay FDV above $30M one day after launch?",
+   "hard": "Hurupay FDV above $50M one day after launch?",
+   "cost": 0.995,
+   "net": 0.9986,
+   "shares": 10.85,
+   "profit_usd": 0.01507271149999923
+  },
+  {
+   "event": "What will Fed Rate hit before 2027?",
+   "kind": "threshold_down",
+   "easy": "Will the Fed’s lower bound reach 3.0% or lower before 2027?",
+   "hard": "Will the Fed’s lower bound reach 0.75% or lower before 2027?",
+   "cost": 0.999,
+   "net": 0.999,
+   "shares": 5.05,
+   "profit_usd": 0.005050000000000004
+  },
+  {
+   "event": "What will Fed Rate hit before 2027?",
+   "kind": "threshold_down",
+   "easy": "Will the Fed’s lower bound reach 3.0% or lower before 2027?",
+   "hard": "Will the Fed’s lower bound reach 0.25% or lower before 2027?",
+   "cost": 0.999,
+   "net": 0.999,
+   "shares": 60.0,
+   "profit_usd": 0.06000000000000005
+  },
+  {
+   "event": "StandX FDV above ___ one day after launch?",
+   "kind": "threshold_up",
+   "easy": "StandX FDV above $50M one day after launch?",
+   "hard": "StandX FDV above $400M one day after launch?",
+   "cost": 0.998,
+   "net": 0.9994,
+   "shares": 91.0,
+   "profit_usd": 0.05588674000000371
+  },
+  {
+   "event": "StandX FDV above ___ one day after launch?",
+   "kind": "threshold_up",
+   "easy": "StandX FDV above $100M one day after launch?",
+   "hard": "StandX FDV above $800M one day after launch?",
+   "cost": 0.997,
+   "net": 0.9995,
+   "shares": 23.73,
+   "profit_usd": 0.010873797900000093
+  },
+  {
+   "event": "StandX FDV above ___ one day after launch?",
+   "kind": "threshold_up",
+   "easy": "StandX FDV above $100M one day after launch?",
+   "hard": "StandX FDV above $1B one day after launch?",
+   "cost": 0.997,
+   "net": 0.9995,
+   "shares": 23.73,
+   "profit_usd": 0.010873797900000093
+  },
+  {
+   "event": "StandX FDV above ___ one day after launch?",
+   "kind": "threshold_up",
+   "easy": "StandX FDV above $200M one day after launch?",
+   "hard": "StandX FDV above $800M one day after launch?",
+   "cost": 0.997,
+   "net": 0.9995,
+   "shares": 326.01,
+   "profit_usd": 0.14938756230000128
+  },
+  {
+   "event": "StandX FDV above ___ one day after launch?",
+   "kind": "threshold_up",
+   "easy": "StandX FDV above $200M one day after launch?",
+   "hard": "StandX FDV above $1B one day after launch?",
+   "cost": 0.997,
+   "net": 0.9995,
+   "shares": 120.0,
+   "profit_usd": 0.05498760000000047
+  }
+ ],
+ "sample_to_label": [
+  {
+   "event": "What will Alphabet Inc. (GOOGL) hit in October 2026?",
+   "kind": "threshold_down",
+   "easy": "Will Alphabet Inc. (GOOGL) hit (LOW) $290 in October?",
+   "hard": "Will Alphabet Inc. (GOOGL) hit (LOW) $270 in October?",
+   "cost": 1.219,
+   "net": 1.219
+  },
+  {
+   "event": "Arc FDV above ___ one day after launch?",
+   "kind": "threshold_up",
+   "easy": "Arc FDV above $1B one day after launch?",
+   "hard": "Arc FDV above $6B one day after launch?",
+   "cost": 1.59,
+   "net": 1.609
+  },
+  {
+   "event": "What will South Korea ETF (EWY) hit in October 2026?",
+   "kind": "threshold_up",
+   "easy": "Will South Korea ETF (EWY) hit (HIGH) $162 in October?",
+   "hard": "Will South Korea ETF (EWY) hit (HIGH) $176 in October?",
+   "cost": 1.29,
+   "net": 1.29
+  },
+  {
+   "event": "Will Amazon (AMZN) finish week of October 26 above___?",
+   "kind": "threshold_up",
+   "easy": "Will Amazon (AMZN) finish week of October 26 above $250?",
+   "hard": "Will Amazon (AMZN) finish week of October 26 above $260?",
+   "cost": 1.63,
+   "net": 1.63
+  },
+  {
+   "event": "Variational FDV above ___ one day after launch?",
+   "kind": "threshold_up",
+   "easy": "Variational FDV above $800M one day after launch?",
+   "hard": "Variational FDV above $3B one day after launch?",
+   "cost": 1.619,
+   "net": 1.6395
+  },
+  {
+   "event": "Will the 30-year Mortgage Rate hit __ in 2026?",
+   "kind": "threshold_down",
+   "easy": "Will the U.S. 30-year Fixed-Rate Mortgage hit 6.50% (LOW) by December 31, 2026?",
+   "hard": "Will the U.S. 30-year Fixed-Rate Mortgage hit 5.70% (LOW) by December 31, 2026?",
+   "cost": 1.233,
+   "net": 1.233
+  },
+  {
+   "event": "Ethereum above ___ on November 1?",
+   "kind": "threshold_up",
+   "easy": "Will the price of Ethereum be above $2,200 on November 1?",
+   "hard": "Will the price of Ethereum be above $2,400 on November 1?",
+   "cost": 1.52,
+   "net": 1.5454
+  },
+  {
+   "event": "Will Intel (INTC) Q3 Foundry revenue be above __?",
+   "kind": "threshold_up",
+   "easy": "Will Intel (INTC) Q3 Foundry revenue be above $6B?",
+   "hard": "Will Intel (INTC) Q3 Foundry revenue be above $7B?",
+   "cost": 1.63,
+   "net": 1.63
+  },
+  {
+   "event": "yo.xyz FDV above ___ one day after launch?",
+   "kind": "threshold_up",
+   "easy": "Yo FDV above $30M one day after launch?",
+   "hard": "Yo FDV above $500M one day after launch?",
+   "cost": 1.945,
+   "net": 1.9487
+  },
+  {
+   "event": "What will Micron Technology, Inc. (MU) hit in October 2026?",
+   "kind": "threshold_up",
+   "easy": "Will Micron Technology, Inc. (MU) hit (HIGH) $960 in October?",
+   "hard": "Will Micron Technology, Inc. (MU) hit (HIGH) $1,320 in October?",
+   "cost": 1.31,
+   "net": 1.31
+  },
+  {
+   "event": "Bitcoin above ___ on October 28?",
+   "kind": "threshold_up",
+   "easy": "Will the price of Bitcoin be above $80,000 on October 28?",
+   "hard": "Will the price of Bitcoin be above $94,000 on October 28?",
+   "cost": 1.452,
+   "net": 1.4699
+  },
+  {
+   "event": "What will S&P 500 (SPX) hit by end of December?",
+   "kind": "threshold_up",
+   "easy": "Will S&P 500 (SPX) hit $8,000 (HIGH) in December?",
+   "hard": "Will S&P 500 (SPX) hit $8,600 (HIGH) in December?",
+   "cost": 1.54,
+   "net": 1.54
+  },
+  {
+   "event": "Saudi troops enter Sanaa by...?",
+   "kind": "date",
+   "easy": "Saudi troops enter Sanaa by December 31, 2026?",
+   "hard": "Saudi troops enter Sanaa by October 31, 2026?",
+   "cost": 1.061,
+   "net": 1.061
+  },
+  {
+   "event": "TownSquare FDV above ___ one day after launch?",
+   "kind": "threshold_up",
+   "easy": "TownSquare FDV above $200M one day after launch?",
+   "hard": "TownSquare FDV above $225M one day after launch?",
+   "cost": 1.05,
+   "net": 1.082
+  },
+  {
+   "event": "Pacifica FDV above ___ one day after launch?",
+   "kind": "threshold_up",
+   "easy": "Pacifica FDV above $100M one day after launch?",
+   "hard": "Pacifica FDV above $1B one day after launch?",
+   "cost": 1.066,
+   "net": 1.0725
+  },
+  {
+   "event": "Predict.fun FDV above ___ one day after launch?",
+   "kind": "threshold_up",
+   "easy": "Predict.fun FDV above $300M one day after launch?",
+   "hard": "Predict.fun FDV above $1B one day after launch?",
+   "cost": 1.326,
+   "net": 1.3465
+  },
+  {
+   "event": "Will Amazon (AMZN) close above ___ end of October?",
+   "kind": "threshold_up",
+   "easy": "Will Amazon (AMZN) close above $200 end of October?",
+   "hard": "Will Amazon (AMZN) close above $300 end of October?",
+   "cost": 1.982,
+   "net": 1.982
+  },
+  {
+   "event": "What will Silver (XAGUSD) hit in October 2026?",
+   "kind": "threshold_down",
+   "easy": "Will Silver (XAGUSD) hit (LOW) $52 in October?",
+   "hard": "Will Silver (XAGUSD) hit (LOW) $44 in October?",
+   "cost": 1.428,
+   "net": 1.428
+  },
+  {
+   "event": "Hurupay FDV above ___ one day after launch?",
+   "kind": "threshold_up",
+   "easy": "Hurupay FDV above $40M one day after launch?",
+   "hard": "Hurupay FDV above $100M one day after launch?",
+   "cost": 1.038,
+   "net": 1.0452
+  },
+  {
+   "event": "NCAA Football: Kansas 2026 Win Total",
+   "kind": "threshold_up",
+   "easy": "Will Kansas have more than 6.5 wins during the 2026 CFB season?",
+   "hard": "Will Kansas have more than 7.5 wins during the 2026 CFB season?",
+   "cost": 1.065,
+   "net": 1.0703
+  },
+  {
+   "event": "Cambria FDV above ___ one day after launch?",
+   "kind": "threshold_up",
+   "easy": "Cambria FDV above $100M one day after launch?",
+   "hard": "Cambria FDV above $150M one day after launch?",
+   "cost": 1.077,
+   "net": 1.0836
+  },
+  {
+   "event": "Will N1 launch a token by ___?",
+   "kind": "date",
+   "easy": "Will N1 launch a token by June 30, 2027?",
+   "hard": "Will N1 launch a token by December 31, 2026?",
+   "cost": 1.28,
+   "net": 1.2997
+  },
+  {
+   "event": "Will Apple (AAPL) close above ___ end of October?",
+   "kind": "threshold_up",
+   "easy": "Will Apple (AAPL) close above $300 end of October?",
+   "hard": "Will Apple (AAPL) close above $360 end of October?",
+   "cost": 1.93,
+   "net": 1.93
+  },
+  {
+   "event": "What will S&P 500 (SPX) hit by end of December?",
+   "kind": "threshold_down",
+   "easy": "Will S&P 500 (SPX) hit $7,400 (LOW) in December?",
+   "hard": "Will S&P 500 (SPX) hit $5,800 (LOW) in December?",
+   "cost": 1.821,
+   "net": 1.821
+  },
+  {
+   "event": "Solana above ___ on November 1?",
+   "kind": "threshold_up",
+   "easy": "Will the price of Solana be above $80 on November 1?",
+   "hard": "Will the price of Solana be above $120 on November 1?",
+   "cost": 1.992,
+   "net": 1.9926
+  },
+  {
+   "event": "Ethereum above ___ on October 27?",
+   "kind": "threshold_up",
+   "easy": "Will the price of Ethereum be above $2,600 on October 27?",
+   "hard": "Will the price of Ethereum be above $2,800 on October 27?",
+   "cost": 1.01,
+   "net": 1.0108
+  },
+  {
+   "event": "Apyx FDV above ___ one day after launch?",
+   "kind": "threshold_up",
+   "easy": "APYX FDV above $50M one day after launch?",
+   "hard": "APYX FDV above $150M one day after launch?",
+   "cost": 1.29,
+   "net": 1.321
+  },
+  {
+   "event": "How many Senators will vote for the Clarity Act?",
+   "kind": "threshold_up",
+   "easy": "Will over 58 Senators vote for the Clarity Act?",
+   "hard": "Will over 62 Senators vote for the Clarity Act?",
+   "cost": 1.059,
+   "net": 1.059
+  },
+  {
+   "event": "XRP above ___ on October 30?",
+   "kind": "threshold_up",
+   "easy": "Will the price of XRP be above $0.90 on October 30?",
+   "hard": "Will the price of XRP be above $1.10 on October 30?",
+   "cost": 1.035,
+   "net": 1.0374
+  },
+  {
+   "event": "Solana above ___ on October 30?",
+   "kind": "threshold_up",
+   "easy": "Will the price of Solana be above $85 on October 30?",
+   "hard": "Will the price of Solana be above $105 on October 30?",
+   "cost": 1.756,
+   "net": 1.769
+  },
+  {
+   "event": "Bitcoin above ___ on October 28?",
+   "kind": "threshold_up",
+   "easy": "Will the price of Bitcoin be above $82,000 on October 28?",
+   "hard": "Will the price of Bitcoin be above $88,000 on October 28?",
+   "cost": 1.161,
+   "net": 1.1715
+  },
+  {
+   "event": "HUDL FDV above ___ one day after launch?",
+   "kind": "threshold_up",
+   "easy": "Huddle FDV above $20M one day after launch?",
+   "hard": "Huddle FDV above $400M one day after launch?",
+   "cost": 1.092,
+   "net": 1.1001
+  },
+  {
+   "event": "Will Airbnb (ABNB) Q3 gross booking value be above __?",
+   "kind": "threshold_up",
+   "easy": "Will Airbnb (ABNB) Q3 gross booking value be above $26.2B?",
+   "hard": "Will Airbnb (ABNB) Q3 gross booking value be above $27B?",
+   "cost": 1.66,
+   "net": 1.6697
+  },
+  {
+   "event": "Solana above ___ on October 28?",
+   "kind": "threshold_up",
+   "easy": "Will the price of Solana be above $95 on October 28?",
+   "hard": "Will the price of Solana be above $120 on October 28?",
+   "cost": 1.931,
+   "net": 1.9355
+  },
+  {
+   "event": "What will South Korea ETF (EWY) hit in October 2026?",
+   "kind": "threshold_up",
+   "easy": "Will South Korea ETF (EWY) hit (HIGH) $164 in October?",
+   "hard": "Will South Korea ETF (EWY) hit (HIGH) $200 in October?",
+   "cost": 1.248,
+   "net": 1.248
+  },
+  {
+   "event": "Fed rate cut by...?",
+   "kind": "date",
+   "easy": "Fed rate cut by June 2027 meeting?",
+   "hard": "Fed rate cut by April 2027 meeting?",
+   "cost": 1.28,
+   "net": 1.28
+  },
+  {
+   "event": "Kimi K4 released by…?",
+   "kind": "date",
+   "easy": "Kimi K4 released by March 31, 2027?",
+   "hard": "Kimi K4 released by October 31, 2026?",
+   "cost": 1.26,
+   "net": 1.26
+  },
+  {
+   "event": "Variational FDV above ___ one day after launch?",
+   "kind": "threshold_up",
+   "easy": "Variational FDV above $100M one day after launch?",
+   "hard": "Variational FDV above $1B one day after launch?",
+   "cost": 1.426,
+   "net": 1.4442
+  },
+  {
+   "event": "Solana above ___ on October 26?",
+   "kind": "threshold_up",
+   "easy": "Will the price of Solana be above $90 on October 26?",
+   "hard": "Will the price of Solana be above $110 on October 26?",
+   "cost": 1.995,
+   "net": 1.9953
+  },
+  {
+   "event": "Tuyo FDV above ___ one day after launch?",
+   "kind": "threshold_up",
+   "easy": "Tuyo FDV above $600M one day after launch?",
+   "hard": "Tuyo FDV above $800M one day after launch?",
+   "cost": 1.674,
+   "net": 1.6931
+  },
+  {
+   "event": "How low will 30-year Treasury yield get before 2027?",
+   "kind": "threshold_down",
+   "easy": "Will the 30-year Treasury yield dip below 5.05% before 2027?",
+   "hard": "Will the 30-year Treasury yield dip below 4.80% before 2027?",
+   "cost": 1.169,
+   "net": 1.169
+  },
+  {
+   "event": "What will WTI Crude Oil (WTI) hit in October 2026?",
+   "kind": "threshold_up",
+   "easy": "Will WTI Crude Oil (WTI) hit (HIGH) $105 in October?",
+   "hard": "Will WTI Crude Oil (WTI) hit (HIGH) $130 in October?",
+   "cost": 1.462,
+   "net": 1.462
+  },
+  {
+   "event": "3Jane FDV above ___ one day after launch?",
+   "kind": "threshold_up",
+   "easy": "3Jane FDV above $40M one day after launch?",
+   "hard": "3Jane FDV above $200M one day after launch?",
+   "cost": 1.874,
+   "net": 1.8821
+  },
+  {
+   "event": "Will Apple (AAPL) Q4 Services revenue be above __?",
+   "kind": "threshold_up",
+   "easy": "Will Apple (AAPL) Q4 Services revenue be above $31.5B?",
+   "hard": "Will Apple (AAPL) Q4 Services revenue be above $32B?",
+   "cost": 1.85,
+   "net": 1.85
+  },
+  {
+   "event": "Hotstuff FDV above ___ one day after launch?",
+   "kind": "threshold_up",
+   "easy": "Hotstuff FDV above $50M one day after launch?",
+   "hard": "Hotstuff FDV above $80M one day after launch?",
+   "cost": 1.09,
+   "net": 1.1141
+  },
+  {
+   "event": "Solana above ___ on October 27?",
+   "kind": "threshold_up",
+   "easy": "Will the price of Solana be above $100 on October 27?",
+   "hard": "Will the price of Solana be above $115 on October 27?",
+   "cost": 1.629,
+   "net": 1.6454
+  },
+  {
+   "event": "Total Unique Champions Played at Worlds 2026",
+   "kind": "threshold_up",
+   "easy": "Will 95 or more unique champions be played at Worlds 2026?",
+   "hard": "Will 100 or more unique champions be played at Worlds 2026?",
+   "cost": 1.303,
+   "net": 1.316
+  },
+  {
+   "event": "XRP above ___ on October 26?",
+   "kind": "threshold_up",
+   "easy": "Will the price of XRP be above $1.30 on October 26?",
+   "hard": "Will the price of XRP be above $1.50 on October 26?",
+   "cost": 1.319,
+   "net": 1.3343
+  },
+  {
+   "event": "What will WTI Crude Oil (WTI) hit in November 2026?",
+   "kind": "threshold_down",
+   "easy": "Will WTI Crude Oil (WTI) hit (LOW) $85 in November?",
+   "hard": "Will WTI Crude Oil (WTI) hit (LOW) $70 in November?",
+   "cost": 1.28,
+   "net": 1.28
+  },
+  {
+   "event": "What will Netflix, Inc. (NFLX) hit Week of October 26 2026?",
+   "kind": "threshold_up",
+   "easy": "Will Netflix, Inc. (NFLX) hit (HIGH) $67.50 Week of October 26 2026?",
+   "hard": "Will Netflix, Inc. (NFLX) hit (HIGH) $80 Week of October 26 2026?",
+   "cost": 1.559,
+   "net": 1.559
+  },
+  {
+   "event": "GMGN FDV above ___ one day after launch?",
+   "kind": "threshold_up",
+   "easy": "GMGN FDV above $700M one day after launch",
+   "hard": "GMGN FDV above $1B one day after launch",
+   "cost": 1.33,
+   "net": 1.3541
+  },
+  {
+   "event": "Multipli.fi FDV above ___ one day after launch?",
+   "kind": "threshold_up",
+   "easy": "Multipli.fi FDV above $200M one day after launch?",
+   "hard": "Multipli.fi FDV above $1B one day after launch?",
+   "cost": 1.445,
+   "net": 1.4648
+  },
+  {
+   "event": "Bitcoin above ___ on October 28?",
+   "kind": "threshold_up",
+   "easy": "Will the price of Bitcoin be above $76,000 on October 28?",
+   "hard": "Will the price of Bitcoin be above $84,000 on October 28?",
+   "cost": 1.891,
+   "net": 1.8982
+  },
+  {
+   "event": "Solana above ___ on October 27?",
+   "kind": "threshold_up",
+   "easy": "Will the price of Solana be above $105 on October 27?",
+   "hard": "Will the price of Solana be above $120 on October 27?",
+   "cost": 1.149,
+   "net": 1.158
+  },
+  {
+   "event": "What will Microsoft Corporation (MSFT) hit Week of October 26 2026?",
+   "kind": "threshold_up",
+   "easy": "Will Microsoft Corporation (MSFT) hit (HIGH) $540 Week of October 26 2026?",
+   "hard": "Will Microsoft Corporation (MSFT) hit (HIGH) $547.50 Week of October 26 2026?",
+   "cost": 1.21,
+   "net": 1.21
+  },
+  {
+   "event": "Trump meets with Putin by...?",
+   "kind": "date",
+   "easy": "Trump meets with Putin by December 31?",
+   "hard": "Trump meets with Putin by November 30?",
+   "cost": 1.05,
+   "net": 1.05
+  },
+  {
+   "event": "What will SK hynix (SKHY) hit in October 2026?",
+   "kind": "threshold_up",
+   "easy": "Will SK hynix (SKHY) hit (HIGH) $138 in October?",
+   "hard": "Will SK hynix (SKHY) hit (HIGH) $198 in October?",
+   "cost": 1.98,
+   "net": 1.98
+  },
+  {
+   "event": "Ethereal FDV above ___ one day after launch?",
+   "kind": "threshold_up",
+   "easy": "Ethereal FDV above $200M one day after launch?",
+   "hard": "Ethereal FDV above $300M one day after launch?",
+   "cost": 1.39,
+   "net": 1.4163
+  },
+  {
+   "event": "Will Palo Alto Networks Q1 Next-Generation Security ARR be above __?",
+   "kind": "threshold_up",
+   "easy": "Will Palo Alto Networks Q1 Next-Generation Security ARR be above $9.75B?",
+   "hard": "Will Palo Alto Networks Q1 Next-Generation Security ARR be above $10.25B?",
+   "cost": 1.53,
+   "net": 1.53
+  },
+  {
+   "event": "What will Micron Technology, Inc. (MU) hit Week of October 26 2026?",
+   "kind": "threshold_up",
+   "easy": "Will Micron Technology, Inc. (MU) hit (HIGH) $900 Week of October 26 2026?",
+   "hard": "Will Micron Technology, Inc. (MU) hit (HIGH) $1,080 Week of October 26 2026?",
+   "cost": 1.77,
+   "net": 1.77
+  }
+ ]
+}

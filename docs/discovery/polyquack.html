@@ -74,7 +74,7 @@
   ul { padding-left: 1.3em; margin: 0 0 14px; } li { margin: 3px 0; }
   .cover p.lead { font-size: 19px; color: var(--ink2); }
 
-  /* diagramas */
+  /* diagrams */
   svg .bx  { fill: var(--surface); stroke: var(--rule); stroke-width: 1.3; }
   svg .bxm { fill: var(--surface); stroke: var(--ink2); stroke-width: 1.3; }
   svg .bxc { fill: var(--surface); stroke: var(--accent); stroke-width: 1.6; }
@@ -109,7 +109,7 @@
 
 <nav class="toc" aria-label="Contents">
   <div class="brand">Polyquack · discovery</div>
-  <a href="#portada">Cover and summary</a>
+  <a href="#cover">Cover and summary</a>
   <div class="part">I · The terrain</div>
   <a href="#c1"><span class="n">1</span>Why don't prices sometimes add up to 1?</a>
   <a href="#c2"><span class="n">2</span>What does it really cost to take an opportunity?</a>
@@ -124,21 +124,21 @@
   <a href="#c8"><span class="n">9</span>How do they measure up against your criteria?</a>
   <a href="#c9"><span class="n">10</span>What is still unknown and what do you decide?</a>
   <div class="part">Reference</div>
-  <a href="#glosario">Glossary</a>
-  <a href="#apA">A · Ladder probe data</a>
-  <a href="#apB">B · Weather probe data</a>
-  <a href="#apC">C · Main sources</a>
-  <a href="#apD">D · Decisions that are yours</a>
-  <a href="#bitacora">Change log</a>
+  <a href="#glossary">Glossary</a>
+  <a href="#appendix-a">A · Ladder probe data</a>
+  <a href="#appendix-b">B · Weather probe data</a>
+  <a href="#appendix-c">C · Main sources</a>
+  <a href="#appendix-d">D · Decisions that are yours</a>
+  <a href="#changelog">Change log</a>
 </nav>
 
 <main>
 
 <!-- ===================================================== COVER -->
-<section id="portada" class="cover col">
+<section id="cover" class="cover col">
   <h1>Polyquack: What Discovery Found</h1>
   <p class="lead">By the end, Josue can choose which angle Polyquack follows, settle every open question, and defend why.</p>
-  <p>Written on Oct 26, 2026 from <span class="mono">docs/discovery/findings.md</span>, the probes in <span class="mono">docs/discovery/spikes/</span>, and an independent review that corrected three serious errors (see the <a href="#bitacora">change log</a>).</p>
+  <p>Written on Oct 26, 2026 from <span class="mono">docs/discovery/findings.md</span>, the probes in <span class="mono">docs/discovery/spikes/</span>, and an independent review that corrected three serious errors (see the <a href="#changelog">change log</a>).</p>
 
   <h3>How to read this book</h3>
   <p>Each chapter answers one question. The blue box at the start is the short answer: if you read only those boxes, you already have the book. Every claim carries its level of evidence:</p>
@@ -179,19 +179,19 @@
 
   <h3>Case</h3>
   <div class="row"><div>
-    <p>On Oct 26, 2026, Polymarket had the market "US October unemployment rate" open. It had 9 <a class="t" href="#g-opcion">options</a>: "3.8% or less", "3.9%", "4.0%" and so on up to "4.6% or more". The official figure comes out on Nov 6 and <b>only one</b> option pays 1 USD per share; the other 8 pay 0.</p>
+    <p>On Oct 26, 2026, Polymarket had the market "US October unemployment rate" open. It had 9 <a class="t" href="#g-option">options</a>: "3.8% or less", "3.9%", "4.0%" and so on up to "4.6% or more". The official figure comes out on Nov 6 and <b>only one</b> option pays 1 USD per share; the other 8 pay 0.</p>
     <p>If you buy one share of each option, you know in advance that you will collect exactly 1 USD, whatever happens. So if buying all 9 cost less than 1 USD, you would earn the difference regardless of the outcome.</p>
-    <p>How much did it cost? Polymarket does not set prices: people do. Each one leaves orders such as "I sell 50 shares of '4.2%' at 0.34" or "I buy 30 at 0.32". The list of those waiting orders is the <a class="t" href="#g-libro">order book</a>. From it come two prices per option:</p>
+    <p>How much did it cost? Polymarket does not set prices: people do. Each one leaves orders such as "I sell 50 shares of '4.2%' at 0.34" or "I buy 30 at 0.32". The list of those waiting orders is the <a class="t" href="#g-order-book">order book</a>. From it come two prices per option:</p>
     <ul>
-      <li>the <a class="t" href="#g-ejecutable">ask price</a>: the cheapest price at which someone sells to you right now. For "4.2%" it was 0.34 USD;</li>
-      <li>the <a class="t" href="#g-ejecutable">bid price</a>: the highest price at which someone pays you right now. For "4.2%" it was 0.32 USD.</li>
+      <li>the <a class="t" href="#g-executable-price">ask price</a>: the cheapest price at which someone sells to you right now. For "4.2%" it was 0.34 USD;</li>
+      <li>the <a class="t" href="#g-executable-price">bid price</a>: the highest price at which someone pays you right now. For "4.2%" it was 0.32 USD.</li>
     </ul>
     <p>The names take the point of view of whoever left the order: you <i>buy</i> at someone else's ask.</p>
     <p>Adding up the ask prices of the 9 options: 0.29 + 0.34 + 0.28 for the top three, plus 0.166 for the other six, gives <b>1.076 USD</b>. You pay 1.076 to collect 1.00: you lose 7.6 cents per set.</p>
     <p>It can also go the other way. Polymarket lets you <i>create</i> the complete set: you deposit 1 USD and it hands you one share of each option. If you sell all 9 at their bid prices, you collect 0.924: you also lose 7.6 cents. <span class="lab c">Confirmed</span></p>
-    <p>If either of those sums had landed on the good side, there would be profit regardless of the outcome. That is called <a class="t" href="#g-arbitraje">arbitrage</a>.</p>
+    <p>If either of those sums had landed on the good side, there would be profit regardless of the outcome. That is called <a class="t" href="#g-arbitrage">arbitrage</a>.</p>
   </div>
-  <aside class="note"><b>Where the numbers come from.</b> Snapshot of all active markets, Oct 26, 2026, 03:08 UTC. The full table is in <a href="#apA">appendix A</a>. This market charged no fee (rate 0).</aside>
+  <aside class="note"><b>Where the numbers come from.</b> Snapshot of all active markets, Oct 26, 2026, 03:08 UTC. The full table is in <a href="#appendix-a">appendix A</a>. This market charged no fee (rate 0).</aside>
   </div>
 
   <figure class="wide">
@@ -225,14 +225,14 @@
 
   <h3>Mechanism</h3>
   <div class="row"><div>
-    <p>A multi-option market (Polymarket calls them <a class="t" href="#g-negrisk">negRisk</a>) promises that exactly one option wins. With that promise you can build a <a class="t" href="#g-juego">complete set</a>: one share of each option. The set always pays 1 USD. That is why, at equilibrium, their prices add up to 1.</p>
+    <p>A multi-option market (Polymarket calls them <a class="t" href="#g-negrisk">negRisk</a>) promises that exactly one option wins. With that promise you can build a <a class="t" href="#g-complete-set">complete set</a>: one share of each option. The set always pays 1 USD. That is why, at equilibrium, their prices add up to 1.</p>
     <p>There are two ways for the sum to deviate in your favor:</p>
     <ul>
       <li><b>Buy them all for less than 1:</b> the sum of the ask prices is below 1.</li>
       <li><b>Sell them all for more than 1:</b> you create the set for 1 USD and the sum of the bid prices is above 1.</li>
     </ul>
     <p>Between the bid and the ask there is always a distance, the <a class="t" href="#g-spread">spread</a>. That is why, in a normal market, buying everything costs a bit more than 1 and selling everything yields a bit less. That margin is the payment to whoever leaves orders waiting. It is not an opportunity.</p>
-    <p>The Polymarket page shows a <a class="t" href="#g-mostrado">displayed price</a>, the mid price or the last trade's. Adding displayed prices and finding 1.03 tells you nothing: it may be just the spread.</p>
+    <p>The Polymarket page shows a <a class="t" href="#g-displayed-price">displayed price</a>, the mid price or the last trade's. Adding displayed prices and finding 1.03 tells you nothing: it may be just the spread.</p>
   </div>
   <aside class="note"><b>Another example, from chapter 6:</b> the New York temperature markets have 11 degree ranges. Over 60 days, their history prices added up to 1.022 on average. It was margin, not opportunity.</aside>
   </div>
@@ -256,7 +256,7 @@
 
   <h3>Case</h3>
   <div class="row"><div>
-    <p>Another market from Oct 26: "How high will US unemployment go in 2026?". It is not multi-option: it is 5 yes-or-no questions ("does it reach at least 5.0%?", "5.5%?", "6.0%?", "7.0%?", "10%?"). The questions hold an ordering rule: if unemployment reaches 7%, it also reached 6%. We call this a <a class="t" href="#g-escalera">ladder</a>.</p>
+    <p>Another market from Oct 26: "How high will US unemployment go in 2026?". It is not multi-option: it is 5 yes-or-no questions ("does it reach at least 5.0%?", "5.5%?", "6.0%?", "7.0%?", "10%?"). The questions hold an ordering rule: if unemployment reaches 7%, it also reached 6%. We call this a <a class="t" href="#g-ladder">ladder</a>.</p>
     <p>The prices at that moment contradicted the rule. "Reaches 6%" sold at 0.002, and someone paid 0.028 for "reaches 7%". That is, the market was saying 7% was more likely than 6%, which is impossible.</p>
     <p>To take advantage, you buy two things:</p>
     <ul>
@@ -343,7 +343,7 @@
   <div class="row"><div>
     <p><b>IMDEA</b> (Saguillo et al., 2025) reviewed Polymarket trades between Apr 2024 and Apr 2025 and estimated how much the accounts that exploited price differences took out. It adds up to 39.6 M USD, assuming 1 USD of profit per trade. They used the average price of each block's trades, not the order book. They did not subtract fees because none were charged back then. <span class="lab c">Confirmed</span></p>
     <p><b>Gebele, Mutzel and Matthes</b> (Aug 2026) did what IMDEA could not: they replayed full order books, update by update, on a sample of hours from Apr 14 to May 19, 2026. They measured violations with depth and fees, only in multi-option markets. <span class="lab c">Confirmed</span></p>
-    <p>They did not record the whole period: they chose individual hours and, in each one, replayed the book minute by minute. In those hours they observed 624 <a class="t" href="#g-episodio">episodes</a>, that is, stretches during which a difference stayed open after fees:</p>
+    <p>They did not record the whole period: they chose individual hours and, in each one, replayed the book minute by minute. In those hours they observed 624 <a class="t" href="#g-episode">episodes</a>, that is, stretches during which a difference stayed open after fees:</p>
     <ul>
       <li><b>366 (58.7%) lasted more than 50 minutes.</b> They filled the whole observed hour, so it is unknown how much longer they lasted.</li>
       <li>The other 258 were seen opening and closing. Of those, 253 were on the Yes side, with a median of <b>16.15 s</b>, and 5 on the No side, with a median of <b>7.99 s</b>. Both sides are explained below.</li>
@@ -354,8 +354,8 @@
   </div>
 
   <h3>Mechanism</h3>
-  <p>An <a class="t" href="#g-episodio">episode</a> begins when the difference becomes positive after fees and ends at the first book update in which it stops being so. Its ending does not prove that someone exploited it: it can also close because someone moved an order.</p>
-  <p>In a multi-option market, each option has Yes and No shares. Polymarket's <a class="t" href="#g-convertidor">converter</a> instantly exchanges 1 No of one option for 1 Yes of each of the others. It makes sense: "so-and-so does not win" is the same as "one of the others wins". With that, a difference can go in two directions (simplified):</p>
+  <p>An <a class="t" href="#g-episode">episode</a> begins when the difference becomes positive after fees and ends at the first book update in which it stops being so. Its ending does not prove that someone exploited it: it can also close because someone moved an order.</p>
+  <p>In a multi-option market, each option has Yes and No shares. Polymarket's <a class="t" href="#g-converter">converter</a> instantly exchanges 1 No of one option for 1 Yes of each of the others. It makes sense: "so-and-so does not win" is the same as "one of the others wins". With that, a difference can go in two directions (simplified):</p>
   <ul>
     <li><b>No side:</b> the Nos are cheap relative to the Yeses. You buy the Nos, convert them into Yeses and sell those Yeses immediately. There are few episodes and they are brief: someone takes them quickly.</li>
     <li><b>Yes side:</b> the Yeses are cheap. The reverse conversion does not exist, so the only way to collect is to buy all the Yeses (the basket) and wait for the market to resolve. There are many episodes and some last hours: taking them requires trapping money.</li>
@@ -365,7 +365,7 @@
   <p>It changes what Polyquack can contribute. Measuring arbitrage in multi-option markets with real books has already been done. What we did not find published:</p>
   <ul>
     <li>what happens after May 19, 2026. Since then, Polymarket raised the sports fee in July (from 0.03 to 0.05) and finished moving to its version 2, which changed the money used and the converter;</li>
-    <li>the <a class="t" href="#g-escalera">ladders</a> from chapter 2, which are standalone yes-or-no questions and not multi-option markets, so Gebele does not measure them;</li>
+    <li>the <a class="t" href="#g-ladder">ladders</a> from chapter 2, which are standalone yes-or-no questions and not multi-option markets, so Gebele does not measure them;</li>
     <li>whether anyone on a home connection can take anything.</li>
   </ul>
 
@@ -393,7 +393,7 @@
     <ol>
       <li>receive the book update;</li>
       <li>detect that the sum fell below 1;</li>
-      <li>send one order for each option in the market (in the chapter 1 case that would be 9). Each of those purchases is called a <a class="t" href="#g-pata">leg</a>;</li>
+      <li>send one order for each option in the market (in the chapter 1 case that would be 9). Each of those purchases is called a <a class="t" href="#g-leg">leg</a>;</li>
       <li>have all of them fill before someone else takes them.</li>
     </ol>
     <p>Polymarket's engine is on AWS, in London <span class="lab h">Strong hypothesis</span>: its Chinese-language documentation says so and it was not seen in the English version. Polymarket offers to place servers next to it for those who verify their identity. The bots that live there receive and send earlier. <span class="lab h">Hypothesis</span>: how much earlier was not measured.</p>
@@ -505,7 +505,7 @@
   </figure>
 
   <div class="row"><div>
-    <p>The <a class="t" href="#g-fantasma">phantom prices</a> deserve a comment. Gamma, Polymarket's markets API, reported a bid and an ask price for markets whose book did not exist (it answered "404, not found"). A scanner that trusts those prices announces 5% opportunities that nobody can take. The first version of this analysis fell for that and the independent review flagged it.</p>
+    <p>The <a class="t" href="#g-phantom-price">phantom prices</a> deserve a comment. Gamma, Polymarket's markets API, reported a bid and an ask price for markets whose book did not exist (it answered "404, not found"). A scanner that trusts those prices announces 5% opportunities that nobody can take. The first version of this analysis fell for that and the independent review flagged it.</p>
   </div>
   <aside class="note"><b>From 34 to 33:</b> the pair on the valuation of the company Glean had only 0.36 shares, below the minimum of 5 per order. Each pair's fee was read from its own market; many charged 0.</aside>
   </div>
@@ -630,7 +630,7 @@
       <li><b>"Above X":</b> only the price on one date matters, for example "BTC above 120,000 on Dec 31?".</li>
       <li><b>"Touch X?":</b> it is enough for the price to pass through X at some point in the period, even if it then moves away.</li>
     </ul>
-    <p>On Deribit, a crypto derivatives exchange much larger and used by professionals <span class="lab h">Hypothesis</span>, <a class="t" href="#g-opfin">financial options</a> on BTC are traded. With a standard mathematical model, you can back out from their prices the probability that market assigns to each case. If it does not match Polymarket's, one of the two is wrong.</p>
+    <p>On Deribit, a crypto derivatives exchange much larger and used by professionals <span class="lab h">Hypothesis</span>, <a class="t" href="#g-financial-options">financial options</a> on BTC are traded. With a standard mathematical model, you can back out from their prices the probability that market assigns to each case. If it does not match Polymarket's, one of the two is wrong.</p>
     <p>What is already known <span class="lab c">Confirmed</span> from the abstract of a paper comparing the two markets:</p>
     <ul>
       <li>The "above X" bets track the options well.</li>
@@ -643,7 +643,7 @@
 
   <h3>Case: calibration</h3>
   <div class="row"><div>
-    <p>A market is <a class="t" href="#g-calibracion">calibrated</a> if, of all the contracts quoted at 70 cents, about 70% come true. Two studies disagree:</p>
+    <p>A market is <a class="t" href="#g-calibration">calibrated</a> if, of all the contracts quoted at 70 cents, about 70% come true. Two studies disagree:</p>
     <ul>
       <li><b>Le (2026)</b>, with trades through Dec 2025: in politics, favorites are worth less than they should be, and more so at long horizons. A 70-cent contract at one month equals about 75% in reality. It does not subtract fees. <span class="lab c">Confirmed</span></li>
       <li><b>Song</b>, with 2,975 markets: finds no such bias, and correcting for it out of sample improved nothing. It is an analysis published on GitHub, without peer review: the numbers are from its text, but nobody else has reviewed the method.</li>
@@ -866,7 +866,7 @@
   </div>
 
   <h3>Why it matters</h3>
-  <p>For the brief to be <i>Ready for the PRD</i> (the requirements document that follows), the three big decisions and one choice in each row of the table are needed. Without them, the brief stays in discovery. Technical decisions, such as how to record or where to store, are not made here: they move to system design. <a href="#apD">Appendix D</a> gathers all the decisions in a checklist.</p>
+  <p>For the brief to be <i>Ready for the PRD</i> (the requirements document that follows), the three big decisions and one choice in each row of the table are needed. Without them, the brief stays in discovery. Technical decisions, such as how to record or where to store, are not made here: they move to system design. <a href="#appendix-d">Appendix D</a> gathers all the decisions in a checklist.</p>
 
   <h3>What we don't know</h3>
   <ul>
@@ -876,36 +876,36 @@
 </section>
 
 <!-- ===================================================== REFERENCE -->
-<section id="glosario" class="ch col">
+<section id="glossary" class="ch col">
   <h2>Glossary</h2>
   <dl class="gloss">
-    <dt id="g-opcion">Option (of a market)</dt><dd>One of the possible outcomes. On resolution, the winner pays 1 USD per share and the others 0.</dd>
+    <dt id="g-option">Option (of a market)</dt><dd>One of the possible outcomes. On resolution, the winner pays 1 USD per share and the others 0.</dd>
     <dt id="g-negrisk">Multi-option market (negRisk)</dt><dd>A market whose options exclude each other: exactly one wins. Polymarket calls it negRisk.</dd>
-    <dt id="g-juego">Complete set (basket)</dt><dd>One share of each option of a multi-option market. It always pays 1 USD.</dd>
-    <dt id="g-libro">Order book</dt><dd>The list of waiting buy and sell orders, with their price and quantity.</dd>
-    <dt id="g-ejecutable">Executable price (ask and bid price)</dt><dd>The best price at which you can really buy right now (ask price) or sell right now (bid price).</dd>
-    <dt id="g-mostrado">Displayed price</dt><dd>The one the page shows: the mid price or the last trade's. It is not useful for deciding on a trade.</dd>
+    <dt id="g-complete-set">Complete set (basket)</dt><dd>One share of each option of a multi-option market. It always pays 1 USD.</dd>
+    <dt id="g-order-book">Order book</dt><dd>The list of waiting buy and sell orders, with their price and quantity.</dd>
+    <dt id="g-executable-price">Executable price (ask and bid price)</dt><dd>The best price at which you can really buy right now (ask price) or sell right now (bid price).</dd>
+    <dt id="g-displayed-price">Displayed price</dt><dd>The one the page shows: the mid price or the last trade's. It is not useful for deciding on a trade.</dd>
     <dt id="g-spread">Spread</dt><dd>The distance between the ask price and the bid price. It is the payment to whoever leaves orders waiting.</dd>
     <dt id="g-taker">Taker and maker</dt><dd>Taker: whoever buys or sells at the book price, immediately; pays a fee. Maker: whoever leaves an order waiting; pays nothing and receives a rebate.</dd>
-    <dt id="g-arbitraje">Arbitrage</dt><dd>A combination of buys and sells that leaves a profit whatever happens with the outcome.</dd>
-    <dt id="g-convertidor">Converter</dt><dd>A Polymarket tool that exchanges 1 No of one option for 1 Yes of each of the others, in multi-option markets.</dd>
-    <dt id="g-pata">Leg</dt><dd>Each individual buy or sell within a trade that combines several. A set of 9 options has 9 legs.</dd>
+    <dt id="g-arbitrage">Arbitrage</dt><dd>A combination of buys and sells that leaves a profit whatever happens with the outcome.</dd>
+    <dt id="g-converter">Converter</dt><dd>A Polymarket tool that exchanges 1 No of one option for 1 Yes of each of the others, in multi-option markets.</dd>
+    <dt id="g-leg">Leg</dt><dd>Each individual buy or sell within a trade that combines several. A set of 9 options has 9 legs.</dd>
     <dt id="g-perp">Perpetual future (perp)</dt><dd>A contract that follows the price of an asset and never expires. It can be bought (long) or sold (short) with leverage.</dd>
     <dt id="g-funding">Funding rate</dt><dd>A payment that, every hour, one side of the perpetual makes to the other to keep its price tied to the real price. If the perp is expensive, the longs pay; if it is cheap, the shorts.</dd>
-    <dt id="g-escalera">Ladder</dt><dd>A group of markets that only change a threshold or a date. The Yes of the hard one implies the Yes of the easy one.</dd>
-    <dt id="g-fantasma">Phantom price</dt><dd>A price that the markets API reports for a market with no real book. It cannot be executed.</dd>
-    <dt id="g-episodio">Episode</dt><dd>The time a price difference stays positive after fees, from when it opens to when it closes.</dd>
+    <dt id="g-ladder">Ladder</dt><dd>A group of markets that only change a threshold or a date. The Yes of the hard one implies the Yes of the easy one.</dd>
+    <dt id="g-phantom-price">Phantom price</dt><dd>A price that the markets API reports for a market with no real book. It cannot be executed.</dd>
+    <dt id="g-episode">Episode</dt><dd>The time a price difference stays positive after fees, from when it opens to when it closes.</dd>
     <dt id="g-brier">Brier score</dt><dd>Measures the error of a probability: for each possible outcome, it adds the square of the difference between the probability given and what happened. Lower is better.</dd>
     <dt id="g-walk">Walk-forward</dt><dd>Evaluating a model by letting it learn only from data prior to each day it predicts, so that it does not see the future.</dd>
-    <dt id="g-calibracion">Calibration</dt><dd>How closely the probabilities in prices match the real frequency with which they come true.</dd>
-    <dt id="g-opfin">Financial options</dt><dd>Contracts that give the right to buy or sell an asset at a price on a date. Their prices imply probabilities about where the asset will be.</dd>
+    <dt id="g-calibration">Calibration</dt><dd>How closely the probabilities in prices match the real frequency with which they come true.</dd>
+    <dt id="g-financial-options">Financial options</dt><dd>Contracts that give the right to buy or sell an asset at a price on a date. Their prices imply probabilities about where the asset will be.</dd>
   </dl>
 </section>
 
-<section id="apA" class="ch">
+<section id="appendix-a" class="ch">
   <h2>Appendix A · Ladder probe data</h2>
   <div class="col">
-  <p>Snapshot: Oct 26, 2026, 03:08 UTC. Scripts: <span class="mono">docs/discovery/spikes/DQ-006-escaleras/</span> (<span class="mono">descargar.py</span>, <span class="mono">escaleras.py</span>); full result in <span class="mono">resultado.json</span>.</p>
+  <p>Snapshot: Oct 26, 2026, 03:08 UTC. Scripts: <span class="mono">docs/discovery/spikes/DQ-006-ladders/</span> (<span class="mono">download.py</span>, <span class="mono">ladders.py</span>); full result in <span class="mono">result.json</span>.</p>
   <table>
     <tr><th>Item</th><th class="num">Count</th></tr>
     <tr><td>Active events</td><td class="num">21,823</td></tr>
@@ -924,10 +924,10 @@
   </div>
 </section>
 
-<section id="apB" class="ch">
+<section id="appendix-b" class="ch">
   <h2>Appendix B · Weather probe data</h2>
   <div class="col">
-  <p>Script: <span class="mono">docs/discovery/spikes/DQ-C-clima/sondeo.py</span>; summaries in <span class="mono">resumen_nyc.json</span> and <span class="mono">resumen_london.json</span>.</p>
+  <p>Script: <span class="mono">docs/discovery/spikes/DQ-C-weather/probe.py</span>; summaries in <span class="mono">summary_nyc.json</span> and <span class="mono">summary_london.json</span>.</p>
   <table>
     <tr><th>Item</th><th class="num">New York</th><th class="num">London</th></tr>
     <tr><td>Days evaluated</td><td class="num">60</td><td class="num">61</td></tr>
@@ -942,7 +942,7 @@
   </div>
 </section>
 
-<section id="apC" class="ch">
+<section id="appendix-c" class="ch">
   <h2>Appendix C · Main sources</h2>
   <div class="col">
   <ul>
@@ -956,7 +956,7 @@
   </div>
 </section>
 
-<section id="apD" class="ch">
+<section id="appendix-d" class="ch">
   <h2>Appendix D · Decisions that are yours</h2>
   <div class="col">
   <ol>
@@ -972,7 +972,7 @@
   </div>
 </section>
 
-<section id="bitacora" class="ch">
+<section id="changelog" class="ch">
   <h2>Change log</h2>
   <div class="col">
   <ul>

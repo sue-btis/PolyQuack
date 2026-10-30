@@ -1,9 +1,9 @@
 # M01 — One pair (BTC) is ingested end to end on the VM — Verification
 
 Verdict: Blocked
-Acceptance: Pending — VM QA log (2 h run, 5 min network cut, VM restart, systemd, clock sync, ASM-5) for R-2, R-4 to R-8, R-10 and Done When; author decisions F-4 to F-12
-Verified by: reviewer subagent, independent of the implementation session (medium)
-Open limitations: None
+Acceptance: Accepted by the author on 2026-10-30 with the open limitations below, after the VM QA in `vm-qa-log.md`; author decisions F-4 to F-12 still pending
+Verified by: reviewer subagent, independent of the implementation session (medium); VM QA run by the author
+Open limitations: AC-5 (reconnection after a 5-minute network cut) and AC-6 (recovery after a VM restart) were not run on the VM by the author's decision; only the local tests in `test_feed.py` and `test_service.py` cover them. The technical verdict was not re-run after the VM QA.
 
 Size: medium
 Reliability: strict
@@ -11,6 +11,7 @@ Reliability: strict
 ## Pass History
 - Pass 1 (2026-10-28): Fail — F-1, F-2, F-3 open; decisions F-4 to F-12 pending; VM checks unverified.
 - Pass 2 (2026-10-28): Blocked — F-1, F-2, F-3 fixed in Round 1; the VM evidence the spec requires cannot be produced in this environment; F-4 to F-12 pending.
+- VM QA (2026-10-30, author, not a verifier pass): preconditions, install and the 2 h run passed; network cut and restart not run. See `vm-qa-log.md`.
 
 ## Baseline
 | Field | Value |

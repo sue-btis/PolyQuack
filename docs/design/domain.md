@@ -10,7 +10,7 @@
 | Pair | Two instruments, one per platform, that track the same asset. | FR-002 |
 | Reading | A data point stored exactly as the source reported it, with its time: a funding rate, a book snapshot, a mark price or an index price. | FR-004 to FR-007 |
 | Gap | An interval in which a reading was expected and did not arrive. It is recorded with its source and, if known, its cause. | FR-010, BR-001 |
-| Book snapshot | Summary of an instrument's order book at one minute: best bid, best ask and cumulative volume on each side up to 0.5% of the mid price. | FR-006, PD-012 |
+| Book snapshot | Summary of an instrument's order book at one minute: best bid, best ask and cumulative notional on each side up to 0.5% of the mid price, or up to the reach of the levels the platform delivers when they do not extend that far. The reach of a side is the relative distance to the mid price of the farthest level delivered; a volume truncated at its reach is read that way and what is missing is never completed or estimated (PD-022). | FR-006, PD-012 |
 | Funding | Hourly payment between longs and shorts of an instrument. If the rate is positive, longs pay. | FR-004, BR-007 |
 | Funding spread | Polymarket Perps rate minus Hyperliquid rate, for the same pair and the same hour. | FR-019, BR-008 |
 | Fee schedule | Taker and maker fees of a platform, with their effective date. | FR-009 |
@@ -56,7 +56,7 @@
 ### Gap
 - Meaning: a hole in what was expected to be received.
 - Identity: source + instrument + kind + interval.
-- Lifecycle: `open` → `closed with real data` (funding only, per FR-011) or `final`. Book snapshots cannot be recovered later: their gap is final when the minute ends.
+- Lifecycle: `open` → `closed with real data` (funding only, per FR-011) or `final`. Book snapshots cannot be recovered later: their gap is final when the minute ends. A gap always covers an expected, closed interval (the minute for book snapshots and prices, the hour for funding, the failed attempt for instruments); an ongoing hole is represented by the rows of the intervals already elapsed, so a gap never has an unknown end. Book snapshot and price gaps are born `final`; funding gaps are born `open`.
 - Invariants: the dashboard and the evaluator treat it as "no data", never as zero (UX-002).
 
 ### Variant (of a method)

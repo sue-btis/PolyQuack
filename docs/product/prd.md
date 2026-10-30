@@ -147,7 +147,7 @@ Polyquack stores each funding rate collected on each paired instrument, with the
 When pairing a new pair, Polyquack retrieves the funding history of both platforms from the earliest available date, without going back before Sep 3, 2026.
 
 ### FR-006
-Polyquack stores order book snapshots of each paired instrument on both platforms. Each snapshot includes the best bid, the best ask and the cumulative volume on each side up to 0.5% of the mid price.
+Polyquack stores order book snapshots of each paired instrument on both platforms. Each snapshot includes the best bid, the best ask and the cumulative volume on each side up to 0.5% of the mid price, or up to the reach of the levels the platform delivers when they do not extend that far. The reach of each side is recorded (PD-022).
 
 ### FR-007
 Polyquack stores the mark price and the index price of each paired instrument.
@@ -348,7 +348,7 @@ No MVP function requires reacting in under 1 minute. All of them work from a hom
 | PD-002 | Public or private? | Decided | Hybrid: code and studies public; parameters and strategies with an edge, private | Author | 2026-10-25 | «Hybrid (Recommended)» | CON-003, CAP-005, FR-031 to FR-033 |
 | PD-003 | Who uses it? | Decided | Only the author; the public part is read-only | Author | 2026-10-25 | «Just me (Recommended)» | CON-002, NG-004 |
 | PD-004 | How far does real money go? | Decided | In stages: data, paper and real money with a cap if the method passes | Author | 2026-10-25 | «In stages (Recommended)» | CON-001, BR-011 |
-| PD-005 | What is the first focus? | Decided (replaced by PD-006) | Arbitrage and contradictions in prediction markets, plus calibration | Author | 2026-10-25 | «yes, I think we can start with that» | Historical |
+| PD-005 | What is the first focus? | Decided | Arbitrage and contradictions in prediction markets, plus calibration. Replaced by PD-006 | Author | 2026-10-25 | «yes, I think we can start with that» | Historical |
 | PD-006 | What is the core and the first strategy? | Decided | ETL plus evaluator, with E1 (funding between Polymarket Perps and Hyperliquid) as the first strategy; scope is expanded to perpetuals | Author | 2026-10-26 | «yes, it would rather be that, ETL + evaluator with E1. As a first decision» | §1, CAP-001 to CAP-003, CON-008 |
 | PD-007 | Do ladders come in as a second strategy? | Decided | Out for now | Author | 2026-10-26 | «Ladders stay out for now.» | NG-006, §14 |
 | PD-008 | Research or profit first? | Decided | Research first | Author | 2026-10-26 | «Research first (Recommended)» | §1 Product Philosophy |
@@ -365,6 +365,7 @@ No MVP function requires reacting in under 1 minute. All of them work from a hom
 | PD-019 | Which studies and which parts of the code are published? | Open | The author decides piece by piece, following CON-003 | — | — | — | FR-031 |
 | PD-020 | How is the collateral of a run with several simultaneous positions or with hours without positions calculated? | Decided | The maximum collateral committed at the same time during the run | Author | 2026-10-26 | «Maximum used at the same time (Recommended)» | BR-003, FR-016, `docs/design/domain.md` |
 | PD-021 | At what level is the gap limit of PD-013 applied? | Decided | Per pair. A pair that exceeds the limit is left out of the verdict and reported; the run is qualified with the others. Each pair counts only from when it is paired until it is delisted | Author | 2026-10-26 | «Per pair, excluding the pair (Recommended)» | FR-018, PD-013, `docs/design/domain.md`, `docs/design/data/schema.dbml` |
+| PD-022 | What does the book snapshot store if the platform does not deliver depth up to 0.5%? | Decided | Each snapshot stores the levels the platform delivers at full precision, only those within 0.5% of the mid price. The volume at 0.5% is computed with those levels and each side records its reach: the relative distance to the mid of the farthest level delivered. If the reach is less than 0.5%, the volume is truncated at that reach and is read that way; what is missing is never completed or estimated | Author | 2026-10-28 | «B» | FR-006, `docs/design/domain.md`, `docs/design/data/schema.dbml` |
 
 ## 16. Product Traceability
 

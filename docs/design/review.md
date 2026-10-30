@@ -195,7 +195,7 @@ Decision status at follow-up:
 ### F-006 — PD-005 uses a status that does not exist in the enum (the mechanical check fails)
 
 - Severity: `MINOR`
-- Status: `OPEN`
+- Status: `RESOLVED`
 - Origin: `BASELINE`
 - Classification: `EDITORIAL`
 - Owner: `docs/product/prd.md`
@@ -204,6 +204,7 @@ Decision status at follow-up:
 - Why it matters: the meaning is understandable, but the package does not pass its own mechanical check.
 - Required resolution: leave the status as `Decided` and put the replacement by PD-006 in the Decision or Affects column. `check-package.mjs` must exit with 0.
 - Verification evidence: follow-up of 2026-10-26: still not fixed. `check-package.mjs` exits with 1 and this is its only problem.
+- Resolution: change `docs/changes/2026-10-28-M01-btc-ingestion/` (2026-10-28). PD-005 now has the status `Decided` and the replacement by PD-006 is in the Decision column of `prd.md` §15. `check-package.mjs` now exits 0 ("Package checks passed.", run by the verifier of this change).
 - Routed to: —
 - Accepted by: —
 
@@ -231,7 +232,7 @@ Decision status at follow-up:
 ### F-008 — `gap.ends_at` is required even though the gap is still open
 
 - Severity: `MINOR`
-- Status: `OPEN`
+- Status: `RESOLVED`
 - Origin: `BASELINE`
 - Classification: `MINOR_INCONSISTENCY`
 - Owner: `docs/design/data/schema.dbml`
@@ -240,6 +241,7 @@ Decision status at follow-up:
 - Why it matters: for a gap in progress an end time would have to be invented, which clashes with BR-001.
 - Required resolution: `ends_at` accepts null while the gap is open, or the design documents how a gap in progress is represented.
 - Verification evidence: follow-up of 2026-10-26: still not fixed. `schema.dbml:117` still has `ends_at datetime [not null]`.
+- Resolution: change `docs/changes/2026-10-28-M01-btc-ingestion/` (DEC-4, 2026-10-28). A gap always covers an expected, closed interval, so `gap.ends_at` stays `not null` and an ongoing hole is represented by the rows of the intervals already elapsed. `domain.md` (Gap) and the note on `gap.status` in `schema.dbml` document it. This is the second resolution this finding allows.
 - Routed to: —
 - Accepted by: —
 

@@ -1,7 +1,7 @@
 # M01 — One pair (BTC) is ingested end to end on the VM — Verification
 
 Verdict: Blocked
-Acceptance: Accepted by the author on 2026-10-30 with the open limitations below, after the VM QA in `vm-qa-log.md`; author decisions F-4 to F-12 still pending
+Acceptance: Accepted by the author on 2026-10-30 with the open limitations below, after the VM QA in `vm-qa-log.md`; author decisions F-4 to F-12 accepted as implemented on the same date
 Verified by: reviewer subagent, independent of the implementation session (medium); VM QA run by the author
 Open limitations: AC-5 (reconnection after a 5-minute network cut) and AC-6 (recovery after a VM restart) were not run on the VM by the author's decision; only the local tests in `test_feed.py` and `test_service.py` cover them. The technical verdict was not re-run after the VM QA.
 
@@ -44,15 +44,15 @@ Implementer deviations recorded in `execution.md`, assessed in Pass 1 and still 
 | F-1 | defect | Backoff state not reset on abnormal close: the reconnect delay did not return to 1 s after a healthy session ended with `ConnectionClosedError` | Pass 1: `feed.py:29-42`; repro logged 2 s, 4 s. Pass 2: `_received` is set by the reading loop and read after any exit path (`feed.py:25,30,43,58-59`); the same scratchpad abort repro logs `reconnecting in 1 s` twice and passes; mutants M20 and M21 killed; repo regression test `test_reconnect_delay_returns_to_the_initial_one_after_an_aborted_healthy_session` | Fixed (Round 1) |
 | F-2 | defect | Missing behaviour assertions (8 mutation survivors) and TST-1 not using trimmed real responses | Pass 2: 12 mutants killed (M1, M1b, M5, M11, M12, M13, M16, M16b, M18, M20, M21, M22). TST-1 runs the real instrument parsers over `tests/fixtures/pm_instruments.json` and `hl_meta.json`, then pairs, lists unpaired and repeats without duplicates (`tests/test_parsers.py:33-71`). The fixture shapes match the APIs; that they were fetched live is self-report | Fixed (Round 1) |
 | F-3 | defect | Deployment procedure, ownership: the root-owned clone, `uv sync` as a user with no home and no `uv` on PATH | Pass 2: `useradd --create-home --home-dir /opt/polyquack`; `uv` installed by and for the user (`/opt/polyquack/.local/bin/uv`); the user clones into `/opt/polyquack/app`; unit `WorkingDirectory` and `ExecStart` updated (`deploy/polyquack-ingestion.service:9,12`); README and `execution.md` agree. Not executed (see QA) | Fixed (Round 1) |
-| F-4 | decision | Out-of-scope edit: ruff rewrote 5 `docs/discovery/spikes/*.py` files; no backup; probes restored | `execution.md` Deviations; spike mtimes 15:42; all 5 pass `py_compile` | Open |
-| F-5 | decision | Unrequested deviation: Polymarket REST resync `depth=100` cut to 50 | `platforms.py:96-98,131-142`; now tested | Open |
-| F-6 | decision | Unrequested deviation: delisted Hyperliquid instruments not stored or paired | `platforms.py:167-170`; now tested | Open |
-| F-7 | decision | Unrequested deviation: `not_collected` gaps for elapsed intervals | `service.py:110-130` | Open |
-| F-8 | decision | Spec gap: `instruments` gap born `final` | `service.py:85-87` | Open |
-| F-9 | decision | Staleness window: ~20 s during which a dead connection's book counts as valid (DEC-3) | `feed.py:14-16` | Open |
-| F-10 | decision | File outside the Change Surface: `.gitleaksignore`; verified false positive | `.gitleaksignore:2`; isolated scan, line 957 | Open |
-| F-11 | decision | Branch policy: work on `docs/english-translation/josueDev`, spec requires `feat/btc-ingestion/josueDev` before commit | `spec.md:112` | Open |
-| F-12 | decision | Status coverage: platform-level `instruments` gaps not shown by `polyquack status` | `status.py:63-67` | Open |
+| F-4 | decision | Out-of-scope edit: ruff rewrote 5 `docs/discovery/spikes/*.py` files; no backup; probes restored | `execution.md` Deviations; spike mtimes 15:42; all 5 pass `py_compile` | Accepted by the author (2026-10-30) |
+| F-5 | decision | Unrequested deviation: Polymarket REST resync `depth=100` cut to 50 | `platforms.py:96-98,131-142`; now tested | Accepted by the author (2026-10-30) |
+| F-6 | decision | Unrequested deviation: delisted Hyperliquid instruments not stored or paired | `platforms.py:167-170`; now tested | Accepted by the author (2026-10-30) |
+| F-7 | decision | Unrequested deviation: `not_collected` gaps for elapsed intervals | `service.py:110-130` | Accepted by the author (2026-10-30) |
+| F-8 | decision | Spec gap: `instruments` gap born `final` | `service.py:85-87` | Accepted by the author (2026-10-30) |
+| F-9 | decision | Staleness window: ~20 s during which a dead connection's book counts as valid (DEC-3) | `feed.py:14-16` | Accepted by the author (2026-10-30) |
+| F-10 | decision | File outside the Change Surface: `.gitleaksignore`; verified false positive | `.gitleaksignore:2`; isolated scan, line 957 | Accepted by the author (2026-10-30) |
+| F-11 | decision | Branch policy: work on `docs/english-translation/josueDev`, spec requires `feat/btc-ingestion/josueDev` before commit | `spec.md:112` | Accepted by the author (2026-10-30) |
+| F-12 | decision | Status coverage: platform-level `instruments` gaps not shown by `polyquack status` | `status.py:63-67` | Accepted by the author (2026-10-30) |
 
 ## Requirement Compliance
 | Requirement / AC | Implementation Evidence | Independent Check | Result |

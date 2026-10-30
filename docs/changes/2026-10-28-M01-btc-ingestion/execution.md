@@ -106,7 +106,7 @@ None.
 Not ready for the final verdict until the VM QA below is run and logged. Ready for the verifier to inspect the code, the tests and the gates.
 
 ## Pending VM QA (manual, with a log)
-Run on the VM as a user with sudo. The repository is private, so the `polyquack` user needs read access to it (a read-only deploy key or a token) before step 2.
+Run on the VM as a user with sudo.
 
 1. Preconditions (ASM-5 and clock):
    ```
@@ -119,8 +119,7 @@ Run on the VM as a user with sudo. The repository is private, so the `polyquack`
    sudo useradd --system --create-home --home-dir /opt/polyquack --shell /usr/sbin/nologin polyquack
    sudo -u polyquack -H sh -c 'curl -LsSf https://astral.sh/uv/install.sh | sh'
    sudo -u polyquack -H git clone -b feat/btc-ingestion/josueDev https://github.com/sue-btis/PolyQuack.git /opt/polyquack/app
-   cd /opt/polyquack/app
-   sudo -u polyquack -H /opt/polyquack/.local/bin/uv sync --no-dev
+   sudo -u polyquack -H /opt/polyquack/.local/bin/uv sync --no-dev --directory /opt/polyquack/app
    sudo install -m 644 /opt/polyquack/app/deploy/polyquack-ingestion.service /etc/systemd/system/
    sudo systemctl daemon-reload
    sudo systemctl enable --now polyquack-ingestion

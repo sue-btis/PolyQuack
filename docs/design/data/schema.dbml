@@ -87,10 +87,12 @@ Table book_snapshot {
   source_time datetime [not null, note: 'time of the last channel message included']
   best_bid real [not null]
   best_ask real [not null]
-  bid_notional_05 real [not null, note: 'cumulative notional up to 0.5% below the mid']
+  bid_notional_05 real [not null, note: 'cumulative notional (sum of price x quantity, quote currency) up to 0.5% below the mid or up to the reach, whichever is smaller']
   ask_notional_05 real [not null]
-  bid_levels text [not null, note: 'JSON [[price, quantity], ...] up to 0.5%; for walking the book (FR-021)']
+  bid_levels text [not null, note: 'JSON [[price, quantity], ...] up to 0.5% or up to the reach, whichever is smaller; for walking the book (FR-021). Quantities in asset units']
   ask_levels text [not null]
+  bid_reach real [not null, note: 'fraction of the mid price up to the farthest bid level delivered by the platform (PD-022). Mid price = (best bid + best ask) / 2']
+  ask_reach real [not null, note: 'same, for the ask side']
   indexes {
     (instrument_id, minute) [pk]
   }
@@ -116,7 +118,7 @@ Table gap {
   starts_at datetime [not null]
   ends_at datetime [not null]
   cause text [note: 'disconnection, 429, HTTP error, no data at the source...']
-  status text [not null, note: 'open | closed_with_data | final']
+  status text [not null, note: 'open | closed_with_data | final. A gap covers a closed interval: book_snapshot and price gaps are born final, funding gaps are born open (recoverable per FR-011)']
   closed_at datetime
   indexes {
     (instrument_id, kind, starts_at)

@@ -1,0 +1,43 @@
+{
+ "universe": [
+  {
+   "szDecimals": 5,
+   "name": "BTC",
+   "maxLeverage": 40,
+   "marginTableId": 56
+  },
+  {
+   "szDecimals": 4,
+   "name": "ETH",
+   "maxLeverage": 25,
+   "marginTableId": 55
+  },
+  {
+   "szDecimals": 1,
+   "name": "MATIC",
+   "maxLeverage": 20,
+   "marginTableId": 20,
+   "isDelisted": true
+  },
+  {
+   "szDecimals": 0,
+   "name": "kPEPE",
+   "maxLeverage": 10,
+   "marginTableId": 52
+  },
+  {
+   "szDecimals": 1,
+   "name": "RNDR",
+   "maxLeverage": 20,
+   "marginTableId": 20,
+   "isDelisted": true
+  },
+  {
+   "szDecimals": 0,
+   "name": "FTM",
+   "maxLeverage": 10,
+   "marginTableId": 10,
+   "isDelisted": true
+  }
+ ]
+}

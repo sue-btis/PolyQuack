@@ -3,7 +3,7 @@
 Status: Accepted
 Date: 2026-10-26
 Decision owners: the author
-Accepted by: the author, 2026-10-26, «tengo unas vm que podria usar son locales, y sqlite»
+Accepted by: the author, 2026-10-26, «I have some VMs I could use, they are local, and sqlite»
 Related: FR-004 to FR-011, FR-026, NFR-001, NFR-006, NFR-007, NFR-010, BR-001
 
 ## Context

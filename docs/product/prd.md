@@ -345,26 +345,26 @@ No MVP function requires reacting in under 1 minute. All of them work from a hom
 | ID | Question | Status | Decision | Decided by | Date | Quote | Affects |
 |---|---|---|---|---|---|---|---|
 | PD-001 | What is the project called? | Decided | Polyquack | Author | 2026-10-25 | «Polyquack» | The whole package |
-| PD-002 | Public or private? | Decided | Hybrid: code and studies public; parameters and strategies with an edge, private | Author | 2026-10-25 | «Híbrido (Recomendado)» | CON-003, CAP-005, FR-031 to FR-033 |
-| PD-003 | Who uses it? | Decided | Only the author; the public part is read-only | Author | 2026-10-25 | «Solo yo (Recomendado)» | CON-002, NG-004 |
-| PD-004 | How far does real money go? | Decided | In stages: data, paper and real money with a cap if the method passes | Author | 2026-10-25 | «Por etapas (Recomendado)» | CON-001, BR-011 |
-| PD-005 | What is the first focus? | Decided (replaced by PD-006) | Arbitrage and contradictions in prediction markets, plus calibration | Author | 2026-10-25 | «si creo que podemos empezar con eso» | Historical |
-| PD-006 | What is the core and the first strategy? | Decided | ETL plus evaluator, with E1 (funding between Polymarket Perps and Hyperliquid) as the first strategy; scope is expanded to perpetuals | Author | 2026-10-26 | «si mas bien seria eso ETl + evaluador con E1. Como primer decision» | §1, CAP-001 to CAP-003, CON-008 |
-| PD-007 | Do ladders come in as a second strategy? | Decided | Out for now | Author | 2026-10-26 | «Las escaleras se quedan fuera por ahora.» | NG-006, §14 |
-| PD-008 | Research or profit first? | Decided | Research first | Author | 2026-10-26 | «Investigación primero (Recomendado)» | §1 Product Philosophy |
-| PD-009 | When does E1's verdict come out and with what threshold? | Decided | At 4 weeks on paper; passes with ≥ 10% a year net on collateral | Author | 2026-10-26 | «4 semanas (Recomendado)» and «≥ 10 % al año» | BR-009, FR-030, SC-002 |
-| PD-010 | Do C, D or E2 come in? | Decided | Out for now; reconsidered after E1's verdict | Author | 2026-10-26 | «Fuera por ahora (Recomendado)» | NG-007, §14 |
-| PD-011 | Legal opinion before real money? | Decided | No; the platform's list of countries is enough; the author assumes the risk | Author | 2026-10-26 | «No, me basta con la lista de países» | CON-005 |
-| PD-012 | How often is a book snapshot taken? | Decided | Every 60 s | Author | 2026-10-26 | «Confirmo PD-012 a PD-015 con los valores propuestos: foto cada 60 s, límites de faltantes, 1,000 USD por pata y 2x.» | NFR-003, FR-006 |
-| PD-013 | What percentage of gaps prevents qualifying a period? | Decided | More than 5% of hours without funding or more than 10% of minutes without a book snapshot in the period | Author | 2026-10-26 | «Confirmo PD-012 a PD-015 con los valores propuestos: foto cada 60 s, límites de faltantes, 1,000 USD por pata y 2x.» | FR-018 |
-| PD-014 | What is the reference size per leg for calculating slippage? | Decided | 1,000 USD per leg in E1's preregistration | Author | 2026-10-26 | «Confirmo PD-012 a PD-015 con los valores propuestos: foto cada 60 s, límites de faltantes, 1,000 USD por pata y 2x.» | FR-012, FR-021 |
-| PD-015 | What is the reference leverage for collateral? | Decided | 2x per leg in E1's preregistration | Author | 2026-10-26 | «Confirmo PD-012 a PD-015 con los valores propuestos: foto cada 60 s, límites de faltantes, 1,000 USD por pata y 2x.» | FR-012, FR-024, BR-003 |
+| PD-002 | Public or private? | Decided | Hybrid: code and studies public; parameters and strategies with an edge, private | Author | 2026-10-25 | «Hybrid (Recommended)» | CON-003, CAP-005, FR-031 to FR-033 |
+| PD-003 | Who uses it? | Decided | Only the author; the public part is read-only | Author | 2026-10-25 | «Just me (Recommended)» | CON-002, NG-004 |
+| PD-004 | How far does real money go? | Decided | In stages: data, paper and real money with a cap if the method passes | Author | 2026-10-25 | «In stages (Recommended)» | CON-001, BR-011 |
+| PD-005 | What is the first focus? | Decided (replaced by PD-006) | Arbitrage and contradictions in prediction markets, plus calibration | Author | 2026-10-25 | «yes, I think we can start with that» | Historical |
+| PD-006 | What is the core and the first strategy? | Decided | ETL plus evaluator, with E1 (funding between Polymarket Perps and Hyperliquid) as the first strategy; scope is expanded to perpetuals | Author | 2026-10-26 | «yes, it would rather be that, ETL + evaluator with E1. As a first decision» | §1, CAP-001 to CAP-003, CON-008 |
+| PD-007 | Do ladders come in as a second strategy? | Decided | Out for now | Author | 2026-10-26 | «Ladders stay out for now.» | NG-006, §14 |
+| PD-008 | Research or profit first? | Decided | Research first | Author | 2026-10-26 | «Research first (Recommended)» | §1 Product Philosophy |
+| PD-009 | When does E1's verdict come out and with what threshold? | Decided | At 4 weeks on paper; passes with ≥ 10% a year net on collateral | Author | 2026-10-26 | «4 weeks (Recommended)» and «≥ 10 % a year» | BR-009, FR-030, SC-002 |
+| PD-010 | Do C, D or E2 come in? | Decided | Out for now; reconsidered after E1's verdict | Author | 2026-10-26 | «Out for now (Recommended)» | NG-007, §14 |
+| PD-011 | Legal opinion before real money? | Decided | No; the platform's list of countries is enough; the author assumes the risk | Author | 2026-10-26 | «No, the list of countries is enough for me» | CON-005 |
+| PD-012 | How often is a book snapshot taken? | Decided | Every 60 s | Author | 2026-10-26 | «I confirm PD-012 to PD-015 with the proposed values: snapshot every 60 s, gap limits, 1,000 USD per leg and 2x.» | NFR-003, FR-006 |
+| PD-013 | What percentage of gaps prevents qualifying a period? | Decided | More than 5% of hours without funding or more than 10% of minutes without a book snapshot in the period | Author | 2026-10-26 | «I confirm PD-012 to PD-015 with the proposed values: snapshot every 60 s, gap limits, 1,000 USD per leg and 2x.» | FR-018 |
+| PD-014 | What is the reference size per leg for calculating slippage? | Decided | 1,000 USD per leg in E1's preregistration | Author | 2026-10-26 | «I confirm PD-012 to PD-015 with the proposed values: snapshot every 60 s, gap limits, 1,000 USD per leg and 2x.» | FR-012, FR-021 |
+| PD-015 | What is the reference leverage for collateral? | Decided | 2x per leg in E1's preregistration | Author | 2026-10-26 | «I confirm PD-012 to PD-015 with the proposed values: snapshot every 60 s, gap limits, 1,000 USD per leg and 2x.» | FR-012, FR-024, BR-003 |
 | PD-016 | Capital cap for the real-money stage | Open | — | — | — | — | CON-001, §14 |
 | PD-017 | Will the system place orders on its own or stay with alerts? | Open | Decided before the real-money stage | — | — | — | NG-002, §14 |
 | PD-018 | Stage thresholds for strategies other than E1 | Open | Decided when each strategy comes in | — | — | — | BR-009 |
 | PD-019 | Which studies and which parts of the code are published? | Open | The author decides piece by piece, following CON-003 | — | — | — | FR-031 |
-| PD-020 | How is the collateral of a run with several simultaneous positions or with hours without positions calculated? | Decided | The maximum collateral committed at the same time during the run | Author | 2026-10-26 | «Máximo usado a la vez (Recomendado)» | BR-003, FR-016, `docs/design/domain.md` |
-| PD-021 | At what level is the gap limit of PD-013 applied? | Decided | Per pair. A pair that exceeds the limit is left out of the verdict and reported; the run is qualified with the others. Each pair counts only from when it is paired until it is delisted | Author | 2026-10-26 | «Por par, excluyendo el par (Recomendado)» | FR-018, PD-013, `docs/design/domain.md`, `docs/design/data/schema.dbml` |
+| PD-020 | How is the collateral of a run with several simultaneous positions or with hours without positions calculated? | Decided | The maximum collateral committed at the same time during the run | Author | 2026-10-26 | «Maximum used at the same time (Recommended)» | BR-003, FR-016, `docs/design/domain.md` |
+| PD-021 | At what level is the gap limit of PD-013 applied? | Decided | Per pair. A pair that exceeds the limit is left out of the verdict and reported; the run is qualified with the others. Each pair counts only from when it is paired until it is delisted | Author | 2026-10-26 | «Per pair, excluding the pair (Recommended)» | FR-018, PD-013, `docs/design/domain.md`, `docs/design/data/schema.dbml` |
 
 ## 16. Product Traceability
 

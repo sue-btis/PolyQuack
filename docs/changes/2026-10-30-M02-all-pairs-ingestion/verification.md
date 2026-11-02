@@ -1,9 +1,9 @@
 # M02 — All pairs are ingested 24/7 and recover on their own — Verification
 
 Verdict: Pass
-Acceptance: Pending — F-12: the VM QA in `vm-qa-log.md` (ASM-2, ASM-3, AC-7's 7-day figures, database size, real systemd restart on a target change)
+Acceptance: Pending — F-12: the 7-day part of the VM QA in `vm-qa-log.md` (AC-7's figures, database size; ASM-2 and ASM-3 held on 2026-11-02)
 Verified by: Independent reviewer agent, separate from the implementer and the integration owner (medium)
-Open limitations: None
+Open limitations: L-5 (F-14, crypto fee rate for Polymarket, deferred to M03)
 
 Size: medium
 Reliability: strict
@@ -49,6 +49,7 @@ Reliability: strict
 | F-11 | decision | `status` and `completeness` also list delisted pairs | `status.py`, `completeness.py` | Accepted — the author, 2026-11-02, «Sí, las acepto» |
 | F-12 | decision | Evidence assigned elsewhere: the VM QA (ASM-2, ASM-3, AC-7's 7-day figures, database size, real systemd restart on a target change) belongs to `vm-qa-log.md` in a later session | spec "Quality Obligations", "Done When", "Triggered Artifacts" | Pending |
 | F-13 | defect | Wrong error classification: extended BUSY/LOCKED result codes were treated as fatal | `service.py:36-39` uses `code is not None and code & 0xFF in (sqlite3.SQLITE_BUSY, sqlite3.SQLITE_LOCKED)` (`&` binds tighter than `in`); parametrized `test_lock_contention_is_classified_by_the_primary_result_code` (`tests/test_concurrency.py:95-113`): 5, 6, 261, 517, 773, 262 → True; 1, 10, 1555, missing → False; `test_a_non_lock_error_while_writing_history_propagates` (`:116-129`); N4, N7, N8 killed | Fixed (Round 3) |
+| F-14 | decision | Data gap found in the VM QA, not a code defect: Polymarket's public `GET /v1/info/fees` returns only a `perpetual`/`equity` entry, so `fee_schedule` holds no row for the `crypto` category of the 38 pairs. DEC-2 assumed one entry per category. The rates match the docs' base tier (taker 0.0400%, maker 0.0125%), but nothing in the API says they apply to `crypto` | `vm-qa-log.md` (Dated rows); live call of 2026-11-02: `1 [('perpetual', 'equity', '0.0004', '0.000125', 7)]`; instruments by category `crypto` 41, `equity` 38, `index` 6, `commodity` 4, `pre_ipo` 1 | Accepted — the author, 2026-11-02, «Postergar a M03 (Recomendado)» |
 
 ## Requirement Compliance
 | Requirement / AC | Implementation Evidence | Independent Check | Result |
@@ -108,6 +109,7 @@ Reliability: strict
 | L-2 | F-8 | the author, «Sí, las acepto» (option selected in the main session) | 2026-11-02 | none |
 | L-3 | F-10 | the author, «Sí, las acepto» (option selected in the main session) | 2026-11-02 | none |
 | L-4 | F-11 | the author, «Sí, las acepto» (option selected in the main session) | 2026-11-02 | none |
+| L-5 | F-14 | the author, «Postergar a M03 (Recomendado)» (option selected in the main session) | 2026-11-02 | M03 spec decides the source of the `crypto` rate |
 
 ## Canonical Design Synchronization
 | Artifact | Expected | Observed | Status |

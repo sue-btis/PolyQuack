@@ -1,17 +1,24 @@
+import json
 from abc import ABC, abstractmethod
+from collections.abc import AsyncIterator
+from pathlib import Path
 from typing import Any
 
 import httpx
 
 from polyquack.ingestion.models import (
+    ACTIVE,
+    CLOSE_ONLY,
+    DELISTED,
     BookLevels,
+    FeeRate,
     FundingPayment,
     InstrumentInfo,
     Levels,
     PriceQuote,
 )
 from polyquack.ingestion.ratelimit import RateLimiter
-from polyquack.times import MINUTE_MS
+from polyquack.times import MINUTE_MS, from_iso
 
 POLYMARKET = "polymarket_perps"
 HYPERLIQUID = "hyperliquid"
@@ -19,6 +26,14 @@ HYPERLIQUID = "hyperliquid"
 # Funding is stamped a few milliseconds after the top of the hour; a minute either way is
 # accepted and anything farther away is not that hour's payment.
 FUNDING_TOLERANCE_MS = MINUTE_MS
+
+# 2026-09-03T00:00:00Z: the earliest funding history the project keeps.
+HISTORY_FLOOR_MS = 1_788_393_600_000
+
+HYPERLIQUID_HISTORY_PAGE = 500
+# The error-responses page of Hyperliquid states one minimum order value for every perpetual.
+HYPERLIQUID_MIN_NOTIONAL = 10.0
+HYPERLIQUID_FEES_FILE = Path(__file__).with_name("hyperliquid_fees.json")
 
 
 class RestError(Exception):
@@ -65,6 +80,19 @@ class Platform(ABC):
         """The payment stamped at `hour_ms`, or None if the source does not have it yet."""
 
     @abstractmethod
+    def funding_history(
+        self, source_id: str, start_ms: int, end_ms: int
+    ) -> AsyncIterator[list[FundingPayment]]:
+        """Pages of payments in [start_ms, end_ms], one request per page."""
+
+    @abstractmethod
+    async def fees(self) -> list[FeeRate]: ...
+
+    async def has_settlement(self, source_id: str) -> bool:
+        """Whether the source reports the instrument as permanently settled."""
+        return False
+
+    @abstractmethod
     async def prices(self) -> dict[str, PriceQuote]: ...
 
     @abstractmethod
@@ -99,9 +127,50 @@ class PolymarketPerps(Platform):
 
     async def instruments(self) -> list[InstrumentInfo]:
         rows = await self._request("GET", f"{self.base_url}/v1/info/instruments")
+        return [_polymarket_instrument(row) for row in rows]
+
+    async def has_settlement(self, source_id: str) -> bool:
+        answer = await self._request(
+            "GET", f"{self.base_url}/v1/info/instruments", params={"instrument_id": source_id}
+        )
+        rows = answer if isinstance(answer, list) else [answer]
+        return any(isinstance(row, dict) and row.get("settlement") for row in rows)
+
+    async def funding_history(
+        self, source_id: str, start_ms: int, end_ms: int
+    ) -> AsyncIterator[list[FundingPayment]]:
+        end = end_ms
+        while True:
+            payload = await self._request(
+                "GET",
+                f"{self.base_url}/v1/info/funding",
+                params={
+                    "instrument_id": source_id,
+                    "start_timestamp": start_ms,
+                    "end_timestamp": end,
+                },
+            )
+            rows = [
+                FundingPayment(int(r["timestamp"]), float(r["funding_rate"]))
+                for r in payload["data"]
+            ]
+            if rows:
+                yield rows
+            if not rows or not payload.get("more"):
+                return
+            end = min(row.source_time_ms for row in rows) - 1
+
+    async def fees(self) -> list[FeeRate]:
+        payload = await self._request("GET", f"{self.base_url}/v1/info/fees")
         return [
-            InstrumentInfo(str(row["instrument_id"]), row["symbol"], row["base_asset"])
-            for row in rows
+            FeeRate(
+                entry["category"],
+                tier["min_volume_30d"],
+                float(tier["taker_fee_rate"]),
+                float(tier["maker_fee_rate"]),
+            )
+            for entry in payload["fee_schedule"]
+            for tier in entry["tiers"]
         ]
 
     async def funding(self, source_id: str, hour_ms: int) -> FundingPayment | None:
@@ -163,10 +232,42 @@ class Hyperliquid(Platform):
 
     async def instruments(self) -> list[InstrumentInfo]:
         meta = await self._request("POST", self.info_url, json={"type": "meta"})
+        tables = dict(meta["marginTables"])
+        return [_hyperliquid_instrument(row, tables) for row in meta["universe"]]
+
+    async def funding_history(
+        self, source_id: str, start_ms: int, end_ms: int
+    ) -> AsyncIterator[list[FundingPayment]]:
+        start = start_ms
+        while True:
+            raw = await self._request(
+                "POST",
+                self.info_url,
+                json={
+                    "type": "fundingHistory",
+                    "coin": source_id,
+                    "startTime": start,
+                    "endTime": end_ms,
+                },
+            )
+            rows = [FundingPayment(int(r["time"]), float(r["fundingRate"])) for r in raw]
+            if rows:
+                yield rows
+            if len(rows) < HYPERLIQUID_HISTORY_PAGE:
+                return
+            start = max(row.source_time_ms for row in rows) + 1
+
+    async def fees(self) -> list[FeeRate]:
+        entries = json.loads(HYPERLIQUID_FEES_FILE.read_text(encoding="utf-8"))["entries"]
         return [
-            InstrumentInfo(row["name"], row["name"], row["name"])
-            for row in meta["universe"]
-            if not row.get("isDelisted")
+            FeeRate(
+                "",
+                entry["tier"],
+                entry["taker"],
+                entry["maker"],
+                from_iso(f"{entry['effective_from']}T00:00:00.000Z"),
+            )
+            for entry in entries
         ]
 
     async def funding(self, source_id: str, hour_ms: int) -> FundingPayment | None:
@@ -210,6 +311,40 @@ class Hyperliquid(Platform):
             return None
         data = message["data"]
         return data["coin"], _hyperliquid_book(data)
+
+
+def _optional_float(value: Any) -> float | None:
+    return None if value is None else float(value)
+
+
+def _polymarket_instrument(row: dict[str, Any]) -> InstrumentInfo:
+    max_leverage = float(row["max_leverage"])
+    return InstrumentInfo(
+        str(row["instrument_id"]),
+        row["symbol"],
+        row["base_asset"],
+        CLOSE_ONLY if row["close_only"] else ACTIVE,
+        max_leverage,
+        0.5 / max_leverage,
+        float(row["min_notional"]),
+        _optional_float(row.get("liquidation_fee")),
+    )
+
+
+def _hyperliquid_instrument(row: dict[str, Any], tables: dict[int, Any]) -> InstrumentInfo:
+    # Table ids up to 50 are not listed: the id is the single tier's max leverage.
+    table = tables.get(row["marginTableId"])
+    max_leverage = float(table["marginTiers"][0]["maxLeverage"] if table else row["maxLeverage"])
+    return InstrumentInfo(
+        row["name"],
+        row["name"],
+        row["name"],
+        DELISTED if row.get("isDelisted") else ACTIVE,
+        max_leverage,
+        0.5 / max_leverage,
+        HYPERLIQUID_MIN_NOTIONAL,
+        None,
+    )
 
 
 def _levels(raw: list[list[str]]) -> Levels:

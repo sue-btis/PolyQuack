@@ -36,18 +36,38 @@ def test_polymarket_instruments_are_read_from_the_real_list() -> None:
     infos = asyncio.run(platform.instruments())
 
     assert infos == [
-        InstrumentInfo("1", "SP500-USD", "SP500"),
-        InstrumentInfo("6", "BTC-USD", "BTC"),
-        InstrumentInfo("7", "ETH-USD", "ETH"),
+        InstrumentInfo("1", "SP500-USD", "SP500", "active", 50.0, 0.01, 10.0, 0.005),
+        InstrumentInfo("6", "BTC-USD", "BTC", "active", 50.0, 0.01, 10.0, 0.005),
+        InstrumentInfo("7", "ETH-USD", "ETH", "active", 50.0, 0.01, 10.0, 0.005),
     ]
 
 
-def test_hyperliquid_instruments_skip_delisted_coins() -> None:
+def test_hyperliquid_instruments_keep_delisted_coins_with_their_status() -> None:
     platform = serve_fixture("hl_meta.json", [])
 
     infos = asyncio.run(platform.instruments())
 
-    assert [i.asset for i in infos] == ["BTC", "ETH", "kPEPE"]
+    assert [(i.asset, i.status) for i in infos] == [
+        ("BTC", "active"),
+        ("ETH", "active"),
+        ("MATIC", "delisted"),
+        ("kPEPE", "active"),
+        ("RNDR", "delisted"),
+        ("FTM", "delisted"),
+    ]
+
+
+def test_hyperliquid_base_tier_parameters_come_from_the_margin_table() -> None:
+    platform = serve_fixture("hl_meta.json", [])
+
+    by_asset = {i.asset: i for i in asyncio.run(platform.instruments())}
+
+    assert by_asset["BTC"].max_leverage == 40.0
+    assert by_asset["BTC"].maintenance_margin == 0.5 / 40
+    assert by_asset["BTC"].min_notional == 10.0
+    assert by_asset["BTC"].liquidation_fee is None
+    # Delisted coins have no listed table: the table id is their single tier's leverage.
+    assert by_asset["FTM"].max_leverage == 10.0
 
 
 def test_pairing_the_real_lists_pairs_by_asset_and_does_not_duplicate_on_repeat(
@@ -61,6 +81,8 @@ def test_pairing_the_real_lists_pairs_by_asset_and_does_not_duplicate_on_repeat(
     for _ in range(2):
         db.upsert_instruments(POLYMARKET, pm_infos, T0)
         db.upsert_instruments(HYPERLIQUID, hl_infos, T0)
+        db.record_lifecycle(POLYMARKET, pm_infos, T0)
+        db.record_lifecycle(HYPERLIQUID, hl_infos, T0)
         db.pair_instruments(T0)
 
     paired = db.conn.execute(
@@ -68,7 +90,7 @@ def test_pairing_the_real_lists_pairs_by_asset_and_does_not_duplicate_on_repeat(
     ).fetchall()
     assert paired == [("BTC",), ("ETH",)]
     assert db.unpaired_instruments() == [(POLYMARKET, "SP500-USD"), (HYPERLIQUID, "kPEPE")]
-    assert db.conn.execute("SELECT count(*) FROM instrument").fetchone()[0] == 6
+    assert db.conn.execute("SELECT count(*) FROM instrument").fetchone()[0] == 9
 
 
 def test_polymarket_funding_reads_the_payment_of_the_requested_hour() -> None:

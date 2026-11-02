@@ -44,5 +44,18 @@ Each snapshot stores a summary (best bid, best ask and depth at 0.5%), not the f
 ### Negative / Trade-offs
 - If one day there are several writers or several users, a migration is needed.
 
+## Amendment: two writers (M02, resolves F-010)
+
+Status: `Accepted`.
+Accepted by: the author, 2026-11-02, «Sí, Accepted by»
+
+The architecture has two writer processes, Ingestion and Evaluator (`architecture.dsl:23-24`), so the premise "a single process writes" does not hold. SQLite in WAL mode allows one write transaction at a time. They coexist under these rules:
+
+- Every write transaction stays short, with a target under 1 s: Ingestion commits per reading or per batch of one instrument and kind, and the Evaluator writes in small batches.
+- A writer waits for the lock up to the connection's `busy_timeout`, kept at 5 s.
+- An ingestion write that still fails after the wait is logged and leaves no row. The interval stays uncovered, so the next tick records it as a `not_collected` gap through the existing coverage rule. No value is invented.
+
+Consequence: a lock held for more than 5 s costs the readings of that interval, never their integrity.
+
 ## Verification / Revisit Trigger
 - If the file exceeds 50 GB, or if a dashboard query takes longer than NFR-009 allows, review Option C for the history.

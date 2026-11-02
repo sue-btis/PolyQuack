@@ -1,6 +1,7 @@
 import asyncio
 import json
 import logging
+from collections.abc import AsyncIterator
 from typing import Any
 
 import pytest
@@ -8,7 +9,13 @@ from websockets.asyncio.server import ServerConnection, serve
 
 from polyquack.ingestion.book import BookState
 from polyquack.ingestion.feed import BookFeed
-from polyquack.ingestion.models import BookLevels, FundingPayment, InstrumentInfo, PriceQuote
+from polyquack.ingestion.models import (
+    BookLevels,
+    FeeRate,
+    FundingPayment,
+    InstrumentInfo,
+    PriceQuote,
+)
 from polyquack.ingestion.platforms import Platform
 
 
@@ -24,6 +31,15 @@ class _LocalPlatform(Platform):
 
     async def funding(self, source_id: str, hour_ms: int) -> FundingPayment | None:
         return None
+
+    async def funding_history(
+        self, source_id: str, start_ms: int, end_ms: int
+    ) -> AsyncIterator[list[FundingPayment]]:
+        return
+        yield []
+
+    async def fees(self) -> list[FeeRate]:
+        return []
 
     async def prices(self) -> dict[str, PriceQuote]:
         return {}

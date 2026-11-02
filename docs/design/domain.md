@@ -45,6 +45,8 @@
 - Meaning: the same asset on the two platforms.
 - Identity: the asset.
 - Lifecycle: `active` → `close-only` (if either platform moves the instrument to close-only) → `delisted` (if either removes it).
+- Status derivation: not stored. A pair is `delisted` if either instrument's latest `instrument_status` is `delisted`, otherwise `close-only` if either is `close_only`, otherwise `active`. An instrument without a status row is `active`.
+- Lifecycle signals: Polymarket `close_only = true` is `close_only`; an instrument missing from the list becomes `delisted` only if querying it by `instrument_id` returns a `settlement`. Hyperliquid `isDelisted = true` is `delisted`; it publishes no close-only state. Any other absence changes no status.
 - Invariants: has exactly one instrument per platform. An instrument without a counterpart is not a pair and is listed separately (FR-002).
 
 ### Reading
@@ -56,7 +58,7 @@
 ### Gap
 - Meaning: a hole in what was expected to be received.
 - Identity: source + instrument + kind + interval.
-- Lifecycle: `open` → `closed with real data` (funding only, per FR-011) or `final`. Book snapshots cannot be recovered later: their gap is final when the minute ends. A gap always covers an expected, closed interval (the minute for book snapshots and prices, the hour for funding, the failed attempt for instruments); an ongoing hole is represented by the rows of the intervals already elapsed, so a gap never has an unknown end. Book snapshot and price gaps are born `final`; funding gaps are born `open`.
+- Lifecycle: `open` → `closed with real data` (funding only, per FR-011) or `final`. An open funding gap for hour h becomes `final` when a history response contains a payment later than h but none for h, and `closed with real data` when a payment for h is stored; otherwise it stays `open`. Book snapshots cannot be recovered later: their gap is final when the minute ends. A gap always covers an expected, closed interval (the minute for book snapshots and prices, the hour for funding, the failed attempt for instruments); an ongoing hole is represented by the rows of the intervals already elapsed, so a gap never has an unknown end. Book snapshot and price gaps are born `final`; funding gaps are born `open`.
 - Invariants: the dashboard and the evaluator treat it as "no data", never as zero (UX-002).
 
 ### Variant (of a method)

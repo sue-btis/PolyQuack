@@ -39,5 +39,55 @@
    "marginTableId": 10,
    "isDelisted": true
   }
+ ],
+ "marginTables": [
+  [
+   52,
+   {
+    "description": "tiered 10x (2)",
+    "marginTiers": [
+     {
+      "lowerBound": "0.0",
+      "maxLeverage": 10
+     },
+     {
+      "lowerBound": "20000000.0",
+      "maxLeverage": 5
+     }
+    ]
+   }
+  ],
+  [
+   55,
+   {
+    "description": "tiered 25x",
+    "marginTiers": [
+     {
+      "lowerBound": "0.0",
+      "maxLeverage": 25
+     },
+     {
+      "lowerBound": "100000000.0",
+      "maxLeverage": 15
+     }
+    ]
+   }
+  ],
+  [
+   56,
+   {
+    "description": "tiered 40x",
+    "marginTiers": [
+     {
+      "lowerBound": "0.0",
+      "maxLeverage": 40
+     },
+     {
+      "lowerBound": "150000000.0",
+      "maxLeverage": 20
+     }
+    ]
+   }
+  ]
  ]
 }

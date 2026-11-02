@@ -6,9 +6,11 @@ DAY_MS = 24 * HOUR_MS
 
 def render_status(db: Database, assets: tuple[str, ...], now_ms: int) -> str:
     lines = [f"Status at {iso(now_ms)}"]
-    targets = db.targets(assets)
-    for asset in assets:
-        lines.append(f"\nPair {asset}")
+    targets = db.targets(assets, include_delisted=True)
+    statuses = db.pair_statuses(assets)
+    for asset in assets or tuple(statuses):
+        status = statuses.get(asset)
+        lines.append(f"\nPair {asset}" + (f" [{status}]" if status else ""))
         asset_targets = [t for t in targets if t.asset == asset]
         if not asset_targets:
             lines.append("  not paired")

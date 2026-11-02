@@ -1,8 +1,9 @@
 # Polyquack
 
 Ingestion of hourly funding, per-minute mark and index prices and per-minute order book
-snapshots from Polymarket Perps and Hyperliquid, for the pairs listed in the configuration.
-Design: `docs/`. Current change: `docs/changes/2026-10-28-M01-btc-ingestion/`.
+snapshots from Polymarket Perps and Hyperliquid, for every paired pair that is not delisted
+(optionally narrowed by a filter). Design: `docs/`. Current change:
+`docs/changes/2026-10-30-M02-all-pairs-ingestion/`.
 
 ## Development
 
@@ -21,15 +22,18 @@ Tests never touch the network.
 
 ```
 uv run polyquack run      # ingestion service, logs to stderr
-uv run polyquack status   # latest readings and gaps of the last 24 h per pair and platform
+uv run polyquack status   # derived status of each pair, latest readings and gaps of the last 24 h
+uv run polyquack completeness [--days N]   # share of hours with funding and minutes with a book snapshot (default 7 days)
 ```
+
+When the set of pairs to ingest changes (a pair is added, delisted or leaves the filter), the service logs the change and exits with status 0; systemd restarts it with the new set.
 
 Configuration is read from environment variables:
 
 | Variable | Default | Meaning |
 |---|---|---|
 | `POLYQUACK_DB` | `polyquack.db` | SQLite file |
-| `POLYQUACK_ASSETS` | `BTC` | comma-separated assets to ingest |
+| `POLYQUACK_ASSETS` | empty | optional comma-separated filter; when empty, every pair that is not delisted is ingested |
 | `POLYQUACK_MIN_INTERVAL_POLYMARKET` | `0.8` | minimum seconds between REST requests |
 | `POLYQUACK_MIN_INTERVAL_HYPERLIQUID` | `0.8` | minimum seconds between REST requests |
 

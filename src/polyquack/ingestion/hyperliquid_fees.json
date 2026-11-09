@@ -1,0 +1,6 @@
+{
+  "source": "https://hyperliquid.gitbook.io/hyperliquid-docs/trading/fees",
+  "entries": [
+    {"effective_from": "2026-10-30", "tier": "0", "taker": 0.00045, "maker": 0.00015}
+  ]
+}

@@ -265,7 +265,7 @@ Decision status at follow-up:
 ### F-010 — ADR-002 assumes a single writer, but the architecture has two
 
 - Severity: `MINOR`
-- Status: `OPEN`
+- Status: `RESOLVED`
 - Origin: `BASELINE`
 - Classification: `MINOR_INCONSISTENCY`
 - Owner: `docs/design/architecture/adr/ADR-002-storage.md`
@@ -274,8 +274,9 @@ Decision status at follow-up:
 - Why it matters: SQLite in WAL mode allows one writer at a time. If a long evaluator write blocks the per-minute snapshots, with no defined wait timeout, minutes can be lost (NFR-003). Right now the ADR reasons from a premise that is not true.
 - Required resolution: ADR-002 acknowledges the two writers and sets how they coexist: short transactions, a lock wait timeout, or whatever is decided.
 - Verification evidence: follow-up of 2026-10-26: cycle 1 did not touch it and it remains open.
+- Resolution: change `docs/changes/2026-10-30-M02-all-pairs-ingestion/` (DEC-6, 2026-11-02). ADR-002 has an amendment with short transactions, the 5 s lock wait and a failed ingestion write becoming a gap. The author accepted the amendment on 2026-11-02.
 - Routed to: —
-- Accepted by: —
+- Accepted by: the author, 2026-11-02, «Sí, Accepted by» (ADR-002 amendment)
 
 ### F-011 — No container writes visibility or studies, and the exporter needs data that is not marked as public
 
@@ -292,6 +293,7 @@ Decision status at follow-up:
 - Why it matters: these responsibilities are not assigned. They can be resolved with little work, but today they have no owner.
 - Required resolution: assign in the architecture who writes visibility, studies and, if needed, the fee schedule. Specify which data without a visibility flag, such as the ingestion status, the exporter may read.
 - Verification evidence: follow-up of 2026-10-26: still open. Nothing changed at `architecture.dsl:25,26,29` that affects this finding.
+- Resolution: change `docs/changes/2026-10-30-M02-all-pairs-ingestion/` (DEC-2, 2026-11-02), for the fee schedule only: Polymarket fees come from its public fees endpoint and Hyperliquid's base tier from a versioned data file. The visibility and study parts of this finding are not addressed.
 - Routed to: —
 - Accepted by: —
 

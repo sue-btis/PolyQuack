@@ -6,13 +6,14 @@ from pathlib import Path
 @dataclass(frozen=True)
 class Config:
     db_path: Path
+    # An empty filter means every non-delisted pair.
     assets: tuple[str, ...]
     min_interval_polymarket: float
     min_interval_hyperliquid: float
 
     @classmethod
     def from_env(cls) -> "Config":
-        assets = os.environ.get("POLYQUACK_ASSETS", "BTC")
+        assets = os.environ.get("POLYQUACK_ASSETS", "")
         return cls(
             db_path=Path(os.environ.get("POLYQUACK_DB", "polyquack.db")),
             assets=tuple(a.strip() for a in assets.split(",") if a.strip()),

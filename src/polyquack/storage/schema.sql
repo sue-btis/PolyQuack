@@ -49,10 +49,11 @@ CREATE TABLE IF NOT EXISTS pair (
 CREATE TABLE IF NOT EXISTS fee_schedule (
     platform_id integer NOT NULL REFERENCES platform (id),
     effective_from text NOT NULL,
+    category text NOT NULL,
     tier text NOT NULL,
     taker real NOT NULL,
     maker real NOT NULL,
-    PRIMARY KEY (platform_id, effective_from, tier)
+    PRIMARY KEY (platform_id, effective_from, category, tier)
 );
 
 CREATE TABLE IF NOT EXISTS funding_reading (

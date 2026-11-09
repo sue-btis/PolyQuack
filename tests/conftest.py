@@ -57,3 +57,28 @@ def make_service(
         for state in service.books.values():
             state.replace(BookLevels([(99.0, 1.0)], [(101.0, 1.0)], now_ms))
     return service
+
+
+def seed_pairs(db: Database, assets: list[str]) -> None:
+    pm = [InstrumentInfo(str(n), f"{a}-USD", a) for n, a in enumerate(assets, start=1)]
+    hl = [InstrumentInfo(a, a, a) for a in assets]
+    db.upsert_instruments(POLYMARKET, pm, T0)
+    db.upsert_instruments(HYPERLIQUID, hl, T0)
+    db.pair_instruments(T0)
+
+
+def make_service_for(
+    db: Database,
+    platforms: dict[str, Platform],
+    assets: list[str],
+    now_ms: int,
+    valid_book: bool = True,
+) -> Service:
+    seed_pairs(db, assets)
+    service = Service(db, platforms, (), clock=lambda: now_ms, sleep=no_sleep)
+    service.targets = db.targets()
+    service.books = {t.instrument_id: BookState() for t in service.targets}
+    if valid_book:
+        for state in service.books.values():
+            state.replace(BookLevels([(99.0, 1.0)], [(101.0, 1.0)], now_ms))
+    return service

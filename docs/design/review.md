@@ -211,7 +211,7 @@ Decision status at follow-up:
 ### F-007 — Position states and decision actions do not match between the domain and the DBML
 
 - Severity: `MINOR`
-- Status: `OPEN`
+- Status: `RESOLVED`
 - Origin: `BASELINE`
 - Classification: `MINOR_INCONSISTENCY`
 - Owner: `docs/design/domain.md`
@@ -227,6 +227,7 @@ Decision status at follow-up:
   - `schema.dbml:173` and `schema.dbml:190` remain as before.
   - `domain.md:81` now says «the opposite one is closed and opened», but the state diagram did not change.
 - Routed to: —
+- Resolution: change `docs/changes/2026-11-09-M03-e1-paper-evaluation/` (2026-11-09, pending independent verification). `domain.md` now describes a reverse as closing and opening a position on the opposite side, drops `reversed`, and defines `hold` and `no_action` with its causes.
 - Accepted by: —
 
 ### F-008 — `gap.ends_at` is required even though the gap is still open
@@ -300,7 +301,7 @@ Decision status at follow-up:
 ### F-012 — It is not stated how old the order book snapshot used to compute the price can be
 
 - Severity: `MINOR`
-- Status: `OPEN`
+- Status: `RESOLVED`
 - Origin: `BASELINE`
 - Classification: `MINOR_INCONSISTENCY`
 - Owner: `docs/design/domain.md`
@@ -312,6 +313,7 @@ Decision status at follow-up:
 - Required resolution: the domain fixes the maximum age of the snapshot that can be used (for example, the minute before the decision). If there is no valid snapshot, the decision is `no_action` and a gap is recorded.
 - Verification evidence: follow-up of 2026-10-26: still open. `flows.mmd:33` («Walk the previous order book snapshot») still has no age limit.
 - Routed to: —
+- Resolution: change `docs/changes/2026-11-09-M03-e1-paper-evaluation/` (2026-11-09, pending independent verification). `domain.md` fixes the usable snapshot as at or before the decision instant and at most 120 seconds older; otherwise the decision is `no_action` with a cause. The cause replaces a gap row because gaps belong to ingestion.
 - Accepted by: —
 
 ### F-013 — It is not stated which price is used for the basis and liquidation, nor what happens if there is no liquidation fee
@@ -338,7 +340,7 @@ Decision status at follow-up:
 ### F-014 — The NFR-008 test checks a field written by the same evaluator
 
 - Severity: `MINOR`
-- Status: `OPEN`
+- Status: `RESOLVED`
 - Origin: `BASELINE`
 - Classification: `COVERAGE_GAP`
 - Owner: `docs/design/architecture/quality-attributes.md`
@@ -350,6 +352,7 @@ Decision status at follow-up:
   - `quality-attributes.md:14` added test (2), which compares the payments against the opening and checks data actually used for the funding.
   - The readings used by the decision, such as `paper_trade.snapshot_minute` against the hour or the `source_time` of the rates, are still checked only with `data_until <= hour`, which the same evaluator writes.
 - Routed to: —
+- Resolution: change `docs/changes/2026-11-09-M03-e1-paper-evaluation/` (2026-11-09, pending independent verification). `quality-attributes.md` NFR-008 now checks the snapshot actually used (`paper_trade.snapshot_minute` joined to `book_snapshot.source_time`) and the single cutoff-filtered read layer.
 - Accepted by: —
 
 ### F-015 — UX-003 refers to a brief glossary that does not have those terms

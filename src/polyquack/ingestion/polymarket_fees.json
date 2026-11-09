@@ -1,0 +1,7 @@
+{
+  "source": "https://docs.polymarket.com/perps/learn-about-trading/fees",
+  "note": "The docs publish one schedule for all perps and no effective date; the API labels it equity. effective_from is the page's last-modified date (2026-10-21).",
+  "entries": [
+    {"effective_from": "2026-10-21", "category": "crypto", "tier": "0", "taker": 0.0004, "maker": 0.000125}
+  ]
+}

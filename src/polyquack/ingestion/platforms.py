@@ -34,6 +34,7 @@ HYPERLIQUID_HISTORY_PAGE = 500
 # The error-responses page of Hyperliquid states one minimum order value for every perpetual.
 HYPERLIQUID_MIN_NOTIONAL = 10.0
 HYPERLIQUID_FEES_FILE = Path(__file__).with_name("hyperliquid_fees.json")
+POLYMARKET_FEES_FILE = Path(__file__).with_name("polymarket_fees.json")
 
 
 class RestError(Exception):
@@ -162,7 +163,7 @@ class PolymarketPerps(Platform):
 
     async def fees(self) -> list[FeeRate]:
         payload = await self._request("GET", f"{self.base_url}/v1/info/fees")
-        return [
+        published = [
             FeeRate(
                 entry["category"],
                 tier["min_volume_30d"],
@@ -171,6 +172,18 @@ class PolymarketPerps(Platform):
             )
             for entry in payload["fee_schedule"]
             for tier in entry["tiers"]
+        ]
+        # The API lists only the equity category; the docs' schedule covers the others.
+        entries = json.loads(POLYMARKET_FEES_FILE.read_text(encoding="utf-8"))["entries"]
+        return published + [
+            FeeRate(
+                entry["category"],
+                entry["tier"],
+                entry["taker"],
+                entry["maker"],
+                from_iso(f"{entry['effective_from']}T00:00:00.000Z"),
+            )
+            for entry in entries
         ]
 
     async def funding(self, source_id: str, hour_ms: int) -> FundingPayment | None:

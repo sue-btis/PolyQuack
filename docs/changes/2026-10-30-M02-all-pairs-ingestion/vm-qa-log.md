@@ -28,6 +28,14 @@ VM `duma-sidon`, 2026-11-02. The author ran the commands on the VM and pasted th
 - `fee_schedule`: Polymarket (`platform_id` 1) 7 rows, category `equity`; Hyperliquid (`platform_id` 2) 1 row, category `''`, effective `2026-10-30`.
 - Polymarket's `GET /v1/info/fees` itself returns a single entry, `perpetual`/`equity` (taker 0.0004, maker 0.000125, 7 tiers), while its instruments are `crypto` 41, `equity` 38, `index` 6, `commodity` 4, `pre_ipo` 1 (checked from the development machine on 2026-11-02). The code stored what the API returns, but no fee row covers the `crypto` category of the 38 pairs (verification F-14).
 
-## Pending
-- 7-day run: `polyquack completeness` on or after 2026-11-09 16:06 UTC (AC-7).
-- Database file size after 7 days (ADR-002 hypothesis).
+## 7-day run (AC-7), 2026-11-09
+`polyquack completeness`, window `2026-11-02T18:00:00.000Z` to `2026-11-09T18:00:00.000Z`, 38 pairs × 2 platforms:
+- Funding: `168/168 100.0%` on every pair and platform.
+- Book snapshots, Polymarket: `10076/10080 100.0%` on every pair (4 minutes missing, the same for all pairs).
+- Book snapshots, Hyperliquid: `10070/10080` to `10072/10080`, `99.9%` on every pair.
+- Target ≥ 99% of hours with funding and ≥ 95% of minutes with a snapshot: met on all 76 rows.
+
+## Database size (ADR-002 hypothesis), 2026-11-09 18:22 UTC
+`ls -lh`: `polyquack.db` 849M, `-wal` 4.0M, `-shm` 32K.
+
+Projection (arithmetic, assuming almost all of it is the 7 days of 38 pairs; M01's BTC-only days and the funding history are small by row count): about 120 MB per day at 38 pairs, about 44 GB per year at 38 pairs, about 115 GB per year at 100 pairs. ADR-002 hypothesized 10–20 GB per year at 100 pairs and sets a revisit trigger at a 50 GB file, which this rate reaches in about 14 months at 38 pairs. The hypothesis does not hold (verification F-15). Which columns dominate was not measured.

@@ -1,9 +1,9 @@
 # M02 — All pairs are ingested 24/7 and recover on their own — Verification
 
 Verdict: Pass
-Acceptance: Pending — F-12: the 7-day part of the VM QA in `vm-qa-log.md` (AC-7's figures, database size; ASM-2 and ASM-3 held on 2026-11-02)
+Acceptance: Accepted — the author, 2026-11-09, «Sí, acepto M02»
 Verified by: Independent reviewer agent, separate from the implementer and the integration owner (medium)
-Open limitations: L-5 (F-14, crypto fee rate for Polymarket, deferred to M03)
+Open limitations: L-5 (F-14, Polymarket crypto fee rate, deferred to M03); L-6 (F-15, database growth, to a separate change)
 
 Size: medium
 Reliability: strict
@@ -13,6 +13,7 @@ Reliability: strict
 - Pass 2 (2026-11-02): Pass — F-1 to F-4 fixed in Round 1; F-12 recorded; decisions F-5 to F-12 pending.
 - Pass 3 (2026-11-02): Fail — F-5 and F-6 fixed in Round 2; F-7, F-8, F-10, F-11 accepted; F-9 decided; F-13 (extended SQLite codes misclassified, same class as F-9) open.
 - Pass 4 (2026-11-02): Pass — F-13 fixed in Round 3; only F-12 pending.
+- VM QA (2026-11-02 to 2026-11-09, author; not a verifier pass): F-12 done; F-14 and F-15 found and accepted as limitations; M02 accepted.
 
 ## Baseline
 | Field | Value |
@@ -47,9 +48,10 @@ Reliability: strict
 | F-9 | decision | Exception scope: only lock contention (BUSY/LOCKED) is tolerated; other `sqlite3.OperationalError`s propagate | `service.py` `_guarded`, `_fetch_history`; `tests/test_concurrency.py:74-85`, `:116-129`; mutants N1, N4, N9 killed | Fixed (Round 2; completed by the F-13 fix in Round 3) |
 | F-10 | decision | TST-9 timing bound is `max < 30 s`; the mean stays under 1 s | `tests/test_concurrency.py` TST-9 test | Accepted — the author, 2026-11-02, «Sí, las acepto» |
 | F-11 | decision | `status` and `completeness` also list delisted pairs | `status.py`, `completeness.py` | Accepted — the author, 2026-11-02, «Sí, las acepto» |
-| F-12 | decision | Evidence assigned elsewhere: the VM QA (ASM-2, ASM-3, AC-7's 7-day figures, database size, real systemd restart on a target change) belongs to `vm-qa-log.md` in a later session | spec "Quality Obligations", "Done When", "Triggered Artifacts" | Pending |
+| F-12 | decision | Evidence assigned elsewhere: the VM QA (ASM-2, ASM-3, AC-7's 7-day figures, database size, real systemd restart on a target change) belongs to `vm-qa-log.md` in a later session | spec "Quality Obligations", "Done When", "Triggered Artifacts" | Done — `vm-qa-log.md`: ASM-2 and ASM-3 held on 2026-11-02; 7-day completeness on 2026-11-09: funding 100% and snapshots 99.9–100% on all 76 pair-platform rows; database 849M after 7 days |
 | F-13 | defect | Wrong error classification: extended BUSY/LOCKED result codes were treated as fatal | `service.py:36-39` uses `code is not None and code & 0xFF in (sqlite3.SQLITE_BUSY, sqlite3.SQLITE_LOCKED)` (`&` binds tighter than `in`); parametrized `test_lock_contention_is_classified_by_the_primary_result_code` (`tests/test_concurrency.py:95-113`): 5, 6, 261, 517, 773, 262 → True; 1, 10, 1555, missing → False; `test_a_non_lock_error_while_writing_history_propagates` (`:116-129`); N4, N7, N8 killed | Fixed (Round 3) |
 | F-14 | decision | Data gap found in the VM QA, not a code defect: Polymarket's public `GET /v1/info/fees` returns only a `perpetual`/`equity` entry, so `fee_schedule` holds no row for the `crypto` category of the 38 pairs. DEC-2 assumed one entry per category. The rates match the docs' base tier (taker 0.0400%, maker 0.0125%), but nothing in the API says they apply to `crypto` | `vm-qa-log.md` (Dated rows); live call of 2026-11-02: `1 [('perpetual', 'equity', '0.0004', '0.000125', 7)]`; instruments by category `crypto` 41, `equity` 38, `index` 6, `commodity` 4, `pre_ipo` 1 | Accepted — the author, 2026-11-02, «Postergar a M03 (Recomendado)» |
+| F-15 | decision | Capacity hypothesis refuted by the VM QA: the database reached 849M after 7 days at 38 pairs, about 120 MB per day, about 44 GB per year at 38 pairs and about 115 GB per year at 100 pairs, against ADR-002's 10–20 GB per year at 100 pairs; ADR-002's revisit trigger (50 GB file) would be hit in about 14 months at 38 pairs. Not a code defect; no M02 requirement sets a size limit | `vm-qa-log.md` (Database size) | Accepted — the author, 2026-11-09, «Cambio aparte (Recomendado)» |
 
 ## Requirement Compliance
 | Requirement / AC | Implementation Evidence | Independent Check | Result |
@@ -110,6 +112,7 @@ Reliability: strict
 | L-3 | F-10 | the author, «Sí, las acepto» (option selected in the main session) | 2026-11-02 | none |
 | L-4 | F-11 | the author, «Sí, las acepto» (option selected in the main session) | 2026-11-02 | none |
 | L-5 | F-14 | the author, «Postergar a M03 (Recomendado)» (option selected in the main session) | 2026-11-02 | M03 spec decides the source of the `crypto` rate |
+| L-6 | F-15 | the author, «Cambio aparte (Recomendado)» (option selected in the main session) | 2026-11-09 | a separate change measures what takes the space and reduces it before the 50 GB trigger |
 
 ## Canonical Design Synchronization
 | Artifact | Expected | Observed | Status |

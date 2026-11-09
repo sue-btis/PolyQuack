@@ -1,10 +1,11 @@
 flowchart TB
   subgraph F001["F-001 Continuous ingestion (CAP-001; FR-001 to FR-011; ADR-004, ADR-006)"]
     direction LR
-    A[Start or reconnection] --> B[Request instruments of both platforms over REST]
+    A[Start] --> B[Request instruments of both platforms over REST]
     B --> C[Pair by asset; list unpaired]
-    C --> D[Recover funding history of each pair]
-    D --> E[Subscribe to the order book channels]
+    C --> E[Subscribe to the order book channels]
+    C --> D[History task: backfill funding history of each pair]
+    D --> R
     E --> F[Resync each order book over REST]
     F --> G{Did a minute close?}
     G -- yes, valid book --> H[Store book snapshot]
@@ -15,24 +16,25 @@ flowchart TB
     P1 -- arrived --> P2[Store price readings]
     P1 -- did not arrive --> P3[Record price gap for the minute]
     E -. disconnection .-> J[Open gap and reconnect]
-    J --> A
+    J --> E
     K[Every hour] --> L[Request funding paid over REST]
     L -- arrived --> M[Store funding reading]
     L -- did not arrive --> N[Open funding gap]
-    N -. on reconnect .-> D
+    N -. at start and every hour at minute 20 .-> R[Recover funding gaps from history]
+    R --> N2[Close gap with data, or final if later payments exist]
   end
 
   subgraph F002["F-002 Hour t of E1 on paper (CAP-003; FR-019 to FR-026; BR-004)"]
     direction LR
-    P[Hour t, after storing the funding of t] --> X[Accrual: credit or debit the funding of t only to legs opened before t]
+    P[Decision instant: hour t plus 21 min, after storing the funding of t] --> X[Accrual: credit or debit the funding of t only to legs opened before t]
     X --> Q[For each non-excluded pair: rates of hour t]
     Q -- one is missing --> R[Decision no_action; null spread]
     Q -- both present --> S[Funding spread]
     S --> T[Apply preregistration rules with data up to t]
     T --> U{Action}
-    U -- open, close or reverse --> V[Walk the previous book snapshot for the reference size]
+    U -- open, close or reverse --> V[Walk the latest book snapshot, at most 120 s old, for the reference size; no snapshot, fee or depth gives no_action with a cause]
     V --> W[Record trade with price, fee and slippage; a leg opened at t collects from t+1]
-    U -- hold --> Y[Every minute: basis and distance to liquidation]
+    U -- hold: keep the current state --> Y[Every minute: basis and distance to liquidation]
     W --> Y
     Y -- crosses level --> Z[Leg liquidated; the other is left uncovered]
   end

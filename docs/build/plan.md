@@ -71,7 +71,7 @@ Canonical authorities:
 - `docs/design/architecture/quality-attributes.md`
 
 Prerequisites:
-- None. Polyquack is initialized as a git repository before starting, with a `.gitignore` that excludes the database, local configuration and the data in `docs/discovery/spikes/` (for example `eventos.json`, 250 MB, and the `cache/` folders).
+- None. Polyquack is initialized as a git repository before starting, with a `.gitignore` that excludes the database, local configuration and the data in `docs/discovery/spikes/` (for example `events.json`, 250 MB, and the `cache/` folders).
 
 Expected create/edit areas (proposed, they do not exist yet):
 - Python code for the ingestion service and the data layer;
@@ -284,7 +284,7 @@ Completion evidence:
 - test output.
 
 Resolves in its change folder:
-- **Author's decision already made**, which the change folder records as a new row in PRD §15 together with the update of BR-003 and FR-017. The question is which verdict to give if a run opens no positions and its collateral is 0. Answer: "investigate further", with the return undefined and the reason "no positions". Decided by: the author, 2026-10-26, «Investigar más (Recomendado)».
+- **Author's decision already made**, which the change folder records as a new row in PRD §15 together with the update of BR-003 and FR-017. The question is which verdict to give if a run opens no positions and its collateral is 0. Answer: "investigate further", with the return undefined and the reason "no positions". Decided by: the author, 2026-10-26, «Investigate further (Recommended)».
 - F-013: the domain names the reference price for the basis, the liquidation and the funding amount, and defines how an unknown liquidation fee is handled without inventing it.
 
 Stop if:

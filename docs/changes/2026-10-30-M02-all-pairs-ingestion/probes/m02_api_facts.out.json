@@ -1,0 +1,158 @@
+{
+ "pm_instrument_keys": [
+  "base_asset",
+  "category",
+  "close_only",
+  "display_symbol",
+  "fee_override",
+  "funding_interval",
+  "funding_multiplier",
+  "instrument_id",
+  "instrument_type",
+  "isolated_only",
+  "liquidation_fee",
+  "logo",
+  "max_leverage",
+  "max_limit_notional",
+  "max_market_notional",
+  "max_order_count",
+  "min_notional",
+  "price_bounds",
+  "price_decimals",
+  "quantity_decimals",
+  "quote_asset",
+  "risk_tiers",
+  "symbol",
+  "ui_live_time"
+ ],
+ "pm_instrument_btc": {
+  "instrument_id": 6,
+  "instrument_type": "perpetual",
+  "category": "crypto",
+  "isolated_only": false,
+  "symbol": "BTC-USD",
+  "close_only": false,
+  "base_asset": "BTC",
+  "quote_asset": "pUSD",
+  "funding_interval": "1h",
+  "quantity_decimals": 5,
+  "price_decimals": 1,
+  "price_bounds": "0.02",
+  "liquidation_fee": "0.005",
+  "max_order_count": 200,
+  "min_notional": "10",
+  "max_market_notional": "1000000",
+  "max_limit_notional": "5000000",
+  "max_leverage": 50,
+  "risk_tiers": [
+   {
+    "lower_bound": "0",
+    "max_leverage": 50
+   },
+   {
+    "lower_bound": "250000",
+    "max_leverage": 25
+   },
+   {
+    "lower_bound": "1000000",
+    "max_leverage": 20
+   },
+   {
+    "lower_bound": "2500000",
+    "max_leverage": 15
+   },
+   {
+    "lower_bound": "5000000",
+    "max_leverage": 12
+   },
+   {
+    "lower_bound": "7500000",
+    "max_leverage": 5
+   },
+   {
+    "lower_bound": "10000000",
+    "max_leverage": 2
+   }
+  ],
+  "ui_live_time": 1785542400000,
+  "fee_override": null,
+  "funding_multiplier": null
+ },
+ "hl_universe_keys": [
+  "isDelisted",
+  "marginMode",
+  "marginTableId",
+  "maxLeverage",
+  "name",
+  "onlyIsolated",
+  "szDecimals"
+ ],
+ "hl_universe_btc": {
+  "szDecimals": 5,
+  "name": "BTC",
+  "maxLeverage": 40,
+  "marginTableId": 56
+ },
+ "pm_count": 90,
+ "hl_live_count": 179,
+ "paired_exact": [
+  "AAVE",
+  "ADA",
+  "ARB",
+  "AVAX",
+  "BNB",
+  "BTC",
+  "CASHCAT",
+  "DOGE",
+  "ENA",
+  "ETH",
+  "ETHFI",
+  "FARTCOIN",
+  "HYPE",
+  "JUP",
+  "KAITO",
+  "LDO",
+  "LINK",
+  "LIT",
+  "LTC",
+  "MORPHO",
+  "NEAR",
+  "ONDO",
+  "PENDLE",
+  "PONS",
+  "PUMP",
+  "SOL",
+  "SUI",
+  "TAO",
+  "UNI",
+  "USELESS",
+  "VIRTUAL",
+  "VVV",
+  "WLD",
+  "XMR",
+  "XPL",
+  "XRP",
+  "ZEC",
+  "ZRO"
+ ],
+ "pm_status_values": [
+  "None"
+ ],
+ "pm_funding_page": {
+  "keys": [
+   "more"
+  ],
+  "meta": {
+   "more": true
+  },
+  "rows": 100,
+  "first": "2026-10-26T19:00:00Z",
+  "last": "2026-10-30T22:00:00Z"
+ },
+ "hl_funding_page": {
+  "rows": 500,
+  "first": "2026-09-03T00:00:00Z",
+  "last": "2026-09-23T19:00:00Z"
+ },
+ "hours_since_floor": 1390
+}

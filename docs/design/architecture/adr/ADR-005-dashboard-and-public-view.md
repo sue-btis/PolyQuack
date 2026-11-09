@@ -3,7 +3,7 @@
 Status: Accepted
 Date: 2026-10-26
 Decision owners: the author
-Accepted by: the author, 2026-10-26, «Túnel SSH + sitio estático (Recomendado)»
+Accepted by: the author, 2026-10-26, «SSH tunnel + static site (Recommended)»
 Related: CAP-004, CAP-005, FR-027 to FR-033, NFR-009, NFR-011, CON-002, CON-003, CON-007
 
 ## Context

@@ -8,9 +8,9 @@ Research date: Oct 25, 2026. Sources were read with an automatic extractor that 
 
 | ID | Criterion | Must? | Agreed by |
 |---|---|---:|---|
-| CR-001 | Real net edge: profit is measured with executable prices, after fees and trapped capital | Yes | Author, Oct 25, 2026, «Ventaja con precios reales» (required) and «Ventaja neta real» (matters) |
-| CR-002 | Runs from home: needs no servers next to the exchange and no millisecond latency | Yes | Author, Oct 25, 2026, «Corre desde casa» |
-| CR-003 | Low cost: data, servers and APIs within 20 USD per month during discovery and MVP | No | Author, Oct 25, 2026, «Costo bajo», «Hasta 20 USD» |
+| CR-001 | Real net edge: profit is measured with executable prices, after fees and trapped capital | Yes | Author, Oct 25, 2026, «Advantage with real prices» (required) and «Real net advantage» (matters) |
+| CR-002 | Runs from home: needs no servers next to the exchange and no millisecond latency | Yes | Author, Oct 25, 2026, «Runs from home» |
+| CR-003 | Low cost: data, servers and APIs within 20 USD per month during discovery and MVP | No | Author, Oct 25, 2026, «Low cost», «Up to 20 USD» |
 
 Notes from the criteria round:
 
@@ -59,7 +59,7 @@ Kill or change criterion: if reading public data is not possible from Mexico, th
 ### Decision
 Status: Decided
 Decision: Reading data works from the author's connection and Polymarket Perps does not block Mexico. No legal opinion (DEC-05).
-Decided by: the author, Oct 26, 2026, «Apruebo el cierre de las 10 preguntas. Pasa el brief a Ready for PRD.»
+Decided by: the author, Oct 26, 2026, «I approve closing the 10 questions. Move the brief to Ready for PRD.»
 Route: brief decision
 
 ## DQ-002 — What data do the public sources provide and is there order book history?
@@ -99,7 +99,7 @@ Kill or change criterion: if no order book history exists, the historical study 
 ### Decision
 Status: Decided
 Decision: The ETL records books and funding from Polymarket Perps and from Hyperliquid from day 1: there is no perps order book history.
-Decided by: the author, Oct 26, 2026, «Apruebo el cierre de las 10 preguntas. Pasa el brief a Ready for PRD.»
+Decided by: the author, Oct 26, 2026, «I approve closing the 10 questions. Move the brief to Ready for PRD.»
 Route: ADR input (how and where it is recorded)
 
 ## DQ-003 — What did the IMDEA paper measure and do its figures survive with executable prices?
@@ -143,7 +143,7 @@ Kill or change criterion: if a measurement with executable prices, depth and cos
 ### Decision
 Status: Decided
 Decision: Not applicable: arbitrage in prediction markets was left out of scope (DEC-01, DEC-02).
-Decided by: the author, Oct 26, 2026, «Apruebo el cierre de las 10 preguntas. Pasa el brief a Ready for PRD.»
+Decided by: the author, Oct 26, 2026, «I approve closing the 10 questions. Move the brief to Ready for PRD.»
 Route: brief decision
 
 ## DQ-004 — How do fees, option conversion and settlement work today?
@@ -185,12 +185,12 @@ Kill or change criterion: if the costs of buying and collecting a complete game 
 ### Probes
 | Option | Setup | Measured | Result against the criterion |
 |---|---|---|---|
-| OP-014, OP-018 | Pending: `docs/discovery/spikes/DQ-004-ventaja-neta/` | Net edge of each complete game with real books and fee by category | Pending |
+| OP-014, OP-018 | Pending: `docs/discovery/spikes/DQ-004-net-edge/` | Net edge of each complete game with real books and fee by category | Pending |
 
 ### Decision
 Status: Decided
 Decision: The evaluator calculates as taker on both legs (Polymarket 0.04%, Hyperliquid 0.045%); trading as maker is an improvement to test later.
-Decided by: the author, Oct 26, 2026, «Apruebo el cierre de las 10 preguntas. Pasa el brief a Ready for PRD.»
+Decided by: the author, Oct 26, 2026, «I approve closing the 10 questions. Move the brief to Ready for PRD.»
 Route: brief decision
 
 ## DQ-005 — How long do opportunities last and what latency is needed?
@@ -225,12 +225,12 @@ Kill or change criterion: if opportunities last less than an order takes from a 
 ### Probes
 | Option | Setup | Measured | Result against the criterion |
 |---|---|---|---|
-| OP-019, OP-022 | Pending: `docs/discovery/spikes/DQ-005-vida-oportunidades/` | Duration of each opportunity in negRisk markets and round-trip time from home | Pending |
+| OP-019, OP-022 | Pending: `docs/discovery/spikes/DQ-005-opportunity-lifetime/` | Duration of each opportunity in negRisk markets and round-trip time from home | Pending |
 
 ### Decision
 Status: Decided
 Decision: Closed: funding is collected hourly and speed does not matter; it runs from home. Where it runs 24/7 is decided by the design.
-Decided by: the author, Oct 26, 2026, «Apruebo el cierre de las 10 preguntas. Pasa el brief a Ready for PRD.»
+Decided by: the author, Oct 26, 2026, «I approve closing the 10 questions. Move the brief to Ready for PRD.»
 Route: ADR input
 
 ## DQ-006 — How well does a model find related markets and their logical relationship?
@@ -264,7 +264,7 @@ Kill or change criterion: if precision is so low that manual review does not fit
 ### Probes
 | Option | Setup | Measured | Result against the criterion |
 |---|---|---|---|
-| OP-025 | `docs/discovery/spikes/DQ-006-escaleras/` (`descargar.py`, `escaleras.py`, `resultado.json`). Snapshot of the 21,823 active events on Oct 26, 2026 at 03:08 UTC, with the best bid and ask of each market. Depth read from the book for the 40 worst violations | Precision of the rule; how many violations remain after fees; how much volume they have | See "Probe B result" below |
+| OP-025 | `docs/discovery/spikes/DQ-006-ladders/` (`download.py`, `ladders.py`, `result.json`). Snapshot of the 21,823 active events on Oct 26, 2026 at 03:08 UTC, with the best bid and ask of each market. Depth read from the book for the 40 worst violations | Precision of the rule; how many violations remain after fees; how much volume they have | See "Probe B result" below |
 | OP-024, OP-028 | Not tested | — | Remain as a pending comparison; the IMDEA figure (3.5%) is the only reference |
 
 #### Probe B result
@@ -301,7 +301,7 @@ Kill or change criterion: if precision is so low that manual review does not fit
 ### Decision
 Status: Decided
 Decision: For E1, relating instruments means pairing the same asset on the two platforms, by direct rule, without ML.
-Decided by: the author, Oct 26, 2026, «Apruebo el cierre de las 10 preguntas. Pasa el brief a Ready for PRD.»
+Decided by: the author, Oct 26, 2026, «I approve closing the 10 questions. Move the brief to Ready for PRD.»
 Route: brief decision
 
 ## DQ-007 — How frequent are disputed or ambiguous resolutions and what did they cost?
@@ -334,7 +334,7 @@ Kill or change criterion: if disputes are frequent in the market types where arb
 ### Decision
 Status: Decided
 Decision: For perps it is replaced by basis and liquidation risk; the MVP itself measures them during its 4 weeks on paper (DEC-03).
-Decided by: the author, Oct 26, 2026, «Apruebo el cierre de las 10 preguntas. Pasa el brief a Ready for PRD.»
+Decided by: the author, Oct 26, 2026, «I approve closing the 10 questions. Move the brief to Ready for PRD.»
 Route: brief decision
 
 ## DQ-008 — What Polymarket calibration studies already exist?
@@ -366,7 +366,7 @@ Kill or change criterion: if a recent and complete study already exists, the own
 ### Decision
 Status: Decided
 Decision: Not applicable: calibration was left out of scope (DEC-01).
-Decided by: the author, Oct 26, 2026, «Apruebo el cierre de las 10 preguntas. Pasa el brief a Ready for PRD.»
+Decided by: the author, Oct 26, 2026, «I approve closing the 10 questions. Move the brief to Ready for PRD.»
 Route: brief decision
 
 ## DQ-009 — What tools already scan for arbitrage on Polymarket?
@@ -398,7 +398,7 @@ No open tool measures how long an opportunity lasts or the net edge with trapped
 ### Decision
 Status: Decided
 Decision: No tool was found that covers Polymarket Perps; the funding strategy is in fact known. The own ETL and evaluator are built.
-Decided by: the author, Oct 26, 2026, «Apruebo el cierre de las 10 preguntas. Pasa el brief a Ready for PRD.»
+Decided by: the author, Oct 26, 2026, «I approve closing the 10 questions. Move the brief to Ready for PRD.»
 Route: brief decision
 
 ## DQ-010 — What evaluation methods apply to arbitrage and calibration?
@@ -424,14 +424,14 @@ Kill or change criterion: none cancels the product; it defines metrics and prere
 ### Decision
 Status: Decided
 Decision: Metric: annual net profit on collateral, walk-forward, and criterion written before each test (DEC-03, CON-006).
-Decided by: the author, Oct 26, 2026, «Apruebo el cierre de las 10 preguntas. Pasa el brief a Ready for PRD.»
+Decided by: the author, Oct 26, 2026, «I approve closing the 10 questions. Move the brief to Ready for PRD.»
 Route: brief decision
 
 ---
 
 ## Advantage Angles (ideation with the author)
 
-On Oct 25, 2026 the author asked, «ates de escoger ve otros 2 angulos». Besides A (speed: life of opportunities, OP-011) and B (understanding: template ladders, OP-025), these were added. Both change the mechanism: the edge comes from a **model with better information than the market**, not from prices contradicting each other.
+On Oct 25, 2026 the author asked, «before choosing, look at 2 other angles». Besides A (speed: life of opportunities, OP-011) and B (understanding: template ladders, OP-025), these were added. Both change the mechanism: the edge comes from a **model with better information than the market**, not from prices contradicting each other.
 
 | ID | Option | Mechanism | Origin | Evidence | Label |
 |---|---|---|---|---|---|
@@ -439,7 +439,7 @@ On Oct 25, 2026 the author asked, «ates de escoger ve otros 2 angulos». Beside
 | OP-042 | **D. Crypto options as fair price:** compute the probability of "BTC above X on date Y" from the options market (Deribit) and compare it against Polymarket | Fair value from a more liquid derivatives market | research | S-062: simple "above" bets follow the options; "touch" or "fall to" bets deviate, especially at the open, near expiry and on weekends | Confirmed as a finding of the paper (abstract only). It is already studied: the contribution would be the executable net edge |
 | OP-043 | **Alternative (did not advance to a probe): market making.** Leave orders on both sides in slow markets and collect the *spread* plus the maker rebate | Provide liquidity | research | S-013: the maker pays 0 and receives a rebate. S-049: on Kalshi the maker loses less than the taker (snippets only) | Hypothesis. Risk: you only get filled when you are wrong |
 
-Selection for probing: the assistant recommended B + C; the author answered «me parece» (Oct 25, 2026). It is a decision about what to probe, not the product decision: that one is made in step 8.
+Selection for probing: the assistant recommended B + C; the author answered «sounds good to me» (Oct 25, 2026). It is a decision about what to probe, not the product decision: that one is made in step 8.
 
 - **Why not D (crypto options):** it also passes CR-002 and CR-003. Free data, runs from home. It was left out for novelty: a paper already studies it [S-062]. That is not one of the agreed criteria, so D remains a valid option that was not probed.
 - **Scope expansion:** C and D look for an information edge, not arbitrage. The focus approved in the brief is arbitrage within the market, contradictions between markets and calibration. If C or D continue, the author has to approve it as an expansion of the brief. **Ask.**
@@ -448,7 +448,7 @@ Selection for probing: the assistant recommended B + C; the author answered «me
 
 | Option | Setup | Measured | Result against the criterion |
 |---|---|---|---|
-| OP-041 | `docs/discovery/spikes/DQ-C-clima/sondeo.py`. Already-resolved maximum temperature markets for New York (60 days evaluated) and London (61), Aug to Oct 2026. Price of each range at 16:00 UTC of the previous day, from the 3 h history (mid price, not executable). Model: ECMWF forecast from one day earlier (Open-Meteo, previous runs) plus bias and dispersion learned only from earlier days (walk-forward, 14-day warm-up) | Brier and log score of the model against the market; 80% market and 20% model blend | See below |
+| OP-041 | `docs/discovery/spikes/DQ-C-weather/probe.py`. Already-resolved maximum temperature markets for New York (60 days evaluated) and London (61), Aug to Oct 2026. Price of each range at 16:00 UTC of the previous day, from the 3 h history (mid price, not executable). Model: ECMWF forecast from one day earlier (Open-Meteo, previous runs) plus bias and dispersion learned only from earlier days (walk-forward, 14-day warm-up) | Brier and log score of the model against the market; 80% market and 20% model blend | See below |
 
 #### Probe C result
 
@@ -483,7 +483,7 @@ Selection for probing: the assistant recommended B + C; the author answered «me
 
 ## Angle E: Polymarket Perps (added Oct 26, 2026)
 
-The author asked «deberiamos considerarla como una opcion E?» and approved with «si arranca con ello», on Oct 26, 2026. Like C and D, E is outside the focus approved in the brief: these are no longer prediction markets. If it continues, it is an expansion that the author must approve. **Ask.**
+The author asked «should we consider it as an option E?» and approved with «yes, start with it», on Oct 26, 2026. Like C and D, E is outside the focus approved in the brief: these are no longer prediction markets. If it continues, it is an expansion that the author must approve. **Ask.**
 
 ### Audit
 - Polymarket launched Perps on Sep 3, 2026 [S-063]: perpetual futures on crypto, indices, commodities and stocks. It currently has 89 instruments, which were read from its public API. **Confirmed.**
@@ -507,7 +507,7 @@ The author asked «deberiamos considerarla como una opcion E?» and approved wit
 ### Probes
 | Option | Setup | Measured | Result against the criterion |
 |---|---|---|---|
-| OP-047 | `docs/discovery/spikes/DQ-E-funding/` (`sondeo.py`, `fuera_de_muestra.py`, `resultado.json`, `fuera_de_muestra.json`, `profundidad.json`). Hour-by-hour funding from Sep 3 to Oct 26, 2026, on the 38 cryptos that are on both platforms: 1,272 h on 22 of them and about 1,087 h on those listed later | Rate difference; net profit of a daily walk-forward strategy with taker fee; out-of-sample test; depth and price difference in a snapshot | See below |
+| OP-047 | `docs/discovery/spikes/DQ-E-funding/` (`probe.py`, `out_of_sample.py`, `result.json`, `out_of_sample.json`, `depth.json`). Hour-by-hour funding from Sep 3 to Oct 26, 2026, on the 38 cryptos that are on both platforms: 1,272 h on 22 of them and about 1,087 h on those listed later | Rate difference; net profit of a daily walk-forward strategy with taker fee; out-of-sample test; depth and price difference in a snapshot | See below |
 
 #### Probe E1 result
 
@@ -545,13 +545,13 @@ Decision: the core of Polyquack is an **ETL** and an **evaluator**, with **E1 (f
 - The ETL downloads the data, relates them (which instrument corresponds to which asset on each platform) and segments them.
 - The evaluator calculates the net edge of each method against a criterion set before testing it (CON-006).
 - This also approves the scope expansion toward perpetual futures (see Angle E).
-Decided by: the author, Oct 26, 2026, «yo me iria primero por e» and «si mas bien seria eso ETl + evaluador con E1. Como primer decision».
+Decided by: the author, Oct 26, 2026, «I would go with E first» and «yes, rather it would be that, ETL + evaluator with E1. As the first decision».
 Route: brief decision. How to record and where to store remains as input for an ADR in `designing-system`.
 
 ### DEC-02 — Ladders
 Status: Decided
-Decision: ladders (OP-025) are left out for now. They are not the second strategy. The probe code is kept in `docs/discovery/spikes/DQ-006-escaleras/`.
-Decided by: the author, Oct 26, 2026, «Las escaleras se quedan fuera por ahora.»
+Decision: ladders (OP-025) are left out for now. They are not the second strategy. The probe code is kept in `docs/discovery/spikes/DQ-006-ladders/`.
+Decided by: the author, Oct 26, 2026, «The ladders stay out for now.»
 Route: brief decision.
 
 ### DEC-03 — Expectation, timeframe and threshold for E1
@@ -562,19 +562,19 @@ Decision:
 - **Threshold to move to the next stage:** paper net profit of **≥ 10% per year on the capital posted as collateral**, after fees, basis risk and slippage.
 - Below the threshold, E1 is discarded or reformulated, with evidence and following CON-006.
 
-Decided by: the author, Oct 26, 2026, with the options «Investigación primero (Recomendado)», «4 semanas (Recomendado)» and «≥ 10 % al año».
+Decided by: the author, Oct 26, 2026, with the options «Research first (Recommended)», «4 weeks (Recommended)» and «≥ 10 % per year».
 Route: brief decision. Closes for E1 the open decision "Thresholds to move between stages".
 
 ### DEC-04 — C, D and E2
 Status: Decided
 Decision: C (weather), D (crypto options) and E2 (perps against prediction markets) are left out for now. They are reconsidered after the E1 verdict.
-Decided by: the author, Oct 26, 2026, «Fuera por ahora (Recomendado)».
+Decided by: the author, Oct 26, 2026, «Out for now (Recommended)».
 Route: brief decision.
 
 ### DEC-05 — Legal opinion
 Status: Decided
 Decision: no legal opinion is requested before using real money on E1. For the author it is enough that Polymarket Perps does not block Mexico in its country list [S-066]. The author assumes the legal risk. This is **not** a confirmation that it is legal: the Mexican framework for leveraged derivatives remains unreviewed. **Issue**, accepted by the author.
-Decided by: the author, Oct 26, 2026, «No, me basta con la lista de países».
+Decided by: the author, Oct 26, 2026, «No, the list of countries is enough for me».
 Route: brief decision; changes the text of CON-005.
 
 Closed on Oct 26, 2026 (see the Decision of each DQ):

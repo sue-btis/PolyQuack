@@ -1,0 +1,40 @@
+[project]
+name = "polyquack"
+version = "0.1.0"
+description = "Ingestion of funding, prices and order book snapshots from Polymarket Perps and Hyperliquid."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "httpx",
+    "websockets",
+]
+
+[project.scripts]
+polyquack = "polyquack.cli:main"
+
+[dependency-groups]
+dev = [
+    "mypy",
+    "pytest",
+    "ruff",
+]
+
+[build-system]
+requires = ["uv_build>=0.10,<0.11"]
+build-backend = "uv_build"
+
+[tool.mypy]
+strict = true
+mypy_path = "src"
+
+[tool.ruff]
+line-length = 100
+extend-exclude = ["docs"]
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "SIM", "ASYNC"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"

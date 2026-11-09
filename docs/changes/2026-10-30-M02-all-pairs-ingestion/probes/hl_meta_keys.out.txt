@@ -1,0 +1,4 @@
+['collateralToken', 'marginTables', 'universe']
+[[50, {"description": "", "marginTiers": [{"lowerBound": "0.0", "maxLeverage": 50}]}], [51, {"description": "tiered 10x", "marginTiers": [{"lowerBound": "0.0", "maxLeverage": 10}, {"lowerBound": "3000000.0", "maxLeverage": 5}]}]]
+[{'szDecimals': 1, 'name': 'MATIC', 'maxLeverage': 20, 'marginTableId': 20, 'isDelisted': True}, {'szDecimals': 1, 'name': 'RNDR', 'maxLeverage': 20, 'marginTableId': 20, 'isDelisted': True}]
+['isDelisted', 'marginMode', 'marginTableId', 'maxLeverage', 'name', 'onlyIsolated', 'szDecimals']

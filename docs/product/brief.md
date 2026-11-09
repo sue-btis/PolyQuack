@@ -111,8 +111,8 @@ Excluded:
 ## Approved Product Decisions
 
 - ~~First focus: arbitrage within a single market and contradictions between Polymarket markets, plus calibration. Source of the decision: the author, 2026-10-25.~~ Replaced on 2026-10-26 by the following decision.
-- Core: ETL plus evaluator, with E1 (funding between Polymarket Perps and Hyperliquid) as the first strategy. Scope is expanded to perpetual futures. Source: the author, 2026-10-26, «si mas bien seria eso ETl + evaluador con E1. Como primer decision». Evidence: `docs/discovery/findings.md`, section Angle E and DEC-01.
-- Ladders are out for now. Source: the author, 2026-10-26, «Las escaleras se quedan fuera por ahora.» (DEC-02).
+- Core: ETL plus evaluator, with E1 (funding between Polymarket Perps and Hyperliquid) as the first strategy. Scope is expanded to perpetual futures. Source: the author, 2026-10-26, «yes, it would rather be that, ETL + evaluator with E1. As a first decision». Evidence: `docs/discovery/findings.md`, section Angle E and DEC-01.
+- Ladders are out for now. Source: the author, 2026-10-26, «Ladders stay out for now.» (DEC-02).
 - C, D and E2 are out for now; they are reconsidered after E1's verdict. Source: the author, 2026-10-26 (DEC-04).
 - No legal opinion is requested before real money; the platform's list of countries is enough (DEC-05, CON-005). Source: the author, 2026-10-26.
 - Research first. E1 gets its first verdict after 4 weeks on paper with the project's own data. It advances to the next stage only if it yields ≥ 10% a year net on collateral, after fees, basis and slippage. Source: the author, 2026-10-26 (DEC-03).

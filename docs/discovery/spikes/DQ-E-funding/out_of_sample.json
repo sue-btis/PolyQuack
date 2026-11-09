@@ -1,0 +1,33 @@
+{
+ "coins": 38,
+ "cutoff_utc_hour": 497412,
+ "round_trip_fee_two_legs": 0.0017000000000000001,
+ "chosen_first_half": [
+  "LIT",
+  "KAITO",
+  "VIRTUAL",
+  "VVV",
+  "ETHFI",
+  "USELESS",
+  "ARB",
+  "LDO",
+  "DOGE",
+  "ENA"
+ ],
+ "annual_net_second_half_chosen_mean": 0.08712853528490563,
+ "annual_net_second_half_all_mean": 0.04297997838629592,
+ "annual_net_second_half_by_coin": {
+  "LIT": -0.0314,
+  "KAITO": 0.3048,
+  "VIRTUAL": 0.001,
+  "VVV": -0.0987,
+  "ETHFI": 0.3426,
+  "USELESS": -0.0899,
+  "ARB": 0.317,
+  "LDO": 0.0,
+  "DOGE": 0.1193,
+  "ENA": 0.0066
+ },
+ "mean_annual_diff_all": -0.1250883146685946,
+ "coins_with_negative_diff": 36
+}

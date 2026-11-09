@@ -15,5 +15,5 @@ __pycache__/
 
 # Heavy discovery data
 docs/discovery/spikes/**/cache/
-docs/discovery/spikes/DQ-006-escaleras/eventos.json
+docs/discovery/spikes/DQ-006-ladders/events.json
 dbml-error.log

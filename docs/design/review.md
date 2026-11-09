@@ -41,8 +41,8 @@ Enumeration values are left in English.
 | `npx --yes -p @mermaid-js/mermaid-cli mmdc -i docs/design/domain.md -o <scratchpad>/fv1-domain.md` | **Pass** (exit 0). The 2 diagrams were generated. |
 
 Decision status at follow-up:
-- PD-020 (`prd.md:366`) and PD-021 (`prd.md:367`) are `Decided`, with author, date 2026-10-26, and verbatim quote: «Máximo usado a la vez (Recomendado)» and «Por par, excluyendo el par (Recomendado)».
-- ADR-006 is `Accepted`, with "Accepted by: the author, 2026-10-26, «Acepto ADR-006 (Recomendado)»" (`ADR-006-price-capture.md:3-6`).
+- PD-020 (`prd.md:366`) and PD-021 (`prd.md:367`) are `Decided`, with author, date 2026-10-26, and verbatim quote: «Maximum used at the same time (Recommended)» and «Per pair, excluding the pair (Recommended)».
+- ADR-006 is `Accepted`, with "Accepted by: the author, 2026-10-26, «I accept ADR-006 (Recommended)»" (`ADR-006-price-capture.md:3-6`).
 - No authority depends on an ADR in `Proposed`.
 
 ## Current Blocking Summary
@@ -98,7 +98,7 @@ Decision status at follow-up:
 - Required resolution: the author decides in PRD §15 (a new PD with a verbatim quote) how the collateral of a run with simultaneous or changing positions is calculated. Then BR-003 and the domain definition are updated citing that PD. This cannot be inferred: it is a product rule.
 - Changed paths (cycle 1): `docs/product/prd.md` (new PD-020, decided by the author with a quote; BR-003 cites PD-020); `docs/design/domain.md` (term Collateral; Run invariant); `docs/design/data/schema.dbml` (`verdict.max_collateral`); `docs/design/ux/flows.mmd` (F-003, return step).
 - Verification evidence (follow-up, 2026-10-26):
-  - PD-020 is at `prd.md:366`: `Decided`, author, 2026-10-26, «Máximo usado a la vez (Recomendado)». The decision is "the maximum collateral committed at the same time during the run".
+  - PD-020 is at `prd.md:366`: `Decided`, author, 2026-10-26, «Maximum used at the same time (Recommended)». The decision is "the maximum collateral committed at the same time during the run".
   - BR-003 (`prd.md:278`) defines the collateral of a position and of a run, and cites PD-020. FR-016 (`prd.md:180`) refers to BR-003.
   - The domain is aligned. `domain.md:26` defines the term. `domain.md:76` is the Run invariant and limits the maximum to non-excluded positions, which matches PD-021.
   - The DBML has `verdict.max_collateral` at `schema.dbml:235`, with a PD-020 note.
@@ -123,7 +123,7 @@ Decision status at follow-up:
 - Required resolution: the author decides in §15 the counting level (per pair, summed, or excluding the pair instead of the whole run) and how expected hours or minutes are counted for pairs that enter or leave. FR-018 and PD-013 are left with that precision.
 - Changed paths (cycle 1): `docs/product/prd.md` (new PD-021, decided by the author with a quote; FR-018 rewritten citing PD-021); `docs/design/domain.md` (term Excluded pair; Run lifecycle and invariants); `docs/design/data/schema.dbml` (table `excluded_pair`; note on `run.status`); `docs/design/ux/flows.mmd` (F-003 per pair).
 - Verification evidence (follow-up, 2026-10-26):
-  - PD-021 is at `prd.md:367`: `Decided`, author, 2026-10-26, «Por par, excluyendo el par (Recomendado)». What it says: counting is per pair; the pair that passes the limit is left out and reported; each pair counts only between its pairing and its delisting. Affects lists PD-013, so it refines PD-013 without contradicting it.
+  - PD-021 is at `prd.md:367`: `Decided`, author, 2026-10-26, «Per pair, excluding the pair (Recommended)». What it says: counting is per pair; the pair that passes the limit is left out and reported; each pair counts only between its pairing and its delisting. Affects lists PD-013, so it refines PD-013 without contradicting it.
   - FR-018 (`prd.md:186`) applies the limit per pair, measures only between pairing and delisting, qualifies with the remaining pairs, and leaves the run unqualified only if none remains.
   - The domain is aligned:
     - `domain.md:28` defines «Excluded pair».
@@ -177,9 +177,9 @@ Decision status at follow-up:
   - It was not verified whether a batch endpoint exists (for example "tickers", `findings.md:497`) or a live mark price channel.
 - Why it matters: if implemented as written at `architecture.dsl:14`, with one REST request per instrument every minute, it repeats the option that ADR-004 rejected and puts NFR-005 (zero bans) at risk. The per-minute prices feed the basis and the liquidation distance (FR-023, FR-024).
 - Required resolution: ADR-004 (or a new ADR) decides the source and frequency of the mark price and index price: live channel, batch endpoint, or REST per instrument, with its rate calculation against NFR-005 and NFR-010. `architecture.dsl` and `flows.mmd` are aligned with that decision.
-- Changed paths (cycle 1): `docs/design/architecture/adr/ADR-006-price-capture.md` (new, Accepted by the author with the quote «Acepto ADR-006 (Recomendado)»); `docs/design/architecture/architecture.dsl` (Ingestion description); `docs/design/ux/flows.mmd` (F-001, batch prices every minute); `docs/design/data/schema.dbml` (`price_reading.source_time` null if the source does not provide it, `received_at`); `docs/design/architecture/quality-attributes.md` (NFR-005, NFR-010).
+- Changed paths (cycle 1): `docs/design/architecture/adr/ADR-006-price-capture.md` (new, Accepted by the author with the quote «I accept ADR-006 (Recommended)»); `docs/design/architecture/architecture.dsl` (Ingestion description); `docs/design/ux/flows.mmd` (F-001, batch prices every minute); `docs/design/data/schema.dbml` (`price_reading.source_time` null if the source does not provide it, `received_at`); `docs/design/architecture/quality-attributes.md` (NFR-005, NFR-010).
 - Verification evidence (follow-up, 2026-10-26):
-  - ADR-006 is `Accepted`, with «Accepted by: the author, 2026-10-26, «Acepto ADR-006 (Recomendado)»» (`ADR-006:3-6`).
+  - ADR-006 is `Accepted`, with «Accepted by: the author, 2026-10-26, «I accept ADR-006 (Recommended)»» (`ADR-006:3-6`).
   - It weighed three options (`ADR-006:25-35`) and chose B: one batch request per platform every minute (`ADR-006:37-42`).
   - The rate calculation is at `ADR-006:12,30`: 2 requests per minute in total regardless of how many pairs there are, versus about 200 for the per-instrument option. That answers NFR-005 and NFR-010.
   - The endpoints appear as verified on Oct 26, 2026 at `ADR-006:14-17`: Polymarket Perps `GET /v1/info/tickers` and Hyperliquid `POST /info {"type":"metaAndAssetCtxs"}`. They were not queried again in this follow-up.
@@ -195,7 +195,7 @@ Decision status at follow-up:
 ### F-006 — PD-005 uses a status that does not exist in the enum (the mechanical check fails)
 
 - Severity: `MINOR`
-- Status: `OPEN`
+- Status: `RESOLVED`
 - Origin: `BASELINE`
 - Classification: `EDITORIAL`
 - Owner: `docs/product/prd.md`
@@ -204,13 +204,14 @@ Decision status at follow-up:
 - Why it matters: the meaning is understandable, but the package does not pass its own mechanical check.
 - Required resolution: leave the status as `Decided` and put the replacement by PD-006 in the Decision or Affects column. `check-package.mjs` must exit with 0.
 - Verification evidence: follow-up of 2026-10-26: still not fixed. `check-package.mjs` exits with 1 and this is its only problem.
+- Resolution: change `docs/changes/2026-10-28-M01-btc-ingestion/` (2026-10-28). PD-005 now has the status `Decided` and the replacement by PD-006 is in the Decision column of `prd.md` §15. `check-package.mjs` now exits 0 ("Package checks passed.", run by the verifier of this change).
 - Routed to: —
 - Accepted by: —
 
 ### F-007 — Position states and decision actions do not match between the domain and the DBML
 
 - Severity: `MINOR`
-- Status: `OPEN`
+- Status: `RESOLVED`
 - Origin: `BASELINE`
 - Classification: `MINOR_INCONSISTENCY`
 - Owner: `docs/design/domain.md`
@@ -226,12 +227,13 @@ Decision status at follow-up:
   - `schema.dbml:173` and `schema.dbml:190` remain as before.
   - `domain.md:81` now says «the opposite one is closed and opened», but the state diagram did not change.
 - Routed to: —
+- Resolution: change `docs/changes/2026-11-09-M03-e1-paper-evaluation/` (2026-11-09, pending independent verification). `domain.md` now describes a reverse as closing and opening a position on the opposite side, drops `reversed`, and defines `hold` and `no_action` with its causes.
 - Accepted by: —
 
 ### F-008 — `gap.ends_at` is required even though the gap is still open
 
 - Severity: `MINOR`
-- Status: `OPEN`
+- Status: `RESOLVED`
 - Origin: `BASELINE`
 - Classification: `MINOR_INCONSISTENCY`
 - Owner: `docs/design/data/schema.dbml`
@@ -240,6 +242,7 @@ Decision status at follow-up:
 - Why it matters: for a gap in progress an end time would have to be invented, which clashes with BR-001.
 - Required resolution: `ends_at` accepts null while the gap is open, or the design documents how a gap in progress is represented.
 - Verification evidence: follow-up of 2026-10-26: still not fixed. `schema.dbml:117` still has `ends_at datetime [not null]`.
+- Resolution: change `docs/changes/2026-10-28-M01-btc-ingestion/` (DEC-4, 2026-10-28). A gap always covers an expected, closed interval, so `gap.ends_at` stays `not null` and an ongoing hole is represented by the rows of the intervals already elapsed. `domain.md` (Gap) and the note on `gap.status` in `schema.dbml` document it. This is the second resolution this finding allows.
 - Routed to: —
 - Accepted by: —
 
@@ -263,7 +266,7 @@ Decision status at follow-up:
 ### F-010 — ADR-002 assumes a single writer, but the architecture has two
 
 - Severity: `MINOR`
-- Status: `OPEN`
+- Status: `RESOLVED`
 - Origin: `BASELINE`
 - Classification: `MINOR_INCONSISTENCY`
 - Owner: `docs/design/architecture/adr/ADR-002-storage.md`
@@ -272,8 +275,9 @@ Decision status at follow-up:
 - Why it matters: SQLite in WAL mode allows one writer at a time. If a long evaluator write blocks the per-minute snapshots, with no defined wait timeout, minutes can be lost (NFR-003). Right now the ADR reasons from a premise that is not true.
 - Required resolution: ADR-002 acknowledges the two writers and sets how they coexist: short transactions, a lock wait timeout, or whatever is decided.
 - Verification evidence: follow-up of 2026-10-26: cycle 1 did not touch it and it remains open.
+- Resolution: change `docs/changes/2026-10-30-M02-all-pairs-ingestion/` (DEC-6, 2026-11-02). ADR-002 has an amendment with short transactions, the 5 s lock wait and a failed ingestion write becoming a gap. The author accepted the amendment on 2026-11-02.
 - Routed to: —
-- Accepted by: —
+- Accepted by: the author, 2026-11-02, «Sí, Accepted by» (ADR-002 amendment)
 
 ### F-011 — No container writes visibility or studies, and the exporter needs data that is not marked as public
 
@@ -290,13 +294,14 @@ Decision status at follow-up:
 - Why it matters: these responsibilities are not assigned. They can be resolved with little work, but today they have no owner.
 - Required resolution: assign in the architecture who writes visibility, studies and, if needed, the fee schedule. Specify which data without a visibility flag, such as the ingestion status, the exporter may read.
 - Verification evidence: follow-up of 2026-10-26: still open. Nothing changed at `architecture.dsl:25,26,29` that affects this finding.
+- Resolution: change `docs/changes/2026-10-30-M02-all-pairs-ingestion/` (DEC-2, 2026-11-02), for the fee schedule only: Polymarket fees come from its public fees endpoint and Hyperliquid's base tier from a versioned data file. The visibility and study parts of this finding are not addressed.
 - Routed to: —
 - Accepted by: —
 
 ### F-012 — It is not stated how old the order book snapshot used to compute the price can be
 
 - Severity: `MINOR`
-- Status: `OPEN`
+- Status: `RESOLVED`
 - Origin: `BASELINE`
 - Classification: `MINOR_INCONSISTENCY`
 - Owner: `docs/design/domain.md`
@@ -308,6 +313,7 @@ Decision status at follow-up:
 - Required resolution: the domain fixes the maximum age of the snapshot that can be used (for example, the minute before the decision). If there is no valid snapshot, the decision is `no_action` and a gap is recorded.
 - Verification evidence: follow-up of 2026-10-26: still open. `flows.mmd:33` («Walk the previous order book snapshot») still has no age limit.
 - Routed to: —
+- Resolution: change `docs/changes/2026-11-09-M03-e1-paper-evaluation/` (2026-11-09, pending independent verification). `domain.md` fixes the usable snapshot as at or before the decision instant and at most 120 seconds older; otherwise the decision is `no_action` with a cause. The cause replaces a gap row because gaps belong to ingestion.
 - Accepted by: —
 
 ### F-013 — It is not stated which price is used for the basis and liquidation, nor what happens if there is no liquidation fee
@@ -334,7 +340,7 @@ Decision status at follow-up:
 ### F-014 — The NFR-008 test checks a field written by the same evaluator
 
 - Severity: `MINOR`
-- Status: `OPEN`
+- Status: `RESOLVED`
 - Origin: `BASELINE`
 - Classification: `COVERAGE_GAP`
 - Owner: `docs/design/architecture/quality-attributes.md`
@@ -346,6 +352,7 @@ Decision status at follow-up:
   - `quality-attributes.md:14` added test (2), which compares the payments against the opening and checks data actually used for the funding.
   - The readings used by the decision, such as `paper_trade.snapshot_minute` against the hour or the `source_time` of the rates, are still checked only with `data_until <= hour`, which the same evaluator writes.
 - Routed to: —
+- Resolution: change `docs/changes/2026-11-09-M03-e1-paper-evaluation/` (2026-11-09, pending independent verification). `quality-attributes.md` NFR-008 now checks the snapshot actually used (`paper_trade.snapshot_minute` joined to `book_snapshot.source_time`) and the single cutoff-filtered read layer.
 - Accepted by: —
 
 ### F-015 — UX-003 refers to a brief glossary that does not have those terms
@@ -377,7 +384,7 @@ Decision status at follow-up:
 ### Reconciliation — cycle 1
 
 - Date: 2026-10-26. Scope: only the 5 open MAJOR findings (F-001 to F-005). The 10 MINOR findings (F-006 to F-015) remain `OPEN` as non-blocking debt.
-- Author decisions used: PD-020 («Máximo usado a la vez (Recomendado)») and PD-021 («Por par, excluyendo el par (Recomendado)»), both of 2026-10-26 and recorded in PRD §15. ADR-006 accepted by the author on 2026-10-26 («Acepto ADR-006 (Recomendado)»).
+- Author decisions used: PD-020 («Maximum used at the same time (Recommended)») and PD-021 («Per pair, excluding the pair (Recommended)»), both of 2026-10-26 and recorded in PRD §15. ADR-006 accepted by the author on 2026-10-26 («I accept ADR-006 (Recommended)»).
 - Files changed: `docs/product/prd.md`, `docs/design/domain.md`, `docs/design/ux/flows.mmd`, `docs/design/data/schema.dbml`, `docs/design/architecture/architecture.dsl`, `docs/design/architecture/quality-attributes.md`, `docs/design/architecture/adr/ADR-006-price-capture.md` (new).
 - Commands run after the changes: `npx -p @dbml/cli dbml2sql schema.dbml` → exit 0, 22 tables; `check-package.mjs` → exit 1 only because of F-006 (MINOR, outside the scope of this cycle). Structurizr and Mermaid were not run again in this cycle.
 - Findings moved to `READY_FOR_VERIFICATION`: F-001, F-002, F-003, F-004, F-005. None was marked `RESOLVED`: that is up to the independent verification.

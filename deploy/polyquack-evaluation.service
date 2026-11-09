@@ -1,0 +1,16 @@
+[Unit]
+Description=Polyquack evaluation (hourly paper decisions, trades and funding accrual)
+After=network-online.target
+
+[Service]
+Type=oneshot
+User=polyquack
+WorkingDirectory=/opt/polyquack/app
+Environment=POLYQUACK_DB=/var/lib/polyquack/polyquack.db
+EnvironmentFile=-/etc/polyquack/ingestion.env
+ExecStart=/opt/polyquack/app/.venv/bin/polyquack evaluate
+StateDirectory=polyquack
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true

@@ -42,8 +42,8 @@ Table instrument_status {
 Table instrument_parameters {
   instrument_id integer [not null, ref: > instrument.id]
   effective_from datetime [not null]
-  max_leverage real [not null]
-  maintenance_margin real [not null, note: 'fraction of the notional']
+  max_leverage real [not null, note: 'base tier only: Polymarket max_leverage of the instrument; Hyperliquid first tier of its margin table. When the instrument marginTableId is not listed in marginTables (ids up to 50 are implicit), the row maxLeverage is the base tier; where a table exists its first tier equals that value']
+  maintenance_margin real [not null, note: 'fraction of the notional. Neither platform publishes it: derived as 0.5 / max_leverage of the base tier (the platforms documented rule)']
   min_notional real [not null]
   liquidation_fee real [note: 'fraction of the notional, if the platform publishes it']
   indexes {
@@ -57,16 +57,18 @@ Table pair {
   polymarket_instrument_id integer [not null, unique, ref: > instrument.id]
   hyperliquid_instrument_id integer [not null, unique, ref: > instrument.id]
   paired_at datetime [not null]
+  Note: 'Pair status is not stored: it is derived from the latest instrument_status of the two instruments. delisted if either is delisted, else close_only if either is close_only, else active; an instrument with no status row is active'
 }
 
 Table fee_schedule {
   platform_id integer [not null, ref: > platform.id]
   effective_from datetime [not null]
-  tier text [not null, note: 'account volume tier; in the MVP, the initial tier']
+  category text [not null, note: "Polymarket fee category (crypto, equity...); '' on Hyperliquid, which has none"]
+  tier text [not null, note: 'account volume tier. Polymarket: every tier the public fees endpoint returns (min_volume_30d). Hyperliquid: the base tier only, loaded by hand from its published table']
   taker real [not null, note: 'fraction of the notional']
   maker real [not null]
   indexes {
-    (platform_id, effective_from, tier) [pk]
+    (platform_id, effective_from, category, tier) [pk]
   }
 }
 
@@ -87,10 +89,12 @@ Table book_snapshot {
   source_time datetime [not null, note: 'time of the last channel message included']
   best_bid real [not null]
   best_ask real [not null]
-  bid_notional_05 real [not null, note: 'cumulative notional up to 0.5% below the mid']
+  bid_notional_05 real [not null, note: 'cumulative notional (sum of price x quantity, quote currency) up to 0.5% below the mid or up to the reach, whichever is smaller']
   ask_notional_05 real [not null]
-  bid_levels text [not null, note: 'JSON [[price, quantity], ...] up to 0.5%; for walking the book (FR-021)']
+  bid_levels text [not null, note: 'JSON [[price, quantity], ...] up to 0.5% or up to the reach, whichever is smaller; for walking the book (FR-021). Quantities in asset units']
   ask_levels text [not null]
+  bid_reach real [not null, note: 'fraction of the mid price up to the farthest bid level delivered by the platform (PD-022). Mid price = (best bid + best ask) / 2']
+  ask_reach real [not null, note: 'same, for the ask side']
   indexes {
     (instrument_id, minute) [pk]
   }
@@ -116,7 +120,7 @@ Table gap {
   starts_at datetime [not null]
   ends_at datetime [not null]
   cause text [note: 'disconnection, 429, HTTP error, no data at the source...']
-  status text [not null, note: 'open | closed_with_data | final']
+  status text [not null, note: 'open | closed_with_data | final. A gap covers a closed interval: book_snapshot and price gaps are born final, funding gaps are born open (recoverable per FR-011). An open funding gap for hour h becomes final when a history response holds a payment later than h but none for h, and closed_with_data when a payment for h is stored; closed_at records the change']
   closed_at datetime
   indexes {
     (instrument_id, kind, starts_at)
@@ -173,6 +177,7 @@ Table decision {
   action text [not null, note: 'open | hold | reverse | close | no_action']
   data_until datetime [not null, note: 'time of the most recent reading used; must be <= hour (BR-004)']
   funding_spread real [note: 'null if any rate is missing (FR-019, BR-001)']
+  cause text [note: 'set on every no_action: missing_rate, no_usable_snapshot, thin_book, missing_fee. hour is the decision instant, the hour plus 21 minutes; data_until falls back to it when nothing was read']
   indexes {
     (run_id, pair_id, hour) [pk]
   }
@@ -210,7 +215,7 @@ Table paper_funding_payment {
   platform_id integer [not null, ref: > platform.id]
   source_time datetime [not null]
   rate real [not null]
-  amount real [not null, note: 'positive = collected (FR-022). Only payments with source_time > the position opened_at and <= its close or liquidation (accrual, domain.md)']
+  amount real [not null, note: 'rate times notional_per_leg, rounded to 6 decimals (micro-USD); positive = collected (FR-022). Only payments with source_time > the position opened_at and <= its close or liquidation (accrual, domain.md)']
   indexes {
     (position_id, platform_id, source_time) [pk]
   }

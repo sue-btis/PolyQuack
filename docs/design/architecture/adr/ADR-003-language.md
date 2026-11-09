@@ -3,7 +3,7 @@
 Status: Accepted
 Date: 2026-10-26
 Decision owners: the author
-Accepted by: the author, 2026-10-26, «Python (Recomendado)»
+Accepted by: the author, 2026-10-26, «Python (Recommended)»
 Related: CAP-001 to CAP-005, NFR-007, NFR-008, §14 (future ML)
 
 ## Context

@@ -3,7 +3,7 @@
 Status: Accepted
 Date: 2026-10-26
 Decision owners: the author
-Accepted by: the author, 2026-10-26, «tengo unas vm que podria usar son locales, y sqlite»; team facts confirmed that day: «Sí, es un servidor siempre prendido», «Sí, estable», «Linux»
+Accepted by: the author, 2026-10-26, «I have some VMs I could use, they are local, and sqlite»; team facts confirmed that day: «Yes, it is an always-on server», «Yes, stable», «Linux»
 Related: NFR-002, NFR-003, NFR-004, NFR-006, NFR-013, CON-009, CON-010
 
 ## Context

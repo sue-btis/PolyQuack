@@ -10,7 +10,7 @@
 | Pair | Two instruments, one per platform, that track the same asset. | FR-002 |
 | Reading | A data point stored exactly as the source reported it, with its time: a funding rate, a book snapshot, a mark price or an index price. | FR-004 to FR-007 |
 | Gap | An interval in which a reading was expected and did not arrive. It is recorded with its source and, if known, its cause. | FR-010, BR-001 |
-| Book snapshot | Summary of an instrument's order book at one minute: best bid, best ask and cumulative volume on each side up to 0.5% of the mid price. | FR-006, PD-012 |
+| Book snapshot | Summary of an instrument's order book at one minute: best bid, best ask and cumulative notional on each side up to 0.5% of the mid price, or up to the reach of the levels the platform delivers when they do not extend that far. The reach of a side is the relative distance to the mid price of the farthest level delivered; a volume truncated at its reach is read that way and what is missing is never completed or estimated (PD-022). | FR-006, PD-012 |
 | Funding | Hourly payment between longs and shorts of an instrument. If the rate is positive, longs pay. | FR-004, BR-007 |
 | Funding spread | Polymarket Perps rate minus Hyperliquid rate, for the same pair and the same hour. | FR-019, BR-008 |
 | Fee schedule | Taker and maker fees of a platform, with their effective date. | FR-009 |
@@ -18,7 +18,7 @@
 | Variant | A version of a method with its own preregistration. Changing any part of the preregistration creates a variant. | FR-013, FR-014, BR-005 |
 | Preregistration | What is fixed for a variant before its first run: rules, parameters, metric, horizon, verdict criterion, reference size per leg and reference leverage. | FR-012, CON-006 |
 | Run | The execution of a variant over a data period, live or re-evaluated over stored data. | FR-015, NFR-007 |
-| Decision | What a run resolves for a pair at an hour: open, hold, reverse or close. It only uses readings with an earlier or equal time. | FR-020, BR-004 |
+| Decision | What a run resolves for a pair at an hour: open, hold, reverse, close or no_action. It only uses readings with a source time at or before its decision instant, which is the hour plus 21 minutes (M03 DEC-5) and is what the decision stores as its hour. `hold` keeps the current state, flat or in a position. `no_action` means the hour could not be decided and records a cause: missing rate, no usable snapshot, thin book or missing fee; nothing is estimated, and no gap is written because gaps belong to ingestion. A reverse closes the position and opens the opposite one in the same decision. A pair decides an hour when its derived status as of the decision instant is not delisted and the pair already existed then, so a catch-up decides each hour with the pair set of that hour. A book snapshot is usable only if its source time is at or before the decision instant and at most 120 seconds older. | FR-020, BR-004 |
 | Paper position | Two legs of opposite sides opened with the same notional, simulated without money. | BR-006 |
 | Leg | Each side of the position, on one platform. | FR-021, FR-022 |
 | Reference size | Notional per leg used to simulate slippage. In E1: 1,000 USD. | PD-014 |
@@ -45,6 +45,8 @@
 - Meaning: the same asset on the two platforms.
 - Identity: the asset.
 - Lifecycle: `active` → `close-only` (if either platform moves the instrument to close-only) → `delisted` (if either removes it).
+- Status derivation: not stored. A pair is `delisted` if either instrument's latest `instrument_status` is `delisted`, otherwise `close-only` if either is `close_only`, otherwise `active`. An instrument without a status row is `active`.
+- Lifecycle signals: Polymarket `close_only = true` is `close_only`; an instrument missing from the list becomes `delisted` only if querying it by `instrument_id` returns a `settlement`. Hyperliquid `isDelisted = true` is `delisted`; it publishes no close-only state. Any other absence changes no status.
 - Invariants: has exactly one instrument per platform. An instrument without a counterpart is not a pair and is listed separately (FR-002).
 
 ### Reading
@@ -56,7 +58,7 @@
 ### Gap
 - Meaning: a hole in what was expected to be received.
 - Identity: source + instrument + kind + interval.
-- Lifecycle: `open` → `closed with real data` (funding only, per FR-011) or `final`. Book snapshots cannot be recovered later: their gap is final when the minute ends.
+- Lifecycle: `open` → `closed with real data` (funding only, per FR-011) or `final`. An open funding gap for hour h becomes `final` when a history response contains a payment later than h but none for h, and `closed with real data` when a payment for h is stored; otherwise it stays `open`. Book snapshots cannot be recovered later: their gap is final when the minute ends. A gap always covers an expected, closed interval (the minute for book snapshots and prices, the hour for funding, the failed attempt for instruments); an ongoing hole is represented by the rows of the intervals already elapsed, so a gap never has an unknown end. Book snapshot and price gaps are born `final`; funding gaps are born `open`.
 - Invariants: the dashboard and the evaluator treat it as "no data", never as zero (UX-002).
 
 ### Variant (of a method)
@@ -78,10 +80,10 @@
 ### Paper position
 - Meaning: two opposite legs of the same pair, with the same notional.
 - Identity: run + pair + opening hour.
-- Lifecycle: `open` → `closed` | `reversed` (it is closed and the opposite one is opened) | `leg liquidated` (one leg liquidated and the other uncovered) → `closed`.
+- Lifecycle: `open` → `closed` (a reverse closes it and opens a new position on the opposite side; there is no `reversed` state) | `leg liquidated` (one leg liquidated and the other uncovered) → `closed`.
 - Invariants:
   - Opens with the same notional on both legs (BR-006).
-  - **Funding accrual:** a leg only receives payments with a source time strictly greater than its opening and less than or equal to its close or its liquidation (FR-022). A position that opens at hour t does not receive the payment of hour t. One that closes at hour t does receive it, because it was open during that hour.
+  - **Funding accrual:** a leg only receives payments with a source time strictly greater than its opening and less than or equal to its close or its liquidation (FR-022). A position that opens at hour t does not receive the payment of hour t. One that closes at hour t does receive it, because it was open during that hour. The amount of a payment to a leg is the rate times the notional per leg, negative for a long leg when the rate is positive; amounts are rounded to 6 decimals (micro-USD) in one place. The reference price for the notional is open question F-013 (M04); M03 uses the fixed notional.
   - A leg that crosses its liquidation level is recorded as liquidated (BR-010).
 
 ## Relationships and Ownership
@@ -109,8 +111,7 @@ stateDiagram-v2
   [*] --> open : decision "open"
   open --> open : funding payment after opening / "hold"
   open --> closed : decision "close"
-  open --> reversed : decision "reverse"
-  reversed --> open : the opposite is opened
+  open --> closed : decision "reverse", and the opposite position is opened
   open --> leg_liquidated : the price crosses a leg's level
   leg_liquidated --> closed : "close" decision on the uncovered leg
   closed --> [*]

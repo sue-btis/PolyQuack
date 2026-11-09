@@ -1,0 +1,22 @@
+[Unit]
+Description=Polyquack ingestion (funding, prices and order book snapshots)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=polyquack
+WorkingDirectory=/opt/polyquack/app
+Environment=POLYQUACK_DB=/var/lib/polyquack/polyquack.db
+EnvironmentFile=-/etc/polyquack/ingestion.env
+ExecStart=/opt/polyquack/app/.venv/bin/polyquack run
+Restart=always
+RestartSec=5
+StateDirectory=polyquack
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

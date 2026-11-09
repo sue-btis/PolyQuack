@@ -1,0 +1,9 @@
+[Unit]
+Description=Run the Polyquack evaluation every hour at minute 22
+
+[Timer]
+OnCalendar=*:22
+Persistent=true
+
+[Install]
+WantedBy=timers.target

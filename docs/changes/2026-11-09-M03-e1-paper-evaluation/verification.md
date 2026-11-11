@@ -1,9 +1,9 @@
 # M03 — E1 decides every hour on paper and collects funding without seeing the future — Verification
 
 Verdict: Pass
-Acceptance: Pending — the author's acceptance of M03 after the VM QA (F-6: install the units, preregister E1 with the author's N, E, X, 24 h of decisions, NFR-008 over the real run, no ingestion loss, logged in `vm-qa-log.md`)
+Acceptance: Accepted — the author, 2026-11-11, «Sí, acepto M03»
 Verified by: independent reviewer subagent, pass 2 (medium)
-Open limitations: None
+Open limitations: None (L-1 needs no follow-up)
 
 Size: medium
 Reliability: strict
@@ -11,6 +11,7 @@ Reliability: strict
 ## Pass History
 - Pass 1 (2026-11-09): Fail — F-1, F-2 open (defects); F-3, F-4, F-5, F-6 open (decisions).
 - Pass 2 (2026-11-09): Pass — F-1, F-2 fixed and F-4 implemented in Round 1; F-3 accepted (L-1); F-5 done; F-6 assigned to the VM session.
+- VM QA (2026-11-09 to 2026-11-11, author; not a verifier pass): F-6 done.
 
 ## Baseline
 | Field | Value |
@@ -43,7 +44,7 @@ Recorded in `execution.md` (Round 1, 2026-11-09: F-1, F-2, F-4, F-6 point (a)).
 | F-3 | decision | Polymarket crypto fee source and effective date: `polymarket_fees.json:3-5` applies the docs' single, unlabelled schedule (taker 0.0004, maker 0.000125) to `crypto` with `effective_from` 2026-10-21 = the page's last-modified date | `src/polyquack/ingestion/polymarket_fees.json:1-7`; `execution.md` | Accepted — the author, 2026-11-09, «Sí, la acepto (Recomendado)» (L-1) |
 | F-4 | decision | Which pairs decide an hour in catch-up (bug class: scoping by current state instead of as-of-cutoff state) | Decided by the author, 2026-11-09, «Estado en cada hora (Recomendado)»; implemented in Round 1 (`readings.py:83-93`, `runner.py:157-167`; `domain.md` Decision row). Mutants killed: M15 (`paired_at` removed), N1 (`since < cutoff`), N2 (`since` ignored), N3 (delisted filter removed), N4 (HL status ignored), N7 (status read at now); tests `test_f4_*` | Done (Round 1) |
 | F-5 | decision | M02 limitation L-5 not closed in its own record | `docs/changes/2026-10-30-M02-all-pairs-ingestion/verification.md:6` (only L-6 open) and `:114` (L-5 done in this folder) | Done — the author, 2026-11-09, «Sí, ciérrala (Recomendado)» |
-| F-6 | decision | VM-only evidence assigned to the VM session: R-11/AC-11 install and `systemctl list-timers`, the 24 h run, NFR-008 over the real run, ASM-3, the Done When, logged in `vm-qa-log.md`. (a) restarting ingestion before the first `evaluate` is in `README.md:79`; (b) `variants` needs a migrated database; (c) the author preregisters N, E, X (CON-006). Also to check there: that no funding hour has two readings with different `source_time` (live versus history), which would make accrual credit an hour twice; not verified in either pass | spec Quality Obligations and Done When; `README.md:79` | Open — VM session |
+| F-6 | decision | VM-only evidence assigned to the VM session: R-11/AC-11 install and `systemctl list-timers`, the 24 h run, NFR-008 over the real run, ASM-3, the Done When, logged in `vm-qa-log.md`. (a) restarting ingestion before the first `evaluate` is in `README.md:79`; (b) `variants` needs a migrated database; (c) the author preregisters N, E, X (CON-006). Also to check there: that no funding hour has two readings with different `source_time` (live versus history), which would make accrual credit an hour twice; not verified in either pass | spec Quality Obligations and Done When; `README.md:79` | Done — `vm-qa-log.md`: units installed and timer listed; E1 preregistered by the author and frozen at its first run (2026-11-09 22:22); 43 hours × 38 pairs = 1634 decisions; NFR-008 checks over the real run 0, 0, 0; no funding hour with two readings; ingestion 98.5–100% over the last day; the missing minutes were VM-side episodes, not the second writer (ASM-3) |
 
 ## Requirement Compliance
 | Requirement / AC | Implementation Evidence | Independent Check | Result |
@@ -58,7 +59,7 @@ Recorded in `execution.md` (Round 1, 2026-11-09: F-1, F-2, F-4, F-6 point (a)).
 | R-8 / AC-8 (TST-010) | `_accrue`, `Reader.payments` | `test_ac8_*`, `test_r8_*`, deferral tests; M1, M9, N5, R1, N8 killed; M14 equivalent; F-1 repro clean | Pass |
 | R-9 / AC-9 (TST-011) | `Reader`: every query bounded by the cutoff in SQL (`source_time`, `effective_from`, `since`) | `test_ac9_*` seeds post-cutoff readings with identical results; `future_data_violations` covers `data_until`, snapshot source time, payments versus opening, close and latest decision; M6 killed | Pass |
 | R-10 / AC-10 | `_record`, one transaction per accrual batch, `_defer` re-raises non-contention | `test_ac10_*` (5), `test_r10_*` | Pass |
-| R-11 / AC-11 | `deploy/polyquack-evaluation.service` (`Type=oneshot`, same user, DB, env file, hardening), `.timer` (`OnCalendar=*:22`, `Persistent=true`); README | units read; install not runnable here | Not run — VM session (F-6) |
+| R-11 / AC-11 | `deploy/polyquack-evaluation.service` (`Type=oneshot`, same user, DB, env file, hardening), `.timer` (`OnCalendar=*:22`, `Persistent=true`); README | installed on the VM; `systemctl list-timers` showed the next run 22:22 UTC (`vm-qa-log.md`) | Pass (VM) |
 | R-12 / AC-12 | no order or account endpoint | `test_ac12_*`; suite runs without network | Pass |
 | DEC-1 / DEC-8 / DEC-9 | `rule.py`, `_plan` | rule table, `test_dec1_*`, `test_dec9_*` | Pass |
 | DEC-2 (as decided under F-4) | `Reader.pair_status`, `_evaluate_run` | `test_f4_*`; N1–N4, N7, M15 killed | Pass |

@@ -26,15 +26,15 @@ flowchart TB
 
   subgraph F002["F-002 Hour t of E1 on paper (CAP-003; FR-019 to FR-026; BR-004)"]
     direction LR
-    P[Hour t, after storing the funding of t] --> X[Accrual: credit or debit the funding of t only to legs opened before t]
+    P[Decision instant: hour t plus 21 min, after storing the funding of t] --> X[Accrual: credit or debit the funding of t only to legs opened before t]
     X --> Q[For each non-excluded pair: rates of hour t]
     Q -- one is missing --> R[Decision no_action; null spread]
     Q -- both present --> S[Funding spread]
     S --> T[Apply preregistration rules with data up to t]
     T --> U{Action}
-    U -- open, close or reverse --> V[Walk the previous book snapshot for the reference size]
+    U -- open, close or reverse --> V[Walk the latest book snapshot, at most 120 s old, for the reference size; no snapshot, fee or depth gives no_action with a cause]
     V --> W[Record trade with price, fee and slippage; a leg opened at t collects from t+1]
-    U -- hold --> Y[Every minute: basis and distance to liquidation]
+    U -- hold: keep the current state --> Y[Every minute: basis and distance to liquidation]
     W --> Y
     Y -- crosses level --> Z[Leg liquidated; the other is left uncovered]
   end

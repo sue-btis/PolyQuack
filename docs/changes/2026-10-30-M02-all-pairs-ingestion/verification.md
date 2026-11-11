@@ -3,7 +3,7 @@
 Verdict: Pass
 Acceptance: Accepted — the author, 2026-11-09, «Sí, acepto M02»
 Verified by: Independent reviewer agent, separate from the implementer and the integration owner (medium)
-Open limitations: L-5 (F-14, Polymarket crypto fee rate, deferred to M03); L-6 (F-15, database growth, to a separate change)
+Open limitations: L-6 (F-15, database growth, to a separate change)
 
 Size: medium
 Reliability: strict
@@ -111,7 +111,7 @@ Reliability: strict
 | L-2 | F-8 | the author, «Sí, las acepto» (option selected in the main session) | 2026-11-02 | none |
 | L-3 | F-10 | the author, «Sí, las acepto» (option selected in the main session) | 2026-11-02 | none |
 | L-4 | F-11 | the author, «Sí, las acepto» (option selected in the main session) | 2026-11-02 | none |
-| L-5 | F-14 | the author, «Postergar a M03 (Recomendado)» (option selected in the main session) | 2026-11-02 | M03 spec decides the source of the `crypto` rate |
+| L-5 | F-14 | the author, «Postergar a M03 (Recomendado)» (option selected in the main session) | 2026-11-02 | done in `docs/changes/2026-11-09-M03-e1-paper-evaluation/` (DEC-3, crypto fee file accepted by the author 2026-11-09) |
 | L-6 | F-15 | the author, «Cambio aparte (Recomendado)» (option selected in the main session) | 2026-11-09 | a separate change measures what takes the space and reduces it before the 50 GB trigger |
 
 ## Canonical Design Synchronization

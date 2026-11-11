@@ -210,8 +210,9 @@ def test_fees_of_both_platforms_are_stored_dated_and_not_repeated(db: Database) 
     _refresh(service)
 
     rows = _fee_rows(db)
-    assert len(rows) == 8
-    assert rows[0] == (POLYMARKET, iso(T0), "equity", "0", 0.0004, 0.000125)
+    assert len(rows) == 9
+    assert rows[0] == (POLYMARKET, "2026-10-21T00:00:00.000Z", "crypto", "0", 0.0004, 0.000125)
+    assert rows[1] == (POLYMARKET, iso(T0), "equity", "0", 0.0004, 0.000125)
     assert rows[-1] == (HYPERLIQUID, "2026-10-30T00:00:00.000Z", "", "0", 0.00045, 0.00015)
 
 
@@ -226,7 +227,7 @@ def test_a_changed_polymarket_rate_is_a_new_dated_row_set(db: Database) -> None:
 
     _refresh(service)
 
-    polymarket = [row for row in _fee_rows(db) if row[0] == POLYMARKET]
+    polymarket = [row for row in _fee_rows(db) if row[0] == POLYMARKET and str(row[1]) >= iso(T0)]
     assert [(row[1], row[4]) for row in polymarket] == [
         (iso(T0), 0.0004),
         (iso(T0 + HOUR_MS), 0.0005),

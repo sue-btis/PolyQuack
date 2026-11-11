@@ -177,6 +177,7 @@ Table decision {
   action text [not null, note: 'open | hold | reverse | close | no_action']
   data_until datetime [not null, note: 'time of the most recent reading used; must be <= hour (BR-004)']
   funding_spread real [note: 'null if any rate is missing (FR-019, BR-001)']
+  cause text [note: 'set on every no_action: missing_rate, no_usable_snapshot, thin_book, missing_fee. hour is the decision instant, the hour plus 21 minutes; data_until falls back to it when nothing was read']
   indexes {
     (run_id, pair_id, hour) [pk]
   }
@@ -214,7 +215,7 @@ Table paper_funding_payment {
   platform_id integer [not null, ref: > platform.id]
   source_time datetime [not null]
   rate real [not null]
-  amount real [not null, note: 'positive = collected (FR-022). Only payments with source_time > the position opened_at and <= its close or liquidation (accrual, domain.md)']
+  amount real [not null, note: 'rate times notional_per_leg, rounded to 6 decimals (micro-USD); positive = collected (FR-022). Only payments with source_time > the position opened_at and <= its close or liquidation (accrual, domain.md)']
   indexes {
     (position_id, platform_id, source_time) [pk]
   }

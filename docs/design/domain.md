@@ -18,7 +18,7 @@
 | Variant | A version of a method with its own preregistration. Changing any part of the preregistration creates a variant. | FR-013, FR-014, BR-005 |
 | Preregistration | What is fixed for a variant before its first run: rules, parameters, metric, horizon, verdict criterion, reference size per leg and reference leverage. | FR-012, CON-006 |
 | Run | The execution of a variant over a data period, live or re-evaluated over stored data. | FR-015, NFR-007 |
-| Decision | What a run resolves for a pair at an hour: open, hold, reverse or close. It only uses readings with an earlier or equal time. | FR-020, BR-004 |
+| Decision | What a run resolves for a pair at an hour: open, hold, reverse, close or no_action. It only uses readings with a source time at or before its decision instant, which is the hour plus 21 minutes (M03 DEC-5) and is what the decision stores as its hour. `hold` keeps the current state, flat or in a position. `no_action` means the hour could not be decided and records a cause: missing rate, no usable snapshot, thin book or missing fee; nothing is estimated, and no gap is written because gaps belong to ingestion. A reverse closes the position and opens the opposite one in the same decision. A pair decides an hour when its derived status as of the decision instant is not delisted and the pair already existed then, so a catch-up decides each hour with the pair set of that hour. A book snapshot is usable only if its source time is at or before the decision instant and at most 120 seconds older. | FR-020, BR-004 |
 | Paper position | Two legs of opposite sides opened with the same notional, simulated without money. | BR-006 |
 | Leg | Each side of the position, on one platform. | FR-021, FR-022 |
 | Reference size | Notional per leg used to simulate slippage. In E1: 1,000 USD. | PD-014 |
@@ -80,10 +80,10 @@
 ### Paper position
 - Meaning: two opposite legs of the same pair, with the same notional.
 - Identity: run + pair + opening hour.
-- Lifecycle: `open` → `closed` | `reversed` (it is closed and the opposite one is opened) | `leg liquidated` (one leg liquidated and the other uncovered) → `closed`.
+- Lifecycle: `open` → `closed` (a reverse closes it and opens a new position on the opposite side; there is no `reversed` state) | `leg liquidated` (one leg liquidated and the other uncovered) → `closed`.
 - Invariants:
   - Opens with the same notional on both legs (BR-006).
-  - **Funding accrual:** a leg only receives payments with a source time strictly greater than its opening and less than or equal to its close or its liquidation (FR-022). A position that opens at hour t does not receive the payment of hour t. One that closes at hour t does receive it, because it was open during that hour.
+  - **Funding accrual:** a leg only receives payments with a source time strictly greater than its opening and less than or equal to its close or its liquidation (FR-022). A position that opens at hour t does not receive the payment of hour t. One that closes at hour t does receive it, because it was open during that hour. The amount of a payment to a leg is the rate times the notional per leg, negative for a long leg when the rate is positive; amounts are rounded to 6 decimals (micro-USD) in one place. The reference price for the notional is open question F-013 (M04); M03 uses the fixed notional.
   - A leg that crosses its liquidation level is recorded as liquidated (BR-010).
 
 ## Relationships and Ownership
@@ -111,8 +111,7 @@ stateDiagram-v2
   [*] --> open : decision "open"
   open --> open : funding payment after opening / "hold"
   open --> closed : decision "close"
-  open --> reversed : decision "reverse"
-  reversed --> open : the opposite is opened
+  open --> closed : decision "reverse", and the opposite position is opened
   open --> leg_liquidated : the price crosses a leg's level
   leg_liquidated --> closed : "close" decision on the uncovered leg
   closed --> [*]

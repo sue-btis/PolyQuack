@@ -118,3 +118,85 @@ CREATE TRIGGER IF NOT EXISTS price_reading_no_update BEFORE UPDATE ON price_read
 BEGIN SELECT RAISE(ABORT, 'price_reading is insert-only'); END;
 CREATE TRIGGER IF NOT EXISTS price_reading_no_delete BEFORE DELETE ON price_reading
 BEGIN SELECT RAISE(ABORT, 'price_reading is insert-only'); END;
+
+-- Evaluation tables of docs/design/data/schema.dbml. Evaluation only reads the tables above.
+
+CREATE TABLE IF NOT EXISTS method (
+    id integer PRIMARY KEY,
+    name text NOT NULL UNIQUE,
+    visibility text NOT NULL DEFAULT 'private'
+);
+
+CREATE TABLE IF NOT EXISTS variant (
+    id integer PRIMARY KEY,
+    method_id integer NOT NULL REFERENCES method (id),
+    number integer NOT NULL,
+    preregistration text NOT NULL,
+    registered_at text NOT NULL,
+    first_run_at text,
+    UNIQUE (method_id, number)
+);
+
+CREATE TABLE IF NOT EXISTS run (
+    id integer PRIMARY KEY,
+    variant_id integer NOT NULL REFERENCES variant (id),
+    mode text NOT NULL,
+    starts_at text NOT NULL,
+    ends_at text,
+    status text NOT NULL,
+    reason text
+);
+
+CREATE TABLE IF NOT EXISTS decision (
+    run_id integer NOT NULL REFERENCES run (id),
+    pair_id integer NOT NULL REFERENCES pair (id),
+    hour text NOT NULL,
+    action text NOT NULL CHECK (action IN ('open', 'hold', 'reverse', 'close', 'no_action')),
+    data_until text NOT NULL,
+    funding_spread real,
+    cause text,
+    PRIMARY KEY (run_id, pair_id, hour)
+);
+
+CREATE TABLE IF NOT EXISTS paper_position (
+    id integer PRIMARY KEY,
+    run_id integer NOT NULL REFERENCES run (id),
+    pair_id integer NOT NULL REFERENCES pair (id),
+    polymarket_side text NOT NULL,
+    notional_per_leg real NOT NULL,
+    leverage real NOT NULL,
+    opened_at text NOT NULL,
+    closed_at text,
+    status text NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS paper_trade (
+    id integer PRIMARY KEY,
+    position_id integer NOT NULL REFERENCES paper_position (id),
+    platform_id integer NOT NULL REFERENCES platform (id),
+    kind text NOT NULL,
+    hour text NOT NULL,
+    side text NOT NULL,
+    avg_price real NOT NULL,
+    best_price real NOT NULL,
+    quantity real NOT NULL,
+    fee real NOT NULL,
+    slippage real NOT NULL,
+    snapshot_minute text NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS paper_funding_payment (
+    position_id integer NOT NULL REFERENCES paper_position (id),
+    platform_id integer NOT NULL REFERENCES platform (id),
+    source_time text NOT NULL,
+    rate real NOT NULL,
+    amount real NOT NULL,
+    PRIMARY KEY (position_id, platform_id, source_time)
+);
+
+CREATE TRIGGER IF NOT EXISTS variant_preregistration_frozen
+BEFORE UPDATE OF preregistration ON variant WHEN OLD.first_run_at IS NOT NULL
+BEGIN SELECT RAISE(ABORT, 'variant preregistration is frozen once first_run_at is set'); END;
+CREATE TRIGGER IF NOT EXISTS variant_delete_frozen BEFORE DELETE ON variant
+WHEN OLD.first_run_at IS NOT NULL
+BEGIN SELECT RAISE(ABORT, 'variant is frozen once first_run_at is set'); END;

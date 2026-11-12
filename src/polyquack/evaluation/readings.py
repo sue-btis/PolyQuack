@@ -2,11 +2,18 @@ import json
 import sqlite3
 from dataclasses import dataclass
 
-from polyquack.ingestion.models import ACTIVE, Levels
+from polyquack.ingestion.models import ACTIVE, DELISTED, Levels
 from polyquack.storage.db import derive_pair_status
-from polyquack.times import HOUR_MS, floor_to, from_iso, iso
+from polyquack.times import HOUR_MS, MINUTE_MS, floor_to, from_iso, iso
 
 BASE_TIER = "0"
+PAYMENT_PRICE_MAX_AGE_MS = 60 * MINUTE_MS
+
+
+@dataclass(frozen=True)
+class Prices:
+    mark: float
+    index: float
 
 
 @dataclass(frozen=True)
@@ -52,16 +59,94 @@ class Reader:
             rates[floor_to(from_iso(source_time) + HOUR_MS // 2, HOUR_MS)] = float(rate)
         return rates
 
-    def payments(self, instrument_id: int, after_ms: int, until_ms: int) -> list[tuple[int, float]]:
-        """Funding readings with `after_ms < source_time <= min(until_ms, cutoff)`."""
+    def payments(
+        self,
+        instrument_id: int,
+        after_ms: int,
+        until_ms: int,
+        uncredited_for: tuple[int, int] | None = None,
+    ) -> list[tuple[int, float]]:
+        """Funding readings with `after_ms < source_time <= min(until_ms, cutoff)`.
+
+        `uncredited_for` is a `(position_id, platform_id)` whose already credited readings are
+        left out, so catching up costs one index probe instead of a rescan of the whole position.
+        """
+        credited = (
+            ""
+            if uncredited_for is None
+            else " AND NOT EXISTS (SELECT 1 FROM paper_funding_payment p WHERE p.position_id = ?"
+            " AND p.platform_id = ? AND p.source_time = funding_reading.source_time)"
+        )
         rows = self._conn.execute(
             "SELECT source_time, rate FROM funding_reading WHERE instrument_id = ?"
-            " AND source_time > ? AND source_time <= ? ORDER BY source_time",
-            (instrument_id, iso(after_ms), iso(min(until_ms, self._cutoff_ms))),
+            " AND source_time > ? AND source_time <= ?" + credited + " ORDER BY source_time",
+            (
+                instrument_id,
+                iso(after_ms),
+                iso(min(until_ms, self._cutoff_ms)),
+                *(uncredited_for or ()),
+            ),
         ).fetchall()
         for source_time, _ in rows:
             self._seen(source_time)
         return [(from_iso(source_time), float(rate)) for source_time, rate in rows]
+
+    def prices(
+        self, instrument_id: int, first_minute_ms: int, last_minute_ms: int
+    ) -> dict[int, Prices]:
+        """Price readings by minute; a minute is known only once it has ended."""
+        rows = self._conn.execute(
+            "SELECT minute, mark_price, index_price FROM price_reading WHERE instrument_id = ?"
+            " AND minute >= ? AND minute <= ? AND minute <= ?",
+            (
+                instrument_id,
+                iso(first_minute_ms),
+                iso(last_minute_ms),
+                iso(self._cutoff_ms - MINUTE_MS),
+            ),
+        ).fetchall()
+        return {from_iso(minute): Prices(float(mark), float(index)) for minute, mark, index in rows}
+
+    def payment_prices(self, instrument_id: int, payment_ms: int) -> Prices | None:
+        """Latest reading at or before the payment's minute and at most 60 minutes older."""
+        minute_ms = floor_to(payment_ms, MINUTE_MS)
+        row = self._conn.execute(
+            "SELECT mark_price, index_price FROM price_reading WHERE instrument_id = ?"
+            " AND minute <= ? AND minute >= ? AND minute <= ? ORDER BY minute DESC LIMIT 1",
+            (
+                instrument_id,
+                iso(minute_ms),
+                iso(minute_ms - PAYMENT_PRICE_MAX_AGE_MS),
+                iso(self._cutoff_ms - MINUTE_MS),
+            ),
+        ).fetchone()
+        return None if row is None else Prices(float(row[0]), float(row[1]))
+
+    def maintenance_margins(self, instrument_id: int) -> list[tuple[int, float]]:
+        """`(effective_from_ms, rate)` versions effective by the cutoff, oldest first."""
+        rows = self._conn.execute(
+            "SELECT effective_from, maintenance_margin FROM instrument_parameters"
+            " WHERE instrument_id = ? AND effective_from <= ? ORDER BY effective_from",
+            (instrument_id, self._cutoff),
+        ).fetchall()
+        return [(from_iso(effective), float(margin)) for effective, margin in rows]
+
+    def snapshot_minutes(self, instrument_id: int, first_ms: int, end_ms: int) -> set[int]:
+        """Minutes in `[first_ms, end_ms)` holding a snapshot taken by the cutoff."""
+        rows = self._conn.execute(
+            "SELECT minute FROM book_snapshot WHERE instrument_id = ? AND minute >= ?"
+            " AND minute < ? AND source_time <= ?",
+            (instrument_id, iso(first_ms), iso(end_ms), self._cutoff),
+        ).fetchall()
+        return {from_iso(minute) for (minute,) in rows}
+
+    def delisted_since_ms(self, instrument_id: int) -> int | None:
+        row = self._conn.execute(
+            "SELECT min(since) FROM instrument_status WHERE instrument_id = ?"
+            " AND status = ? AND since <= ?",
+            (instrument_id, DELISTED, self._cutoff),
+        ).fetchone()
+        return None if row[0] is None else from_iso(row[0])
 
     def snapshot(self, instrument_id: int, max_age_ms: int) -> BookSnapshot | None:
         row = self._conn.execute(

@@ -144,7 +144,8 @@ CREATE TABLE IF NOT EXISTS run (
     starts_at text NOT NULL,
     ends_at text,
     status text NOT NULL,
-    reason text
+    reason text,
+    measured_from text
 );
 
 CREATE TABLE IF NOT EXISTS decision (
@@ -182,7 +183,8 @@ CREATE TABLE IF NOT EXISTS paper_trade (
     quantity real NOT NULL,
     fee real NOT NULL,
     slippage real NOT NULL,
-    snapshot_minute text NOT NULL
+    snapshot_minute text NOT NULL,
+    loss real
 );
 
 CREATE TABLE IF NOT EXISTS paper_funding_payment (
@@ -192,6 +194,38 @@ CREATE TABLE IF NOT EXISTS paper_funding_payment (
     rate real NOT NULL,
     amount real NOT NULL,
     PRIMARY KEY (position_id, platform_id, source_time)
+);
+
+CREATE TABLE IF NOT EXISTS position_measurement (
+    position_id integer NOT NULL REFERENCES paper_position (id),
+    minute text NOT NULL,
+    basis real,
+    basis_change real,
+    polymarket_liquidation_distance real,
+    hyperliquid_liquidation_distance real,
+    PRIMARY KEY (position_id, minute)
+);
+
+CREATE TABLE IF NOT EXISTS excluded_pair (
+    run_id integer NOT NULL REFERENCES run (id),
+    pair_id integer NOT NULL REFERENCES pair (id),
+    expected_hours integer NOT NULL,
+    hours_without_funding integer NOT NULL,
+    expected_minutes integer NOT NULL,
+    minutes_without_snapshot integer NOT NULL,
+    reason text NOT NULL,
+    PRIMARY KEY (run_id, pair_id)
+);
+
+CREATE TABLE IF NOT EXISTS verdict (
+    run_id integer PRIMARY KEY REFERENCES run (id),
+    issued_at text NOT NULL,
+    outcome text NOT NULL,
+    max_collateral real NOT NULL,
+    annual_return_on_collateral real,
+    breakdown text NOT NULL,
+    variants_tested integer NOT NULL,
+    reason text
 );
 
 CREATE TRIGGER IF NOT EXISTS variant_preregistration_frozen

@@ -34,20 +34,22 @@ flowchart TB
     T --> U{Action}
     U -- open, close or reverse --> V[Walk the latest book snapshot, at most 120 s old, for the reference size; no snapshot, fee or depth gives no_action with a cause]
     V --> W[Record trade with price, fee and slippage; a leg opened at t collects from t+1]
-    U -- hold: keep the current state --> Y[Every minute: basis and distance to liquidation]
+    U -- open while a leg is uncovered, or at the last decision instant --> UH[Hold: nothing new is opened]
+    UH --> Y
+    U -- hold: keep the current state --> Y[Before each decision, every minute since the last: basis and distance to liquidation, from the mark price]
     W --> Y
-    Y -- crosses level --> Z[Leg liquidated; the other is left uncovered]
+    Y -- crosses level --> Z[Leg liquidated in that minute; the other is closed in that minute or the first later one that can]
   end
 
   subgraph F003["F-003 Verdict (CAP-002; FR-015 to FR-018; BR-009; PD-020, PD-021)"]
     direction LR
-    AA[Horizon is reached] --> AB[For each pair: gaps between its pairing and its delisting]
+    AA[Horizon is reached: open positions are closed at the last decision instant, retried each minute to the horizon end] --> AB[For each pair: gaps between its pairing and its delisting]
     AB -- exceeds PD-013 --> AH[Exclude the pair and report its gaps]
     AB -- does not exceed --> AI[The pair enters the verdict]
     AH --> AJ{Any pairs left?}
     AI --> AJ
     AJ -- no --> AC[Run not_qualifiable with its reason]
-    AJ -- yes --> AD[Net profit with breakdown for the pairs that enter]
+    AJ -- yes --> AD[Net profit with breakdown for the pairs that enter; no position opened gives investigate further with an undefined return; pairs with an empty period are ignored]
     AD --> AE[Annual return on the maximum collateral used at once]
     AE --> AF[Compare with the preregistered criterion]
     AF --> AG[Verdict with breakdown, excluded pairs and variants tested]

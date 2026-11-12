@@ -319,7 +319,7 @@ Decision status at follow-up:
 ### F-013 — It is not stated which price is used for the basis and liquidation, nor what happens if there is no liquidation fee
 
 - Severity: `MINOR`
-- Status: `OPEN`
+- Status: `RESOLVED`
 - Origin: `BASELINE`
 - Classification: `DESIGN_GAP`
 - Owner: `docs/design/domain.md`
@@ -334,6 +334,7 @@ Decision status at follow-up:
   - `domain.md:30-31` still does not name the reference price.
   - `schema.dbml:222` still only says «Polymarket price − Hyperliquid price».
   - `schema.dbml:48` did not change.
+- Resolution (M04, 2026-11-11): `domain.md` now names the reference prices: mark for the basis and liquidation on both platforms; Hyperliquid's oracle (`index_price`) and Polymarket's mark for the funding amount. A liquidation adds no fee, so an unknown `liquidation_fee` does not change a result. See `docs/changes/2026-11-11-M04-basis-liquidation-verdict/spec.md` (DEC-1, DEC-2, DEC-3, DEC-7).
 - Routed to: —
 - Accepted by: —
 

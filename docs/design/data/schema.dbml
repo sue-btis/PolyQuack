@@ -150,11 +150,12 @@ Table variant {
 Table run {
   id integer [pk]
   variant_id integer [not null, ref: > variant.id]
-  mode text [not null, note: 'live | reevaluation']
+  mode text [not null, note: 'live | reevaluation. A re-evaluation starts at the live run starts_at and is the only mode that issues a verdict']
   starts_at datetime [not null]
   ends_at datetime
   status text [not null, note: 'in_progress | complete | not_qualifiable (FR-018): not_qualifiable only if all pairs were excluded (PD-021)']
   reason text [note: 'why it is not qualifiable']
+  measured_from datetime [note: 'first minute the run may measure: its start for runs created by the measurement step, the minute after the latest decision for a live run that predates it']
 }
 
 Table excluded_pair {
@@ -207,7 +208,8 @@ Table paper_trade {
   quantity real [not null]
   fee real [not null]
   slippage real [not null]
-  snapshot_minute datetime [not null, note: 'book snapshot used']
+  snapshot_minute datetime [not null, note: 'book snapshot used; for a liquidation, the minute of the mark price that crossed the level']
+  loss real [note: 'set only on liquidation: the leg isolated margin, notional_per_leg / leverage. A liquidation has avg_price = best_price = the liquidation level, fee 0 and slippage 0']
 }
 
 Table paper_funding_payment {
@@ -215,7 +217,7 @@ Table paper_funding_payment {
   platform_id integer [not null, ref: > platform.id]
   source_time datetime [not null]
   rate real [not null]
-  amount real [not null, note: 'rate times notional_per_leg, rounded to 6 decimals (micro-USD); positive = collected (FR-022). Only payments with source_time > the position opened_at and <= its close or liquidation (accrual, domain.md)']
+  amount real [not null, note: 'rate times the leg quantity times a price (Hyperliquid index_price, Polymarket mark_price), rounded to 6 decimals (micro-USD); positive = collected (FR-022). A payment without a price in the last 60 minutes is not stored. Only payments with source_time > the position opened_at and <= its close or liquidation (accrual, domain.md)']
   indexes {
     (position_id, platform_id, source_time) [pk]
   }
@@ -224,9 +226,9 @@ Table paper_funding_payment {
 Table position_measurement {
   position_id integer [not null, ref: > paper_position.id]
   minute datetime [not null]
-  basis real [note: 'Polymarket price − Hyperliquid price; null if either is missing (FR-023)']
-  basis_change real
-  polymarket_liquidation_distance real [note: 'price fraction until liquidation (FR-024)']
+  basis real [note: 'Polymarket mark price − Hyperliquid mark price of the minute; null if either is missing (FR-023)']
+  basis_change real [note: 'basis minus the basis of the first measured minute that has one']
+  polymarket_liquidation_distance real [note: 'mark price fraction until the liquidation level (FR-024); null once the leg has ended or if a price or the maintenance margin is missing']
   hyperliquid_liquidation_distance real
   indexes {
     (position_id, minute) [pk]
@@ -238,8 +240,9 @@ Table verdict {
   issued_at datetime [not null]
   outcome text [not null, note: 'continue | discard | investigate_further (FR-017)']
   max_collateral real [not null, note: 'maximum committed at once by positions of non-excluded pairs (PD-020)']
-  annual_return_on_collateral real [not null, note: 'BR-003']
-  breakdown text [not null, note: 'JSON: funding, fees, slippage, basis, liquidations']
+  annual_return_on_collateral real [note: 'BR-003; null when no position was opened']
+  reason text [note: 'no positions, when the return is undefined']
+  breakdown text [not null, note: 'JSON: funding, fees, slippage, basis, liquidations, net, uncredited_payments, unclosed_positions, and the same per pair']
   variants_tested integer [not null]
 }
 

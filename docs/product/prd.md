@@ -174,13 +174,13 @@ Once a method has run for the first time, Polyquack does not allow editing its r
 Polyquack shows how many variants of each method have been registered and run.
 
 ### FR-015
-Polyquack calculates, for each method and period, the net profit and splits it into funding collected, fees, slippage and basis effect.
+Polyquack calculates, for each method and period, the net profit and splits it into funding collected, fees, slippage, basis effect and liquidation losses.
 
 ### FR-016
 Polyquack calculates, for each method and period, the annual return on collateral, according to BR-003.
 
 ### FR-017
-When a method's horizon is reached, Polyquack issues a verdict (continue, discard or investigate further) by comparing the result against the preregistered criterion. The verdict carries the breakdown and the number of variants.
+When a method's horizon is reached, Polyquack issues a verdict (continue, discard or investigate further) by comparing the result against the preregistered criterion. The verdict carries the breakdown and the number of variants. If the run opened no position, the verdict is investigate further with an undefined return and the reason no positions (PD-023).
 
 ### FR-018
 If a pair's gaps in the period exceed the maximum accepted (PD-013), Polyquack leaves that pair out of the verdict and reports it with the gaps that prevent it. Each pair is measured only between its pairing and its delisting. The run is qualified with the remaining pairs (PD-021). If none remain, the run is not qualified.
@@ -275,7 +275,7 @@ No MVP function requires reacting in under 1 minute. All of them work from a hom
 
 - BR-001 — Missing data is recorded and shown as a gap. It is never filled in, interpolated or replaced by the last known value (CON-004).
 - BR-002 — A method's profit is always net: funding collected, minus fees, minus slippage, plus or minus the basis effect, minus liquidation losses.
-- BR-003 — Annual return on collateral = period net profit ÷ collateral × 365 ÷ days in the period. A position's collateral is the sum, across the two legs, of notional ÷ reference leverage. A run's collateral is the maximum collateral committed at the same time during the period (PD-020).
+- BR-003 — Annual return on collateral = period net profit ÷ collateral × 365 ÷ days in the period. A position's collateral is the sum, across the two legs, of notional ÷ reference leverage. A run's collateral is the maximum collateral committed at the same time during the period (PD-020). With no position in the period the return is undefined, never a division by zero (PD-023).
 - BR-004 — A decision made at instant t only uses data with a timestamp earlier than or equal to t.
 - BR-005 — A method's verdict criterion is set before its first run and does not change. Changing it creates a new variant, which counts as one more attempt (CON-006).
 - BR-006 — In E1, the two legs open with the same notional and opposite sides: long on one platform and short on the other.
@@ -366,6 +366,7 @@ No MVP function requires reacting in under 1 minute. All of them work from a hom
 | PD-020 | How is the collateral of a run with several simultaneous positions or with hours without positions calculated? | Decided | The maximum collateral committed at the same time during the run | Author | 2026-10-26 | «Maximum used at the same time (Recommended)» | BR-003, FR-016, `docs/design/domain.md` |
 | PD-021 | At what level is the gap limit of PD-013 applied? | Decided | Per pair. A pair that exceeds the limit is left out of the verdict and reported; the run is qualified with the others. Each pair counts only from when it is paired until it is delisted | Author | 2026-10-26 | «Per pair, excluding the pair (Recommended)» | FR-018, PD-013, `docs/design/domain.md`, `docs/design/data/schema.dbml` |
 | PD-022 | What does the book snapshot store if the platform does not deliver depth up to 0.5%? | Decided | Each snapshot stores the levels the platform delivers at full precision, only those within 0.5% of the mid price. The volume at 0.5% is computed with those levels and each side records its reach: the relative distance to the mid of the farthest level delivered. If the reach is less than 0.5%, the volume is truncated at that reach and is read that way; what is missing is never completed or estimated | Author | 2026-10-28 | «B» | FR-006, `docs/design/domain.md`, `docs/design/data/schema.dbml` |
+| PD-023 | What is the verdict of a run that opened no position? | Decided | Investigate further, with an undefined annual return and the reason `no positions` | Author | 2026-10-26 | «Investigate further (Recommended)» | FR-017, BR-003, `docs/design/domain.md`, `docs/design/data/schema.dbml` |
 
 ## 16. Product Traceability
 

@@ -57,5 +57,14 @@ The architecture has two writer processes, Ingestion and Evaluator (`architectur
 
 Consequence: a lock held for more than 5 s costs the readings of that interval, never their integrity.
 
+## Amendment: measured capacity (resolves M02 F-15 / L-6)
+
+Status: `Accepted`.
+Accepted by: the author, 2026-11-18, «Índice y aceptar tamaño»
+
+Measured on the VM on 2026-11-17 (`docs/changes/2026-11-18-snapshot-index-storage-capacity/audit.md`), the file grows about 115 MB per day at 38 pairs: book snapshots about 97 MB, prices about 9.5 MB, primary-key indexes about 8 MB. The levels JSON is about 63% of the file and keeps full precision (M01 DEC-1). The index on `book_snapshot (instrument_id, source_time)` adds about 3.7 MB per day.
+
+That is about 43 GB per year at 38 pairs and, scaling by pairs, about 113 GB per year at 100 pairs, so the 10–20 GB hypothesis above does not hold. Compressing the levels would cut the levels by about 60% (measured) and was not chosen: the author accepts the measured growth. With 67 GB free on 2026-11-17 the disk lasts about 570 days at 38 pairs; the 50 GB trigger below is reached in about 13 months.
+
 ## Verification / Revisit Trigger
 - If the file exceeds 50 GB, or if a dashboard query takes longer than NFR-009 allows, review Option C for the history.

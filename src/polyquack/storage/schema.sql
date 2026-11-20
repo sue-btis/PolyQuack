@@ -80,6 +80,10 @@ CREATE TABLE IF NOT EXISTS book_snapshot (
     PRIMARY KEY (instrument_id, minute)
 );
 
+-- The evaluator picks the latest snapshot by source_time, which the primary key cannot bound.
+CREATE INDEX IF NOT EXISTS book_snapshot_instrument_source_time
+ON book_snapshot (instrument_id, source_time);
+
 CREATE TABLE IF NOT EXISTS price_reading (
     instrument_id integer NOT NULL REFERENCES instrument (id),
     minute text NOT NULL,

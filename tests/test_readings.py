@@ -110,3 +110,21 @@ def test_f4_pair_status_is_read_as_of_the_cutoff_with_delisted_over_close_only_o
     assert Reader(db.conn, D0 - 2 * HOUR_MS).pair_status(pm, hl) == "active"
     assert Reader(db.conn, D0).pair_status(pm, hl) == "close_only"
     assert Reader(db.conn, D0 + HOUR_MS).pair_status(pm, hl) == "delisted"
+
+
+def test_the_snapshot_lookup_seeks_the_source_time_index_without_sorting(db: Database) -> None:
+    pm, _ = seed_world(db)
+    book(db, pm, D0 - MINUTE_MS, PM_BIDS, PM_ASKS)
+    statements: list[str] = []
+    db.conn.set_trace_callback(statements.append)
+
+    Reader(db.conn, D0).snapshot(pm, 120_000)
+
+    db.conn.set_trace_callback(None)
+    (query,) = [s for s in statements if "FROM book_snapshot" in s]
+    plan = " | ".join(row[3] for row in db.conn.execute("EXPLAIN QUERY PLAN " + query))
+    assert (
+        "book_snapshot_instrument_source_time (instrument_id=? AND source_time>? AND source_time<?)"
+        in plan
+    )
+    assert "TEMP B-TREE" not in plan

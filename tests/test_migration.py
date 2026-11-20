@@ -140,3 +140,18 @@ def test_m04_an_m03_run_gains_the_measured_from_column_once_and_keeps_its_row(
     assert db.conn.execute("SELECT id, mode, status, measured_from FROM run").fetchall() == [
         (1, "live", "in_progress", None)
     ]
+
+
+def test_reopening_a_database_without_the_snapshot_source_time_index_creates_it(
+    tmp_path: Path,
+) -> None:
+    Database(tmp_path / "old.db").conn.execute("DROP INDEX book_snapshot_instrument_source_time")
+
+    db = Database(tmp_path / "old.db")
+    Database(tmp_path / "old.db")
+
+    indexes = db.conn.execute(
+        "SELECT count(*) FROM sqlite_master WHERE type = 'index'"
+        " AND name = 'book_snapshot_instrument_source_time'"
+    ).fetchone()
+    assert indexes == (1,)

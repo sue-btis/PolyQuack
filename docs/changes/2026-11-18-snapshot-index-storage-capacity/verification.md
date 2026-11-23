@@ -1,7 +1,7 @@
 # Snapshot index and storage capacity Verification
 
-Verdict: Pass (repository); VM QA pending
-Acceptance: Pending — VM QA for AC-6 and AC-7 in `vm-qa-log.md`, then the author's acceptance of the before/after numbers
+Verdict: Pass
+Acceptance: Accepted by the author, 2026-11-23, «Acepto» (before/after numbers in `vm-qa-log.md`)
 Verified by: reviewer agent, independent session (medium); Round 1 follow-up by the main session
 Open limitations: None
 
@@ -12,6 +12,7 @@ Reliability: strict
 - Pass 1 (2026-11-19, reviewer agent): Fail — F-1 open.
 - Round 1 (2026-11-19, main session): F-1 fixed (`ADR-002-storage.md:65`, `audit.md` options table: 3.4 → 3.7 MB/day). Doc-only; no code or test changed since Pass 1.
 - Pass 2 (2026-11-19, main session follow-up): Pass for the repository; AC-6 and AC-7 pending on the VM.
+- VM QA (2026-11-20, main session from the author's outputs): AC-6 Pass; AC-7 Pass (size per day measured 2026-11-23: ingestion 119.4 MB/day, of which the index 4.1; ADR-002 updated from 3.7 to the measured 4.1); ASM-2 stop condition fired and was resolved by the author's decision F-2.
 
 ## Baseline
 | Field | Value |
@@ -30,6 +31,7 @@ Reliability: strict
 | ID | Type | Finding | Evidence | Status |
 |---|---|---|---|---|
 | F-1 | defect | The ADR-002 amendment said the index adds about 3.4 MB/day; the audit's measurements give about 3.7 (56.7 MB over 1,669,923 rows / 109,440 rows per day = 15.26 days) | `ADR-002-storage.md:65`; derived totals (about 43 GB/yr at 38 pairs, about 113–114 at 100, about 565–570 days, about 13 months to 50 GB) still hold within "about" | Fixed (Round 1) |
+| F-2 | decision | ASM-2 did not hold: 153 `(instrument_id, source_time)` groups have more than one snapshot. With ties the old scan returned the earliest minute and the indexed query returns the latest (insertion order) | `vm-qa-log.md` "Ties on `source_time`": every tied group has identical levels; no stored trade used a tied snapshot; local SQLite 3.50.4 check of both orders | Accepted by the author, 2026-11-20, «Aceptar la del índice»: on a tie the latest minute wins; same price, only `snapshot_minute` can differ; deterministic for NFR-007 as long as snapshots are inserted in minute order, which no code path breaks today |
 
 ## Requirement Compliance
 | Requirement / AC | Implementation Evidence | Independent Check | Result |
@@ -39,8 +41,8 @@ Reliability: strict
 | R-3 / AC-3 | `tests/test_migration.py` `test_reopening_a_database_without_the_snapshot_source_time_index_creates_it` | Passes; fails with the index line reversed | Pass |
 | R-4 / AC-4 | `schema.dbml` `book_snapshot` indexes list the named index | Read | Pass |
 | R-5 / AC-5 | ADR-002 "Amendment: measured capacity" with measured MB/day, GB/year, runway, 50 GB trigger kept, author's words | Arithmetic rechecked against `audit.md` | Pass (after F-1) |
-| R-6 / AC-6 | Deploy order in the spec | VM QA by the author | Pending |
-| R-7 / AC-7 | `vm-qa-log.md` | VM QA by the author | Pending |
+| R-6 / AC-6 | Deploy order in the spec | `vm-qa-log.md` "Deploy": only the restart's gaps (2 minutes per instrument); backup not taken (deviation) | Pass |
+| R-7 / AC-7 | `vm-qa-log.md` | Live `reevaluate 1` 4m40s for 10070 decisions (was 12m26s for 7258); plan uses the index; index 68.3 MB; tie count 153 (F-2); ingestion 115.3 → 119.4 MB/day by `dbstat` | Pass |
 
 ## Automated Checks
 | Command / Check | Result | Covers | Evidence / Notes |
@@ -55,10 +57,10 @@ Reliability: strict
 ## QA
 1. VM deploy order (backup, stop timer, `uv sync --no-dev`, restart ingestion, confirm index, start timer) and gap check
 Expected: only the restart's `gap` rows
-Actual: Pending (author)
+Actual: book 20:32–20:34 and price 20:33–20:35, 152 rows each, `not_collected`; the index build took about 2 min 43 s inside the ingestion start-up; backup not taken
 2. Live `time polyquack reevaluate 1`, plan, index size, tie count, MB/day after, in `vm-qa-log.md`
 Expected: within the ASM-1 bound; tie count 0
-Actual: Pending (author)
+Actual: 4m40s for 10070 decisions (bound about 5.9 min); no gap during it; index plan; 68.3 MB; tie count 153 (F-2, accepted); ingestion 119.4 MB/day (index 4.1)
 
 ## Ownership and Scope
 | Workstream | Assigned Write Set | Actual Files | Compliant? |

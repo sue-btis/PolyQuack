@@ -46,6 +46,11 @@ def platforms_over(handler: Handler) -> dict[str, Platform]:
     }
 
 
+def fill_books(service: Service, source_time_ms: int) -> None:
+    for state in service.books.values():
+        state.replace(BookLevels([(99.0, 1.0)], [(101.0, 1.0)], source_time_ms))
+
+
 def make_service(
     db: Database, platforms: dict[str, Platform], now_ms: int, valid_book: bool = False
 ) -> Service:
@@ -54,8 +59,7 @@ def make_service(
     service.targets = db.targets(("BTC",))
     service.books = {t.instrument_id: BookState() for t in service.targets}
     if valid_book:
-        for state in service.books.values():
-            state.replace(BookLevels([(99.0, 1.0)], [(101.0, 1.0)], now_ms))
+        fill_books(service, now_ms)
     return service
 
 
@@ -79,6 +83,5 @@ def make_service_for(
     service.targets = db.targets()
     service.books = {t.instrument_id: BookState() for t in service.targets}
     if valid_book:
-        for state in service.books.values():
-            state.replace(BookLevels([(99.0, 1.0)], [(101.0, 1.0)], now_ms))
+        fill_books(service, now_ms)
     return service

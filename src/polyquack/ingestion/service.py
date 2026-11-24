@@ -27,6 +27,9 @@ FUNDING_DEADLINE_AFTER_HOUR_MS = 15 * MINUTE_MS
 FUNDING_RETRY_SECONDS = 30.0
 PRICE_OFFSET_MS = 1_000
 RECOVERY_MINUTE_MS = 20 * MINUTE_MS
+# A live socket can keep answering pings after the platform stops pushing books;
+# same bound as the evaluator's usable-snapshot age.
+STALE_BOOK_MS = 120_000
 
 # Funding gaps can still be recovered from the source's history, so they are born open.
 _GAP_STATUS = {"funding": "open", "book_snapshot": "final", "price": "final"}
@@ -213,17 +216,22 @@ class Service:
         if not self._pending(target, "book_snapshot", minute_ms):
             return
         state = self.books[target.instrument_id]
-        snapshot = build_snapshot(state.book) if state.book else None
-        if snapshot is not None:
+        end_ms = minute_ms + MINUTE_MS
+        if state.book is None:
+            cause = state.invalid_cause
+        elif end_ms - state.book.source_time_ms > STALE_BOOK_MS:
+            cause = "stale_book"
+        elif (snapshot := build_snapshot(state.book)) is not None:
             self.db.insert_snapshot(target.instrument_id, minute_ms, snapshot)
             return
-        cause = state.invalid_cause if state.book is None else "empty_book"
+        else:
+            cause = "empty_book"
         self.db.insert_gap(
             target.platform,
             target.instrument_id,
             "book_snapshot",
             minute_ms,
-            minute_ms + MINUTE_MS,
+            end_ms,
             cause,
             _GAP_STATUS["book_snapshot"],
         )

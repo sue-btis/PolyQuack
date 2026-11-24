@@ -97,6 +97,7 @@ Table book_snapshot {
   ask_reach real [not null, note: 'same, for the ask side']
   indexes {
     (instrument_id, minute) [pk]
+    (instrument_id, source_time) [name: 'book_snapshot_instrument_source_time', note: 'the evaluator picks the latest snapshot by source_time']
   }
 }
 

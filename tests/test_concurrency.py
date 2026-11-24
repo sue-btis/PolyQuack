@@ -14,7 +14,7 @@ from polyquack.ingestion.service import _is_lock_contention
 from polyquack.storage.db import Database
 from polyquack.times import HOUR_MS, MINUTE_MS, floor_to, iso
 
-from .conftest import T0, make_service_for, platforms_over
+from .conftest import T0, fill_books, make_service_for, platforms_over
 from .exchange import FakeExchange
 
 HOUR = floor_to(T0, HOUR_MS)
@@ -134,6 +134,7 @@ def test_elapsed_intervals_of_an_instrument_are_written_in_one_transaction(db: D
     service = make_service_for(db, platforms_over(lambda r: httpx.Response(500)), assets, T0)
     service.close_minute(T0)
     statements: list[str] = []
+    fill_books(service, T0 + 60 * MINUTE_MS)
     db.conn.set_trace_callback(statements.append)
 
     service.close_minute(T0 + 60 * MINUTE_MS)
@@ -164,6 +165,7 @@ def test_one_simulated_hour_of_100_pairs_closes_every_minute_and_the_hour(
     service = make_service_for(db, platforms_over(handler), assets, HOUR + 16 * MINUTE_MS)
     durations: list[float] = []
     for minute in range(60):
+        fill_books(service, HOUR + minute * MINUTE_MS)
         started = time.perf_counter()
         service.close_minute(HOUR + minute * MINUTE_MS)
         durations.append(time.perf_counter() - started)

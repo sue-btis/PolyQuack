@@ -7,7 +7,7 @@ from polyquack.status import render_status
 from polyquack.storage.db import Database
 from polyquack.times import HOUR_MS, MINUTE_MS, floor_to, iso
 
-from .conftest import T0, make_service, platforms_over
+from .conftest import T0, fill_books, make_service, platforms_over
 
 PM_TICKERS = [
     {
@@ -59,9 +59,33 @@ def test_minute_without_a_valid_book_has_a_final_gap_and_no_snapshot(db: Databas
     )
 
 
+def test_book_older_than_120_s_at_minute_end_is_a_stale_book_gap(db: Database) -> None:
+    service = make_service(db, platforms_over(_prices_ok), T0)
+    fill_books(service, T0 + MINUTE_MS - 120_001)
+
+    service.close_minute(T0)
+
+    assert _rows(db, "SELECT * FROM book_snapshot") == []
+    assert (
+        _rows(db, "SELECT kind, starts_at, ends_at, cause, status FROM gap")
+        == [("book_snapshot", iso(T0), iso(T0 + MINUTE_MS), "stale_book", "final")] * 2
+    )
+
+
+def test_book_exactly_120_s_old_at_minute_end_is_still_a_snapshot(db: Database) -> None:
+    service = make_service(db, platforms_over(_prices_ok), T0)
+    fill_books(service, T0 + MINUTE_MS - 120_000)
+
+    service.close_minute(T0)
+
+    assert len(_rows(db, "SELECT * FROM book_snapshot")) == 2
+    assert _rows(db, "SELECT * FROM gap") == []
+
+
 def test_elapsed_minutes_missed_by_a_stopped_service_become_gaps(db: Database) -> None:
     service = make_service(db, platforms_over(_prices_ok), T0, valid_book=True)
     service.close_minute(T0)
+    fill_books(service, T0 + 3 * MINUTE_MS)
 
     service.close_minute(T0 + 3 * MINUTE_MS)
 
@@ -187,6 +211,7 @@ def test_status_shows_latest_readings_gaps_and_unpaired_instruments(db: Database
     service = make_service(db, platforms_over(_prices_ok), T0 + 1_000, valid_book=True)
     service.close_minute(T0)
     asyncio.run(service.collect_prices(T0))
+    fill_books(service, T0 + 2 * MINUTE_MS)
     service.close_minute(T0 + 2 * MINUTE_MS)
 
     text = render_status(db, ("BTC",), T0 + 3 * MINUTE_MS)

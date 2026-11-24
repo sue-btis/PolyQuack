@@ -119,7 +119,7 @@ Table gap {
   kind text [not null, note: 'funding | book_snapshot | price | instruments']
   starts_at datetime [not null]
   ends_at datetime [not null]
-  cause text [note: 'disconnection, 429, HTTP error, no data at the source...']
+  cause text [note: 'disconnection, 429, HTTP error, no data at the source, stale_book (book older than 120 s at the end of the minute)...']
   status text [not null, note: 'open | closed_with_data | final. A gap covers a closed interval: book_snapshot and price gaps are born final, funding gaps are born open (recoverable per FR-011). An open funding gap for hour h becomes final when a history response holds a payment later than h but none for h, and closed_with_data when a payment for h is stored; closed_at records the change']
   closed_at datetime
   indexes {

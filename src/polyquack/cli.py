@@ -14,7 +14,8 @@ from polyquack.evaluation.preregistration import (
     preregister,
     render_variants,
 )
-from polyquack.evaluation.runner import evaluate
+from polyquack.evaluation.runner import ReevaluationError, evaluate, reevaluate
+from polyquack.evaluation.verdict import render_verdict
 from polyquack.ingestion.platforms import Hyperliquid, Platform, PolymarketPerps
 from polyquack.ingestion.ratelimit import RateLimiter
 from polyquack.ingestion.service import Service
@@ -71,27 +72,82 @@ def _evaluate(config: Config) -> int:
     return 1 if summary.deferred else 0
 
 
+def _reevaluate(config: Config, variant: str) -> int:
+    _configure_logging()
+    try:
+        result = reevaluate(Database(config.db_path), int(variant), int(time.time() * 1000))
+    except (ReevaluationError, ValueError) as error:
+        print(f"Cannot re-evaluate: {error}", file=sys.stderr)
+        return 1
+    print(
+        f"Re-evaluation run {result.run_id}: {result.status}, {result.summary.decided} decisions,"
+        f" {result.summary.deferred} deferred"
+    )
+    return 1 if result.summary.deferred else 0
+
+
+def _verdict(config: Config, run: str) -> int:
+    try:
+        text = render_verdict(Database(config.db_path, read_only=True), int(run))
+    except ValueError:
+        text = None
+    if text is None:
+        print(f"No run {run}", file=sys.stderr)
+        return 1
+    print(text)
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="polyquack")
     parser.add_argument(
         "command",
-        choices=("run", "status", "completeness", "preregister", "evaluate", "variants"),
+        choices=(
+            "run",
+            "status",
+            "completeness",
+            "preregister",
+            "evaluate",
+            "variants",
+            "reevaluate",
+            "verdict",
+        ),
     )
-    parser.add_argument("file", nargs="?", help="preregistration JSON read by `preregister`")
+    parser.add_argument(
+        "file",
+        nargs="?",
+        help="preregistration JSON for `preregister`, variant number for `reevaluate`, run id"
+        " for `verdict`",
+    )
     parser.add_argument("--days", type=int, default=7, help="window of `completeness`, in days")
     args = parser.parse_args(argv)
     if args.command == "preregister" and args.file is None:
         parser.error("preregister needs a FILE")
+    if args.command in ("reevaluate", "verdict") and args.file is None:
+        parser.error(
+            f"{args.command} needs a {'VARIANT' if args.command == 'reevaluate' else 'RUN'}"
+        )
     config = Config.from_env()
     try:
         if args.command == "preregister":
             return _preregister(config, args.file)
-        if args.command in ("status", "completeness", "variants", "evaluate"):
+        if args.command in (
+            "status",
+            "completeness",
+            "variants",
+            "evaluate",
+            "reevaluate",
+            "verdict",
+        ):
             if not Path(config.db_path).exists():
                 print(f"No database at {config.db_path}", file=sys.stderr)
                 return 1
             if args.command == "evaluate":
                 return _evaluate(config)
+            if args.command == "reevaluate":
+                return _reevaluate(config, args.file)
+            if args.command == "verdict":
+                return _verdict(config, args.file)
             db = Database(config.db_path, read_only=True)
             now_ms = int(time.time() * 1000)
             if args.command == "variants":

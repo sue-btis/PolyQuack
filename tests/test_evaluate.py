@@ -30,9 +30,11 @@ from .evalkit import (
     decisions,
     fund,
     fund_spread,
+    future_data_violations,
     iso_decision,
     prereg_text,
     run_hours,
+    seed_prices,
     seed_world,
     standard_books,
 )
@@ -43,6 +45,8 @@ REGISTERED_AT = H0 - 30 * MINUTE_MS
 def _world(db: Database, with_fees: bool = True) -> tuple[int, int]:
     pm, hl = seed_world(db, with_fees=with_fees)
     preregister(db, prereg_text(), REGISTERED_AT)
+    for instrument in (pm, hl):
+        seed_prices(db, instrument, H0 - HOUR_MS, 10 * 60, 100.0)
     return pm, hl
 
 
@@ -66,25 +70,6 @@ def _payments(db: Database) -> list[tuple[Any, ...]]:
         "SELECT p.name, f.source_time, f.rate, f.amount FROM paper_funding_payment f"
         " JOIN platform p ON p.id = f.platform_id ORDER BY f.source_time, p.id"
     ).fetchall()
-
-
-def future_data_violations(db: Database) -> int:
-    late_reads = db.conn.execute("SELECT count(*) FROM decision WHERE data_until > hour")
-    late_snapshots = db.conn.execute(
-        "SELECT count(*) FROM paper_trade t JOIN paper_position p ON p.id = t.position_id"
-        " JOIN pair ON pair.id = p.pair_id"
-        " JOIN instrument i ON i.platform_id = t.platform_id"
-        "  AND i.id IN (pair.polymarket_instrument_id, pair.hyperliquid_instrument_id)"
-        " JOIN book_snapshot b ON b.instrument_id = i.id AND b.minute = t.snapshot_minute"
-        " WHERE b.source_time > t.hour"
-    )
-    early_payments = db.conn.execute(
-        "SELECT count(*) FROM paper_funding_payment f JOIN paper_position p ON p.id = f.position_id"
-        " WHERE f.source_time <= p.opened_at"
-        "  OR f.source_time > (SELECT max(hour) FROM decision WHERE run_id = p.run_id)"
-        "  OR f.source_time > p.closed_at"
-    )
-    return int(sum(cursor.fetchone()[0] for cursor in (late_reads, late_snapshots, early_payments)))
 
 
 def _filled_quantity(levels: Levels, notional: float) -> float:
@@ -350,12 +335,34 @@ def test_ac8_funding_accrues_after_the_opening_and_through_the_closing_decision(
 ) -> None:
     _lifecycle(db)
 
-    # short PM collects a positive rate and pays a negative one; long HL pays a positive rate
+    # short PM collects a positive rate and pays a negative one; long HL pays a positive rate;
+    # the amount is rate * quantity * price (the seeded price is 100 on both platforms)
+    pm_quantity, hl_quantity = float(_trades(db)[0][6]), float(_trades(db)[1][6])
     assert _payments(db) == [
-        (POLYMARKET, iso(H0 + HOUR_MS + 51), pytest.approx(0.00022), pytest.approx(0.22)),
-        (HYPERLIQUID, iso(H0 + HOUR_MS + 51), 0.0001, pytest.approx(-0.1)),
-        (POLYMARKET, iso(H0 + 2 * HOUR_MS + 51), pytest.approx(-0.00032), pytest.approx(-0.32)),
-        (HYPERLIQUID, iso(H0 + 2 * HOUR_MS + 51), 0.0001, pytest.approx(-0.1)),
+        (
+            POLYMARKET,
+            iso(H0 + HOUR_MS + 51),
+            pytest.approx(0.00022),
+            pytest.approx(0.00022 * pm_quantity * 100, abs=1e-6),
+        ),
+        (
+            HYPERLIQUID,
+            iso(H0 + HOUR_MS + 51),
+            0.0001,
+            pytest.approx(-0.0001 * hl_quantity * 100, abs=1e-6),
+        ),
+        (
+            POLYMARKET,
+            iso(H0 + 2 * HOUR_MS + 51),
+            pytest.approx(-0.00032),
+            pytest.approx(-0.00032 * pm_quantity * 100, abs=1e-6),
+        ),
+        (
+            HYPERLIQUID,
+            iso(H0 + 2 * HOUR_MS + 51),
+            0.0001,
+            pytest.approx(-0.0001 * hl_quantity * 100, abs=1e-6),
+        ),
     ]
     assert future_data_violations(db) == 0
 
@@ -735,8 +742,12 @@ def test_dec11_funding_payments_are_rounded_to_six_decimals(db: Database) -> Non
 
     run_hours(db, 1)
 
+    pm_quantity, hl_quantity = float(_trades(db)[0][6]), float(_trades(db)[1][6])
     amounts = [p[3] for p in _payments(db)]
-    assert amounts == [0.123457, -0.1]
+    assert amounts == [
+        round(0.000123456789 * pm_quantity * 100, 6),
+        round(-0.0001 * hl_quantity * 100, 6),
+    ]
 
 
 def test_dec1_the_window_is_the_last_n_hours_and_excludes_the_hour_n_back(db: Database) -> None:

@@ -26,6 +26,8 @@ uv run polyquack status   # derived status of each pair, latest readings and gap
 uv run polyquack completeness [--days N]   # share of hours with funding and minutes with a book snapshot (default 7 days)
 uv run polyquack preregister FILE   # store a method's preregistration (JSON) as its next variant
 uv run polyquack evaluate           # decide every due hour on paper; run hourly by the timer
+uv run polyquack reevaluate VARIANT # re-decide a variant's live period over stored data, as a new run
+uv run polyquack verdict RUN        # verdict, breakdown, excluded pairs and variants tested of a run
 uv run polyquack variants           # variants registered and run, per method
 ```
 
@@ -57,6 +59,23 @@ instant, then opens, holds, reverses or closes per pair, walking the stored orde
 taker fee, and credits funding to open legs. An hour that cannot be decided is recorded as
 `no_action` with a cause. Missed hours are decided on the next run. It exits 1 when a write was
 deferred by lock contention; the next run decides it.
+
+Before each decision it also processes every minute since the last one: for each open position and
+minute it stores the basis (Polymarket mark minus Hyperliquid mark) and each leg's distance to its
+liquidation level, and a leg whose mark crosses its level is liquidated in that minute (it loses its
+isolated margin, `notional / leverage`) while the other leg is closed with a book walk, in that
+minute or the first later one that can. Funding is `rate x quantity x price`: Hyperliquid's oracle
+(`index_price`) and Polymarket's mark, from the latest reading at most 60 minutes old; a payment
+without one is not credited and is counted as uncredited.
+
+At its horizon (`starts_at` plus 28 days) a run closes its open positions at the last decision
+instant and excludes the pairs with more than 5% of hours without funding or 10% of minutes without
+snapshot (either platform counts). The live run stops there as `complete`. `reevaluate VARIANT`
+(the variant number) decides the same period again over the stored data as a run of mode
+`reevaluation`: before the horizon it stays `in_progress` as a partial result; after it, it issues
+the verdict (`continue` at an annual return on the maximum collateral of at least 10%, `discard`
+below, `investigate_further` with an undefined return when no position was opened). Two
+re-evaluations over the same data are identical. `verdict RUN` prints the result.
 
 ## Service on the VM
 

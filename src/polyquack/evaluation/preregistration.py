@@ -27,6 +27,8 @@ class Preregistration:
     leverage: float
     decision_minute: int
     snapshot_max_age_s: int
+    horizon_days: int
+    min_annual_return: float
 
 
 @dataclass(frozen=True)
@@ -77,9 +79,11 @@ def parse_preregistration(text: str) -> Preregistration:
     if not 0 <= exit_threshold < entry:
         raise InvalidPreregistration("rules must satisfy 0 <= exit < entry")
     _text(document, "metric")
-    _fixed(document, "horizon_days", HORIZON_DAYS)
+    horizon_days = int(_fixed(document, "horizon_days", HORIZON_DAYS))
     criterion = _mapping(document.get("criterion"), "criterion")
-    _fixed(criterion, "min_annual_net_return_on_collateral", CRITERION_ANNUAL_NET_RETURN)
+    min_annual_return = _fixed(
+        criterion, "min_annual_net_return_on_collateral", CRITERION_ANNUAL_NET_RETURN
+    )
     return Preregistration(
         method=_text(document, "method"),
         window_hours=window,
@@ -91,6 +95,8 @@ def parse_preregistration(text: str) -> Preregistration:
         snapshot_max_age_s=int(
             _fixed(document, "snapshot_max_age_seconds", SNAPSHOT_MAX_AGE_SECONDS)
         ),
+        horizon_days=horizon_days,
+        min_annual_return=min_annual_return,
     )
 
 
